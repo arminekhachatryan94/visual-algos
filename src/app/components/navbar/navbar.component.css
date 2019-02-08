@@ -1,0 +1,31 @@
+.nav {
+    background-color: rgb(221, 238, 255);
+    border-bottom: 0.0625rem solid rgb(194, 224, 255);
+}
+.nav--title {
+    display: inline-block;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    color: rgb(0, 110, 255);
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.nav--element {
+    display: inline-block;
+    padding-left: 0.625rem;
+    padding-right: 0.625rem;
+    color: rgb(0, 96, 223);
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    padding-top: .6rem;
+    padding-bottom: .4rem;
+}
+.nav--title:hover {
+    background-color: rgb(244, 250, 255);
+    cursor: pointer;
+}
+.nav--element:hover {
+    background-color: rgb(244, 250, 255);
+    cursor: pointer;
+}
+.nav--title a {
+    margin-right: 0rem;
+}
