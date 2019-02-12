@@ -1,3 +1,14 @@
-<p>
-  huffmancode works!
-</p>
+<div>
+  <div>Huffman Code</div>
+  <div>
+    Enter Text: <input type="text" [(ngModel)]="userText">
+    <hr>
+    <div *ngIf="userText != undefined">
+      <!-- graph tree -->
+      <div *ngFor="let el of userText.split('')" class="huffman--node text-center">
+        <div>{{ convertToInt(el) }}</div>
+        <div><strong>{{ el }}</strong></div>
+      </div>
+    </div>
+  </div>
+</div>

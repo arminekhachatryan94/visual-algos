@@ -6,8 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./mergesort.component.css']
 })
 export class MergesortComponent implements OnInit {
+  sortArray;
 
-  constructor() { }
+  constructor() {
+    this.sortArray = [5, 3, 10, 12, 7, 1, 18];
+  }
 
   ngOnInit() {
   }
