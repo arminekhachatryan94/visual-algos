@@ -2,12 +2,13 @@
   <div>Huffman Code</div>
   <div>
     Enter Text: <input type="text" [(ngModel)]="userText">
+    <button (click)="generateHuffmanCodeTree()">Solve</button>
     <hr>
-    <div *ngIf="userText != undefined">
+    <div *ngIf="textArray != undefined">
       <!-- graph tree -->
-      <div *ngFor="let el of userText.split('')" class="huffman--node text-center">
-        <div>{{ convertToInt(el) }}</div>
-        <div><strong>{{ el }}</strong></div>
+      <div *ngFor="let node of textArray.length" class="huffman--node text-center">
+        <div>{{ convertToInt(node.character) }}</div>
+        <div><strong>{{ node.character }}</strong></div>
       </div>
     </div>
   </div>

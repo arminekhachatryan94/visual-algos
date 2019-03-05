@@ -17,7 +17,7 @@ import { HomeComponent } from './views/home/home.component';
     MergesortComponent,
     HuffmancodeComponent,
     KruskalComponent,
-    HomeComponent
+    HomeComponent,
   ],
   imports: [
     FormsModule,
