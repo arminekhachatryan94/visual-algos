@@ -1,7 +1,13 @@
 <div>
   <div>Merge Sort</div>
   <div>
-    <a *ngFor="let el of sortArray">{{ el }}</a>
+    <div>Enter integers separated by spaces to sort:</div>
+    <input type="text" [(ngModel)]="userText" (keydown)="clearInputError()">
+    <button class="btn btn-primary" (click)="sortArray()">Solve</button>
   </div>
+  <div *ngIf="int_array.length">
+    <a *ngFor="let el of int_array" class="integer">{{ el }}</a>
+  </div>
+  <div *ngIf="input_error.length">{{ input_error }}</div>
   
 </div>
