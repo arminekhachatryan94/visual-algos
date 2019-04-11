@@ -24,7 +24,10 @@ export class MergesortComponent implements OnInit {
       if(this.userText.trim() == "") {
         this.int_array = [];
       } else {
-        this.int_array = this.userText.trim().split(" ");
+        this.int_array = this.userText.trim().split(" ")
+          .filter(function(el) {
+            return el !== "";
+        });
       }
     } else {
       this.input_error = "Error in input."
