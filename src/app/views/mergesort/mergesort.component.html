@@ -3,7 +3,7 @@
   <div>
     <div>Enter integers separated by spaces to sort:</div>
     <input type="text" [(ngModel)]="userText" (keydown)="clearInputError()" (ngModelChange)="convertStringToArray()">
-    <button class="btn btn-primary" (click)="sortArray()">Solve</button>
+    <button class="btn btn-primary" (click)="sortArray()" [disabled]="!int_array.length || input_error.length">Solve</button>
   </div>
   <div *ngIf="int_array.length" class="text-center">
     <a *ngFor="let el of int_array; let i = index" class="integer" :id="{{i}}">{{ el }}</a>

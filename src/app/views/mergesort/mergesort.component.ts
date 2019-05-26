@@ -75,12 +75,44 @@ export class MergesortComponent implements OnInit {
   }
 
   sortArray() {
-    if(this.input_error.length == 0) {
-      this.convertStringToArray();
-      setTimeout(function () {
-        this.separateNumbers(this.int_array, 0);
-      }, 2000);
+    if(!this.input_error.length && this.int_array.length) {
+      this.int_array = this.mergeSort(this.int_array);
     }
+  }
+
+  mergeSort (arr) {
+    if (arr.length === 1) {
+      // return once we hit an array with a single item
+      return arr;
+    }
+  
+    const middle = Math.floor(arr.length / 2); // get the middle item of the array rounded down
+    const left = arr.slice(0, middle); // items on the left side
+    const right = arr.slice(middle); // items on the right side
+  
+    return this.merge(
+      this.mergeSort(left),
+      this.mergeSort(right)
+    )
+  }
+  
+  // compare the arrays item by item and return the concatenated result
+  merge (left, right) {
+    let result = [];
+    let indexLeft = 0;
+    let indexRight = 0;
+  
+    while (indexLeft < left.length && indexRight < right.length) {
+      if (left[indexLeft] < right[indexRight]) {
+        result.push(left[indexLeft]);
+        indexLeft++;
+      } else {
+        result.push(right[indexRight]);
+        indexRight++;
+      }
+    }
+  
+    return result.concat(left.slice(indexLeft)).concat(right.slice(indexRight));
   }
 
   clearInputError() {
