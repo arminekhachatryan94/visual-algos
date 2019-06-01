@@ -9,6 +9,7 @@ export class MergesortComponent implements OnInit {
   int_array = [];
   userText;
   input_error: String;
+  ordering: String;
 
   constructor() {
     this.userText = "";
@@ -16,6 +17,7 @@ export class MergesortComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.ordering = 'ASC';
   }
 
   convertStringToArray() {
@@ -103,12 +105,22 @@ export class MergesortComponent implements OnInit {
     let indexRight = 0;
   
     while (indexLeft < left.length && indexRight < right.length) {
-      if (left[indexLeft] < right[indexRight]) {
-        result.push(left[indexLeft]);
-        indexLeft++;
+      if(this.ordering == 'ASC') {
+        if (left[indexLeft] < right[indexRight]) {
+          result.push(left[indexLeft]);
+          indexLeft++;
+        } else {
+          result.push(right[indexRight]);
+          indexRight++;
+        }
       } else {
-        result.push(right[indexRight]);
-        indexRight++;
+        if (left[indexLeft] > right[indexRight]) {
+          result.push(left[indexLeft]);
+          indexLeft++;
+        } else {
+          result.push(right[indexRight]);
+          indexRight++;
+        }
       }
     }
   

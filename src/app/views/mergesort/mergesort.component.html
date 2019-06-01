@@ -8,5 +8,12 @@
   <div *ngIf="int_array.length" class="text-center">
     <a *ngFor="let el of int_array; let i = index" class="integer" :id="{{i}}">{{ el }}</a>
   </div>
-  <div *ngIf="input_error.length">{{ input_error }}</div>
+  <div *ngIf="input_error.length" class="error">{{ input_error }}</div>
+  <div>
+    Select Order:
+    <select [(ngModel)]="ordering">
+      <option value="ASC" selected>ASC</option>
+      <option value="DESC">DESC</option>
+    </select>
+  </div>
 </div>
