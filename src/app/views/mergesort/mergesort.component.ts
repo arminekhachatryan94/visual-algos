@@ -18,6 +18,7 @@ export class MergesortComponent implements OnInit {
 
   ngOnInit() {
     this.ordering = 'ASC';
+    this.int_array = [];
   }
 
   convertStringToArray() {
@@ -29,7 +30,7 @@ export class MergesortComponent implements OnInit {
         this.int_array = this.userText.trim().split(" ")
           .filter(function(el) {
             return el !== "";
-        });
+        })
       }
     } else {
       this.input_error = "Error in input."
@@ -38,17 +39,14 @@ export class MergesortComponent implements OnInit {
   }
 
   validateInput() {
-    let count = 0;
-    this.userText.split("").forEach(ch => {
-      if(!(isNaN(ch) && ch != " ")) {
-        count++;
+    this.userText.split(" ").forEach(value => {
+      if(parseFloat(value) == NaN) {
+        this.input_error = "Error in input."
+        return false
       }
+      console.log(parseFloat(value))
     });
-    if(count == this.userText.length){
-      return true;
-    } else {
-      return false;
-    }
+    return true;
   }
 
   separateNumbers(arr, i) {
@@ -106,7 +104,7 @@ export class MergesortComponent implements OnInit {
   
     while (indexLeft < left.length && indexRight < right.length) {
       if(this.ordering == 'ASC') {
-        if (left[indexLeft] < right[indexRight]) {
+        if (parseFloat(left[indexLeft]) < parseFloat(right[indexRight])) {
           result.push(left[indexLeft]);
           indexLeft++;
         } else {
@@ -114,7 +112,7 @@ export class MergesortComponent implements OnInit {
           indexRight++;
         }
       } else {
-        if (left[indexLeft] > right[indexRight]) {
+        if (parseFloat(left[indexLeft]) > parseFloat(right[indexRight])) {
           result.push(left[indexLeft]);
           indexLeft++;
         } else {
