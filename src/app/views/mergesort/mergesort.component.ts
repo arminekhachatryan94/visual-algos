@@ -39,11 +39,11 @@ export class MergesortComponent implements OnInit {
   }
 
   isNumeric(value) {
-    return /^\d{0,2}(\.\d{0,2}){0,1}$/.test(value);
+    return /^-?(0|[1-9]\d*)?(\.\d+)?(?<=\d)$/.test(value);
   }
 
   validateInput() {
-    this.userText.replace(/\s+/g,' ').split(" ").forEach(value => {
+    this.userText.replace(/\s+/g,' ').trim().split(" ").forEach(value => {
       if(!this.isNumeric(value)) {
         console.log(value + " : invalid");
         this.input_error = "Error in input.";
