@@ -38,13 +38,19 @@ export class MergesortComponent implements OnInit {
     }
   }
 
+  isNumeric(value) {
+    return /^\d{0,2}(\.\d{0,2}){0,1}$/.test(value);
+  }
+
   validateInput() {
-    this.userText.split(" ").forEach(value => {
-      if(parseFloat(value) == NaN) {
-        this.input_error = "Error in input."
-        return false
+    this.userText.replace(/\s+/g,' ').split(" ").forEach(value => {
+      if(!this.isNumeric(value)) {
+        console.log(value + " : invalid");
+        this.input_error = "Error in input.";
+        return false;
+      } else {
+        console.log(value);
       }
-      console.log(parseFloat(value))
     });
     return true;
   }
