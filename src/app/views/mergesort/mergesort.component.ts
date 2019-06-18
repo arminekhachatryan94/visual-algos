@@ -97,9 +97,21 @@ export class MergesortComponent implements OnInit {
     const right = arr.slice(middle); // items on the right side
   
     return this.merge(
-      this.mergeSort(left),
-      this.mergeSort(right)
+      // this.mergeSort(left),
+      // this.mergeSort(right)
+      this.delay(1000).then(any=>{
+        console.log(left)
+        this.mergeSort(left)
+      }),
+      this.delay(1000).then(any=>{
+        console.log(right)
+        this.mergeSort(right)
+      })
     )
+  }
+
+  async delay(ms: number) {
+    await new Promise(resolve => setTimeout(()=>resolve(), ms)).then(()=>console.log("fired"));
   }
   
   // compare the arrays item by item and return the concatenated result
