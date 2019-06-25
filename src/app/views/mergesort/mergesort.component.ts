@@ -1,10 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList } from '@angular/core';
 
 @Component({
   selector: 'app-mergesort',
   templateUrl: './mergesort.component.html',
   styleUrls: ['./mergesort.component.css']
 })
+
 export class MergesortComponent implements OnInit {
   int_array = [];
   userText;
@@ -82,44 +83,50 @@ export class MergesortComponent implements OnInit {
 
   sortArray() {
     if(!this.input_error.length && this.int_array.length) {
-      this.int_array = this.mergeSort(this.int_array);
+      this.mergeSort(this.int_array, 0).then(console.log);
     }
   }
 
-  mergeSort (arr) {
-    if (arr.length === 1) {
-      // return once we hit an array with a single item
-      return arr;
+  async mergeSort (arr, index) {
+    if (arr.length < 2) {
+      return await arr;
     }
+
+    var mid = Math.floor(arr.length / 2);
   
-    const middle = Math.floor(arr.length / 2); // get the middle item of the array rounded down
-    const left = arr.slice(0, middle); // items on the left side
-    const right = arr.slice(middle); // items on the right side
-  
-    return this.merge(
-      // this.mergeSort(left),
-      // this.mergeSort(right)
-      this.delay(1000).then(any=>{
-        console.log(left)
-        this.mergeSort(left)
-      }),
-      this.delay(1000).then(any=>{
-        console.log(right)
-        this.mergeSort(right)
-      })
-    )
+    var subLeft = arr.slice(0, mid);
+    var subRight = arr.slice(mid);
+
+    document.getElementById((index + subLeft.length).toString()).style.marginLeft = '10px';
+    document.getElementById((index + subLeft.length + 1).toString()).style.marginRight = '10px';
+    
+    await this.sleep(1000);
+
+    await this.mergeSort(subLeft, index).then((res) => {
+      subLeft = res;
+      console.log(res)
+    }).catch(console.log);
+
+    await this.sleep(1000);
+
+    await this.mergeSort(subRight, index + subLeft.length).then((res) => {
+      subRight = res;
+      console.log(res)
+    }).catch(console.log);
+
+    await this.sleep(1000);
+    return await this.merge(subLeft, subRight);
   }
 
-  async delay(ms: number) {
-    await new Promise(resolve => setTimeout(()=>resolve(), ms)).then(()=>console.log("fired"));
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
-  
-  // compare the arrays item by item and return the concatenated result
+
   merge (left, right) {
     let result = [];
     let indexLeft = 0;
     let indexRight = 0;
-  
+
     while (indexLeft < left.length && indexRight < right.length) {
       if(this.ordering == 'ASC') {
         if (parseFloat(left[indexLeft]) < parseFloat(right[indexRight])) {

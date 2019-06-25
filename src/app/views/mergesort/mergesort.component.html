@@ -17,7 +17,7 @@
   </div>
   <div class="col-9">
     <div *ngIf="int_array.length" class="text-center">
-      <a *ngFor="let el of int_array; let i = index" class="integer" :id="{{i}}">{{ el }}</a>
+      <a *ngFor="let el of int_array; let i = index" class="integer" :id="{{i}}" #{i}>{{ el }}</a>
     </div>      
   </div>
 </div>
