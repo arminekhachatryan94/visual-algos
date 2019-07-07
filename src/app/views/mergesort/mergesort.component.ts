@@ -43,42 +43,27 @@ export class MergesortComponent implements OnInit {
     return /^-?(0|[1-9]\d*)?(\.\d+)?(?<=\d)$/.test(value);
   }
 
+  clearMargins() {
+    for(let i = 0; i < this.int_array.length; i++) {
+      let el_style = document.getElementById('' + i).style
+      el_style.removeProperty('leftMargin');
+      el_style.removeProperty('rightMargin');
+      // console.log(el_style);
+    }
+  }
+
   validateInput() {
+    this.clearMargins();
     this.userText.replace(/\s+/g,' ').trim().split(" ").forEach(value => {
       if(!this.isNumeric(value)) {
-        console.log(value + " : invalid");
+        // console.log(value + " : invalid");
         this.input_error = "Error in input.";
         return false;
       } else {
-        console.log(value);
+        // console.log(value);
       }
     });
     return true;
-  }
-
-  separateNumbers(arr, i) {
-    if(arr.length != 1) {
-      let left = arr.splice(0, arr.length/2);
-      let right = arr.splice(arr.length/2 - 1, arr.length);
-
-      console.log("left: " + left);
-      console.log("right: " + right);
-
-      console.log("left.length: " + left.length);
-      console.log("i: " + i);
-
-      setTimeout(function () {
-        console.log("left recursion: " + (i+left.length-1));
-        document.getElementById((i+left.length-1) + "").style.paddingLeft = '5px';
-        this.separateNumbers(left, i);
-      }, 2000);
-
-      setTimeout(function () {
-        console.log("right recursion: " + (i+left.length));
-        document.getElementById((i+left.length) + "").style.paddingRight = '5px';
-        this.separateNumbers(right, i+left.length);
-      }, 2000);
-    }
   }
 
   sortArray() {
@@ -97,21 +82,23 @@ export class MergesortComponent implements OnInit {
     var subLeft = arr.slice(0, mid);
     var subRight = arr.slice(mid);
 
-    document.getElementById((index + subLeft.length).toString()).style.marginLeft = '10px';
-    document.getElementById((index + subLeft.length + 1).toString()).style.marginRight = '10px';
+    // document.getElementById((index + subLeft.length).toString()).style.marginRight += '10px';
+    document.getElementById((index + subLeft.length).toString()).style.marginLeft += '10px';
     
     await this.sleep(1000);
 
     await this.mergeSort(subLeft, index).then((res) => {
       subLeft = res;
-      console.log(res)
+      // console.log(res)
     }).catch(console.log);
 
     await this.sleep(1000);
 
+    console.log(index, subLeft, subRight);
+
     await this.mergeSort(subRight, index + subLeft.length).then((res) => {
       subRight = res;
-      console.log(res)
+      // console.log(res)
     }).catch(console.log);
 
     await this.sleep(1000);
@@ -128,6 +115,7 @@ export class MergesortComponent implements OnInit {
     let indexRight = 0;
 
     while (indexLeft < left.length && indexRight < right.length) {
+      console.log(left, right)
       if(this.ordering == 'ASC') {
         if (parseFloat(left[indexLeft]) < parseFloat(right[indexRight])) {
           result.push(left[indexLeft]);
