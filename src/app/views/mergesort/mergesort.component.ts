@@ -87,9 +87,12 @@ export class MergesortComponent implements OnInit {
     var subRight = arr.slice(mid);
 
     // document.getElementById((index + subLeft.length).toString()).style.marginRight += '10px';
-    document.getElementById((index + subLeft.length).toString()).style.marginLeft += '20px';
+    let style = document.getElementById((index + subLeft.length).toString()).style;
+    style.marginLeft = (parseInt(style.marginLeft) ? parseInt(style.marginLeft) : 0) + 20 + "px";
     for(let i = 0; i < subRight.length + subRight.length; i++) {
-      document.getElementById((index + i).toString()).style.marginTop += '20px';
+      let style_el = document.getElementById((index + i).toString()).style;
+
+      style_el.marginTop = (parseInt(style_el.marginTop) ? parseInt(style_el.marginTop) : 0)  + 20 + "px";
     }
 
     await this.sleep(1000);
@@ -125,13 +128,13 @@ export class MergesortComponent implements OnInit {
       console.log(left, right)
       if(this.ordering == 'ASC') {
         if (parseFloat(left[indexLeft]) < parseFloat(right[indexRight])) {
-          document.getElementById((index + indexLeft).toString()).innerHTML = right[indexRight];
-          document.getElementById((index + indexLeft + indexRight).toString()).innerHTML = left[indexLeft];
+          // document.getElementById((index + indexLeft).toString()).innerHTML = right[indexRight];
+          // document.getElementById((index + indexLeft + indexRight).toString()).innerHTML = left[indexLeft];
           result.push(left[indexLeft]);
           indexLeft++;
         } else {
-          document.getElementById((index + indexLeft).toString()).innerHTML = right[indexRight];
-          document.getElementById((index + indexLeft + indexRight).toString()).innerHTML = left[indexLeft];
+          // document.getElementById((index + indexLeft).toString()).innerHTML = right[indexRight];
+          // document.getElementById((index + indexLeft + indexRight).toString()).innerHTML = left[indexLeft];
           result.push(right[indexRight]);
           indexRight++;
         }
