@@ -11,10 +11,12 @@ export class MergesortComponent implements OnInit {
   userText;
   input_error: String;
   ordering: String;
+  disable_solve: Boolean;
 
   constructor() {
     this.userText = "";
     this.input_error = "";
+    this.disable_solve = false;
   }
 
   ngOnInit() {
@@ -47,7 +49,6 @@ export class MergesortComponent implements OnInit {
     for(let i = 0; i < this.int_array.length; i++) {
       let el_style = document.getElementById('' + i).style
       el_style.removeProperty('leftMargin');
-      el_style.removeProperty('rightMargin');
       // console.log(el_style);
     }
   }
@@ -66,10 +67,13 @@ export class MergesortComponent implements OnInit {
     return true;
   }
 
-  sortArray() {
+  async sortArray() {
+    this.disable_solve = true;
     if(!this.input_error.length && this.int_array.length) {
-      this.mergeSort(this.int_array, 0).then(console.log);
+      await this.mergeSort(this.int_array, 0).then(console.log);
+      this.clearMargins();
     }
+    this.disable_solve = false;
   }
 
   async mergeSort (arr, index) {
@@ -83,8 +87,11 @@ export class MergesortComponent implements OnInit {
     var subRight = arr.slice(mid);
 
     // document.getElementById((index + subLeft.length).toString()).style.marginRight += '10px';
-    document.getElementById((index + subLeft.length).toString()).style.marginLeft += '10px';
-    
+    document.getElementById((index + subLeft.length).toString()).style.marginLeft += '20px';
+    for(let i = 0; i < subRight.length + subRight.length; i++) {
+      document.getElementById((index + i).toString()).style.marginTop += '20px';
+    }
+
     await this.sleep(1000);
 
     await this.mergeSort(subLeft, index).then((res) => {
@@ -102,14 +109,14 @@ export class MergesortComponent implements OnInit {
     }).catch(console.log);
 
     await this.sleep(1000);
-    return await this.merge(subLeft, subRight);
+    return await this.merge(subLeft, subRight, index);
   }
 
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  merge (left, right) {
+  merge (left, right, index) {
     let result = [];
     let indexLeft = 0;
     let indexRight = 0;
@@ -118,9 +125,13 @@ export class MergesortComponent implements OnInit {
       console.log(left, right)
       if(this.ordering == 'ASC') {
         if (parseFloat(left[indexLeft]) < parseFloat(right[indexRight])) {
+          document.getElementById((index + indexLeft).toString()).innerHTML = right[indexRight];
+          document.getElementById((index + indexLeft + indexRight).toString()).innerHTML = left[indexLeft];
           result.push(left[indexLeft]);
           indexLeft++;
         } else {
+          document.getElementById((index + indexLeft).toString()).innerHTML = right[indexRight];
+          document.getElementById((index + indexLeft + indexRight).toString()).innerHTML = left[indexLeft];
           result.push(right[indexRight]);
           indexRight++;
         }
