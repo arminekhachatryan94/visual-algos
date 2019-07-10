@@ -70,7 +70,7 @@ export class MergesortComponent implements OnInit {
   async sortArray() {
     this.disable_solve = true;
     if(!this.input_error.length && this.int_array.length) {
-      await this.mergeSort(this.int_array, 0).then(console.log);
+      await this.mergeSort(this.int_array, 0).then();
       this.clearMargins();
     }
     this.disable_solve = false;
@@ -85,13 +85,15 @@ export class MergesortComponent implements OnInit {
   
     var subLeft = arr.slice(0, mid);
     var subRight = arr.slice(mid);
+    
+    console.log(subLeft, subRight);
 
     // document.getElementById((index + subLeft.length).toString()).style.marginRight += '10px';
     let style = document.getElementById((index + subLeft.length).toString()).style;
     style.marginLeft = (parseInt(style.marginLeft) ? parseInt(style.marginLeft) : 0) + 20 + "px";
+
     for(let i = 0; i < subRight.length + subRight.length; i++) {
       let style_el = document.getElementById((index + i).toString()).style;
-
       style_el.marginTop = (parseInt(style_el.marginTop) ? parseInt(style_el.marginTop) : 0)  + 20 + "px";
     }
 
@@ -100,16 +102,16 @@ export class MergesortComponent implements OnInit {
     await this.mergeSort(subLeft, index).then((res) => {
       subLeft = res;
       // console.log(res)
-    }).catch(console.log);
+    }).catch();
 
     await this.sleep(1000);
 
-    console.log(index, subLeft, subRight);
+    // console.log(index, subLeft, subRight);
 
     await this.mergeSort(subRight, index + subLeft.length).then((res) => {
       subRight = res;
       // console.log(res)
-    }).catch(console.log);
+    }).catch();
 
     await this.sleep(1000);
     return await this.merge(subLeft, subRight, index);
@@ -125,7 +127,7 @@ export class MergesortComponent implements OnInit {
     let indexRight = 0;
 
     while (indexLeft < left.length && indexRight < right.length) {
-      console.log(left, right)
+      // console.log(left, right)
       if(this.ordering == 'ASC') {
         if (parseFloat(left[indexLeft]) < parseFloat(right[indexRight])) {
           // document.getElementById((index + indexLeft).toString()).innerHTML = right[indexRight];
