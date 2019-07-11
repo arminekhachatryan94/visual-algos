@@ -89,13 +89,23 @@ export class MergesortComponent implements OnInit {
     console.log(subLeft, subRight);
 
     // document.getElementById((index + subLeft.length).toString()).style.marginRight += '10px';
-    let style = document.getElementById((index + subLeft.length).toString()).style;
-    style.marginLeft = (parseInt(style.marginLeft) ? parseInt(style.marginLeft) : 0) + 20 + "px";
 
-    for(let i = 0; i < subRight.length + subRight.length; i++) {
-      let style_el = document.getElementById((index + i).toString()).style;
-      style_el.marginTop = (parseInt(style_el.marginTop) ? parseInt(style_el.marginTop) : 0)  + 20 + "px";
-    }
+
+
+    let el = document.getElementById(index + subLeft.length);
+    let transform = window.getComputedStyle(el).transform;
+    let x = this.getTranslateX(transform);
+    let y = this.getTranslateY(transform);
+    console.log(x, y);
+    el.style.transform = 'translate(' + (x+50) + 'px, ' + (y+50) + 'px)'
+
+
+    // style.marginLeft = (parseInt(style.marginLeft) ? parseInt(style.marginLeft) : 0) + 20 + "px";
+
+    // for(let i = 0; i < subRight.length + subRight.length; i++) {
+    //   let style_el = document.getElementById((index + i).toString()).style;
+      // style_el.marginTop = (parseInt(style_el.marginTop) ? parseInt(style_el.marginTop) : 0)  + 20 + "px";
+    // }
 
     await this.sleep(1000);
 
@@ -115,6 +125,18 @@ export class MergesortComponent implements OnInit {
 
     await this.sleep(1000);
     return await this.merge(subLeft, subRight, index);
+  }
+
+  getTranslateX(str) {
+    let arr = str.split(')').join("").split(', ');
+    let s = arr[arr.length-1];
+    return (isNaN(s) ? 0 : parseInt(s));
+  }
+
+  getTranslateY(str) {
+    let arr = str.split(')').join("").split(', ');
+    let s = arr[arr.length-2];
+    return (isNaN(s) ? 0 : parseInt(s));
   }
 
   sleep(ms) {
