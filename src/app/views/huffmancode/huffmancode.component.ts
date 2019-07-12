@@ -31,6 +31,7 @@ export class HuffmancodeComponent implements OnInit {
         temp.frequency = -1;
         temp.leftChild = null;
         temp.rightChild = null;
+        console.log(this.textArray);
         this.textArray.push(temp);
       }
     }

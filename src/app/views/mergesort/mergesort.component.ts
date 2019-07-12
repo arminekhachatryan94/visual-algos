@@ -89,17 +89,9 @@ export class MergesortComponent implements OnInit {
     console.log(subLeft, subRight);
 
     // document.getElementById((index + subLeft.length).toString()).style.marginRight += '10px';
-
-
-
-    let el = document.getElementById(index + subLeft.length);
-    let transform = window.getComputedStyle(el).transform;
-    let x = this.getTranslateX(transform);
-    let y = this.getTranslateY(transform);
-    console.log(x, y);
-    el.style.transform = 'translate(' + (x+50) + 'px, ' + (y+50) + 'px)'
-
-
+    
+    
+    
     // style.marginLeft = (parseInt(style.marginLeft) ? parseInt(style.marginLeft) : 0) + 20 + "px";
 
     // for(let i = 0; i < subRight.length + subRight.length; i++) {
