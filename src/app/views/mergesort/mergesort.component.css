@@ -1,18 +1,41 @@
 .integer {
-    background-color: pink;
-    border: 1px solid lightcoral;
-    padding: 5px;
-    font-size: 20px;
+  background-color: pink;
+  border: 1px solid lightcoral;
+  padding: 5px;
+  font-size: 20px;
+  display: inline-block;
 }
 
 .error {
-    color: red;
+  color: red;
 }
 
 .display-parent {
-    background-color: black;
-    margin: 100px;
-    padding: 10px;
-    display: flex;
-    flex-direction: row;
+  background-color: black;
+  margin: 100px;
+  padding: 10px;
+}
+
+.myTree{
+
+}
+
+.node {
+  cursor: pointer;
+}
+
+.node circle {
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 3px;
+}
+
+.node text {
+  font: 12px sans-serif;
+}
+
+.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 2px;
 }

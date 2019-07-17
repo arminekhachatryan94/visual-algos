@@ -20,4 +20,22 @@
       <a *ngFor="let el of int_array; let i = index" class="integer" :id="{{i}}" #{i}>{{ el }}</a>
     </div>
   </div>
+  <h2>The mergesort algorithm will sort the left most leaves first</h2>
+  <div class="row">
+    <div class="col-6">
+      <div *ngFor="let el of height_array; let i = index">
+        Depth {{el}}:
+        <span #treeBreak></span>
+        <br/>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <div *ngFor="let el of height_array; let i = index">
+      Depth {{el}}:
+      <span #treeMerge></span>
+      <br/>
+    </div>
+  </div>
+  <div class="myTree"></div>
 </div>
