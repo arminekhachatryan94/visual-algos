@@ -1,5 +1,4 @@
-import 
-{ 
+import { 
   Component, 
   OnInit, 
   ViewChildren, 
@@ -16,6 +15,7 @@ import {
 } from 'd3-hierarchy'
 
 import * as d3 from 'd3';
+
 import { Node } from '../../interfaces/Node.interface';
 
 @Component({
@@ -62,89 +62,77 @@ export class MergesortComponent implements OnInit {
   }
 
   ngAfterContentInit(){
-    this.treeData = {
-      depth: 0,
-      parent: -1,
-      data: '["1","0","5"]',
-      children: [
-        {
-          depth:1,
-          parent:0,
-          data:'["1"]'
-        },
-        {
-          depth:1,
-          parent:0,
-          data:'["0","5"]'
-        }
-      ],
-    }
+    // this.treeData = {
+    //   depth: 0,
+    //   parent: -1,
+    //   data: '["1","0","5"]',
+    //   children: []
+    // }
 
     this.width = 720 - this.margin.right - this.margin.left;
     this.height = 640 - this.margin.top - this.margin.bottom;
     this.svg = d3.select('.myTree').append("svg")
-                .attr("width", this.width + this.margin.right + this.margin.left)
-                .attr("height", this.height + this.margin.top + this.margin.bottom)
-                .append("g")
-                .attr("class", "g")
-                .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+      .attr("width", this.width + this.margin.right + this.margin.left)
+      .attr("height", this.height + this.margin.top + this.margin.bottom)
+      .append("g")
+      .attr("class", "g")
+      .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+
     d3.select('svg g.g')
       .append("g")
       .attr("class", "links");
-    
     d3.select('svg g.g')
       .append("g")
       .attr("class", "nodes");
     
-    console.log("flare inside", this.treeData);
+    // console.log("flare inside", this.treeData);
     this.tree = tree<Node>();
     this.tree.size([this.height, this.width]);
-    this.root = this.tree(hierarchy<Node>(this.treeData));
-    this.draw(this.root);
+    // this.root = this.tree(hierarchy<Node>(this.treeData));
+    // this.draw(this.root);
   }
 
   private draw(root: HierarchyPointNode<Node>) {
     // Nodes
     var parent = d3.select('svg g.nodes')
-        .selectAll('circle.node')
-        .data(root.descendants())
-        .enter()
-        .append('g')
-        .attr('style', "fill: #fff;stroke: #ccc;stroke-width: 3px;")
-        .attr('x', function (d) { return d.x-20; })
-        .attr('y', function (d) { return d.y-20; })
-        .attr('width', ()=>{ return "40px"})
-        .attr('height', ()=>{ return "40px"});
+      .selectAll('circle.node')
+      .data(root.descendants())
+      .enter()
+      .append('g')
+      .attr('style', "fill: #fff;stroke: #ccc;stroke-width: 3px;")
+      .attr('x', function (d) { return d.x-20; })
+      .attr('y', function (d) { return d.y-20; })
+      .attr('width', ()=>{ return "40px"})
+      .attr('height', ()=>{ return "40px"});
 
+    parent.append('rect')
+      .classed('node', true)
+      .attr('style', "fill: #fff;stroke: #ccc;stroke-width: 3px;")
+      .attr('x', function (d) { return d.x-20; })
+      .attr('y', function (d) { return d.y-20; })
+      .attr('width', ()=>{ return "40px"})
+      .attr('height', ()=>{ return "40px"});
 
-      parent.append('rect')
-        .classed('node', true)
-        .attr('style', "fill: #fff;stroke: #ccc;stroke-width: 3px;")
-        .attr('x', function (d) { return d.x-20; })
-        .attr('y', function (d) { return d.y-20; })
-        .attr('width', ()=>{ return "40px"})
-        .attr('height', ()=>{ return "40px"});
-
-      parent.append('text')
-            .attr('style', "fill: #000;stroke: #000;stroke-width: 1px;")
-            .attr("dy", "1em")
-            .attr('x', function (d) { return d.x-20; })
-            .attr('y', function (d) { return d.y-20; })
-            .attr("text-anchor", function(d) { return d.children || d.children ? "end" : "start";})
-            .text(function(d) { return d.data.data; })
+    parent.append('text')
+      .attr('style', "fill: #000;stroke: #000;stroke-width: 1px;")
+      .attr("dy", "1em")
+      .attr('x', function (d) { return d.x-20; })
+      .attr('y', function (d) { return d.y-20; })
+      .attr("text-anchor", function(d) { return d.children || d.children ? "end" : "start";})
+      .text(function(d) { return d.data.data; })
     
     // Links
     d3.select('svg g.links')
-        .selectAll('line.link')
-        .data(root.links())
-        .enter()
-        .append('line')
-        .classed('link', true)
-        .attr('style', "stroke: #ccc;stroke-width: 3px;")
-        .attr('x1', function (d) { return d.source.x; })
-        .attr('y1', function (d) { return d.source.y; })
-        .attr('x2', function (d) { return d.target.x; })
-        .attr('y2', function (d) { return d.target.y; });
+      .selectAll('line.link')
+      .data(root.links())
+      .enter()
+      .append('line')
+      .classed('link', true)
+      .attr('style', "stroke: #ccc;stroke-width: 3px;")
+      .attr('x1', function (d) { return d.source.x; })
+      .attr('y1', function (d) { return d.source.y; })
+      .attr('x2', function (d) { return d.target.x; })
+      .attr('y2', function (d) { return d.target.y; });
   
 }
 
@@ -181,13 +169,20 @@ export class MergesortComponent implements OnInit {
 
   validateInput() {
     this.clearMargins();
-    this.userText.replace(/\s+/g,' ').trim().split(" ").forEach(value => {
+    let arr = this.userText.replace(/\s+/g,' ').trim().split(" ");
+    arr.forEach(value => {
       if(!this.isNumeric(value)) {
         // console.log(value + " : invalid");
         this.input_error = "Error in input.";
         return false;
       } else {
-        // console.log(value);
+        this.treeData = {
+          depth: 0,
+          parent: -1,
+          data: arr
+        };
+        this.root = this.tree(hierarchy<Node>(this.treeData));
+        this.draw(this.root);
       }
     });
     return true;
@@ -284,6 +279,7 @@ export class MergesortComponent implements OnInit {
     var merged = await this.merge(subLeft, subRight, index);
 
     this.treeMergeArr[depth].nativeElement.innerHTML += "merged: "+JSON.stringify(merged);
+
     await this.sleep(this.mergeSleepTime);
 
     return merged; 
