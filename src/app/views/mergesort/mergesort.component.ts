@@ -157,34 +157,31 @@ export class MergesortComponent implements OnInit {
     return /^-?(0|[1-9]\d*)?(\.\d+)?(?<=\d)$/.test(value);
   }
 
-  clearMargins() {
-    /*
-    for(let i = 0; i < this.int_array.length; i++) {
-      let el_style = document.getElementById('' + i).style
-      el_style.removeProperty('leftMargin');
-      // console.log(el_style);
-    }
-    */
-  }
-
   validateInput() {
-    this.clearMargins();
+    d3.select('svg g.nodes').selectAll('*').remove();
+
     let arr = this.userText.replace(/\s+/g,' ').trim().split(" ");
     arr.forEach(value => {
       if(!this.isNumeric(value)) {
         // console.log(value + " : invalid");
         this.input_error = "Error in input.";
-        return false;
-      } else {
         this.treeData = {
           depth: 0,
           parent: -1,
-          data: arr
+          data: undefined
         };
         this.root = this.tree(hierarchy<Node>(this.treeData));
         this.draw(this.root);
+        return false;
       }
     });
+    this.treeData = {
+      depth: 0,
+      parent: -1,
+      data: arr
+    };
+    this.root = this.tree(hierarchy<Node>(this.treeData));
+    this.draw(this.root);
     return true;
   }
 
@@ -242,7 +239,6 @@ export class MergesortComponent implements OnInit {
       await this.mergeSort(this.int_array, 0,1).then((res) => {
         this.treeMergeArr[0].nativeElement.innerHTML += "end: "+JSON.stringify(res);
       });
-      this.clearMargins();
     }
     this.disable_solve = false;
   }
