@@ -65,7 +65,7 @@ export class MergesortComponent implements OnInit {
     // this.treeData = {
     //   depth: 0,
     //   parent: -1,
-    //   data: '["1","0","5"]',
+    //   value: '["1","0","5"]',
     //   children: []
     // }
 
@@ -119,7 +119,7 @@ export class MergesortComponent implements OnInit {
       .attr('x', function (d) { return d.x-20; })
       .attr('y', function (d) { return d.y-20; })
       .attr("text-anchor", function(d) { return d.children || d.children ? "end" : "start";})
-      .text(function(d) { return d.data.data; })
+      .text(function(d) { return d.data.value; })
     
     // Links
     d3.select('svg g.links')
@@ -168,7 +168,7 @@ export class MergesortComponent implements OnInit {
         this.treeData = {
           depth: 0,
           parent: -1,
-          data: undefined
+          value: undefined
         };
         this.root = this.tree(hierarchy<Node>(this.treeData));
         this.draw(this.root);
@@ -178,7 +178,7 @@ export class MergesortComponent implements OnInit {
     this.treeData = {
       depth: 0,
       parent: -1,
-      data: arr
+      value: arr
     };
     this.root = this.tree(hierarchy<Node>(this.treeData));
     this.draw(this.root);
@@ -203,41 +203,41 @@ export class MergesortComponent implements OnInit {
   async sortArray() {
     this.disable_solve = true;
     if(!this.input_error.length && this.int_array.length) {
-      this.height_array = [];
+      // this.height_array = [];
     
-      var height = (Math.log2(this.int_array.length)+2);
+      // var height = (Math.log2(this.int_array.length)+2);
 
-      console.log("height of merge tree:", height);
+      // console.log("height of merge tree:", height);
 
-      for (let index = 0; index < height; index++) {
-        this.height_array.push(index);
-      }
+      // for (let index = 0; index < height; index++) {
+      //   this.height_array.push(index);
+      // }
 
-      while(this.treeBreakArr.length < height && this.treeMergeArr.length < height)
-      {
-        await this.sleep(10);
-      }
+      // while(this.treeBreakArr.length < height && this.treeMergeArr.length < height)
+      // {
+      //   await this.sleep(10);
+      // }
 
-      this.treeData.data = JSON.stringify(this.int_array);
+      // this.treeData.data = JSON.stringify(this.int_array);
 
-      this.tree = tree<Node>();
-      this.tree.size([this.height, this.width]);
-      this.root = this.tree(hierarchy<Node>(this.treeData));
-      this.draw(this.root);
+      // this.tree = tree<Node>();
+      // this.tree.size([this.height, this.width]);
+      // this.root = this.tree(hierarchy<Node>(this.treeData));
+      // this.draw(this.root);
 
 
       //console.log(this.treeBreakArr);
-      this.treeBreakArr.forEach(el=>{
-        el.nativeElement.innerHTML = "";
-      })
-      this.treeMergeArr.forEach(el=>{
-        el.nativeElement.innerHTML = "";
-      })
+      // this.treeBreakArr.forEach(el=>{
+      //   el.nativeElement.innerHTML = "";
+      // })
+      // this.treeMergeArr.forEach(el=>{
+      //   el.nativeElement.innerHTML = "";
+      // })
 
-      this.treeBreakArr[0].nativeElement.innerHTML = "start: "+JSON.stringify(this.int_array);
+      // this.treeBreakArr[0].nativeElement.innerHTML = "start: "+JSON.stringify(this.int_array);
     
       await this.mergeSort(this.int_array, 0,1).then((res) => {
-        this.treeMergeArr[0].nativeElement.innerHTML += "end: "+JSON.stringify(res);
+        // this.treeMergeArr[0].nativeElement.innerHTML += "end: "+JSON.stringify(res);
       });
     }
     this.disable_solve = false;
@@ -246,7 +246,7 @@ export class MergesortComponent implements OnInit {
   async mergeSort (arr, index, depth) {
     if (arr.length < 2) {
       await this.sleep(this.mergeSleepTime);
-      this.treeBreakArr[depth].nativeElement.innerHTML += "node: "+JSON.stringify(arr) + " ";
+      // this.treeBreakArr[depth].nativeElement.innerHTML += "node: "+JSON.stringify(arr) + " ";
       return await arr;
     }
     
@@ -258,7 +258,7 @@ export class MergesortComponent implements OnInit {
 
     await this.sleep(this.mergeSleepTime);
 
-    this.treeBreakArr[depth].nativeElement.innerHTML += "left: "+JSON.stringify(subLeft)+"right: "+JSON.stringify(subRight)+" ";
+    // this.treeBreakArr[depth].nativeElement.innerHTML += "left: "+JSON.stringify(subLeft)+"right: "+JSON.stringify(subRight)+" ";
     
     await this.mergeSort(subLeft, index, depth+1).then((res) => {
       subLeft = res;
@@ -274,7 +274,7 @@ export class MergesortComponent implements OnInit {
     
     var merged = await this.merge(subLeft, subRight, index);
 
-    this.treeMergeArr[depth].nativeElement.innerHTML += "merged: "+JSON.stringify(merged);
+    // this.treeMergeArr[depth].nativeElement.innerHTML += "merged: "+JSON.stringify(merged);
 
     await this.sleep(this.mergeSleepTime);
 

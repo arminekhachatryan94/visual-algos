@@ -1,6 +1,6 @@
 export class Node {
     depth: number;
     parent: number;
-    data: string;
+    value: string;
     children?: Array<Node>;
 }
