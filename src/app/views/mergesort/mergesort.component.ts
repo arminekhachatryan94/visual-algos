@@ -41,7 +41,7 @@ export class MergesortComponent implements OnInit {
   treeBreakArr = [];
   treeMergeArr = [];
 
-  mergeSleepTime = 500;
+  mergeSleepTime = 1000;
 
   constructor(private d3Service: D3Service) {
     this.userText = "";
