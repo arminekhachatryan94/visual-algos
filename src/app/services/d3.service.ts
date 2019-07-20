@@ -18,7 +18,7 @@ export class D3Service {
     private margin: any = { top: 20, right: 120, bottom: 20, left: 120 };
     private width: number;
     private height: number;
-    // private root: HierarchyPointNode<Node>;
+    private root: HierarchyPointNode<Node>;
     private tree: TreeLayout<Node>;
     private svg: any;
     // private diagonal: any;
@@ -50,11 +50,11 @@ export class D3Service {
         // this.draw(this.root);
     }
 
-    public draw(root: HierarchyPointNode<Node>) {
+    public draw() {
         // Nodes
         var parent = d3.select('svg g.nodes')
           .selectAll('circle.node')
-          .data(root.descendants())
+          .data(this.root.descendants())
           .enter()
           .append('g')
           .attr('style', "fill: #fff;stroke: #ccc;stroke-width: 3px;")
@@ -82,7 +82,7 @@ export class D3Service {
         // Links
         d3.select('svg g.links')
           .selectAll('line.link')
-          .data(root.links())
+          .data(this.root.links())
           .enter()
           .append('line')
           .classed('link', true)
@@ -93,8 +93,8 @@ export class D3Service {
           .attr('y2', function (d) { return d.target.y; });
     }
 
-    public d3Tree(treeData: Node) {
-        return this.tree(hierarchy<Node>(treeData));
+    public setRoot(treeData: Node) {
+        this.root = this.tree(hierarchy<Node>(treeData));
     }
 
     public removeAll() {

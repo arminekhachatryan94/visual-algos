@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 
 import { Node } from '../../interfaces/Node.interface';
-import { HierarchyPointNode, TreeLayout, hierarchy } from 'd3';
+import { HierarchyPointNode } from 'd3';
 import { D3Service } from 'src/app/services/d3.service';
 
 @Component({
@@ -27,13 +27,13 @@ export class MergesortComponent implements OnInit {
   disable_solve: Boolean;
 
   treeData : Node;
-  private margin: any = { top: 20, right: 120, bottom: 20, left: 120 };
-  private width: number;
-  private height: number;
+  // private margin: any = { top: 20, right: 120, bottom: 20, left: 120 };
+  // private width: number;
+  // private height: number;
   private root: HierarchyPointNode<Node>;
-  private tree: TreeLayout<Node>;
-  private svg: any;
-  private diagonal: any;
+  // private tree: TreeLayout<Node>;
+  // private svg: any;
+  // private diagonal: any;
 
   @ViewChildren("treeBreak") treeBreakRef : QueryList<ElementRef>;
   @ViewChildren("treeMerge") treeMergeRef : QueryList<ElementRef>;
@@ -98,8 +98,8 @@ export class MergesortComponent implements OnInit {
           parent: -1,
           value: undefined
         };
-        this.root = this.d3Service.d3Tree(this.treeData);
-        this.d3Service.draw(this.root);
+        this.d3Service.setRoot(this.treeData);
+        this.d3Service.draw();
         return false;
       }
     });
@@ -108,8 +108,8 @@ export class MergesortComponent implements OnInit {
       parent: -1,
       value: arr
     };
-    this.root = this.d3Service.d3Tree(this.treeData);
-    this.d3Service.draw(this.root);
+    this.d3Service.setRoot(this.treeData);
+    this.d3Service.draw();
     return true;
   }
 
@@ -164,14 +164,14 @@ export class MergesortComponent implements OnInit {
 
       // this.treeBreakArr[0].nativeElement.innerHTML = "start: "+JSON.stringify(this.int_array);
     
-      await this.mergeSort(this.int_array, 0,1).then((res) => {
+      await this.mergeSort(this.int_array, 0,1, this.treeData).then((res) => {
         // this.treeMergeArr[0].nativeElement.innerHTML += "end: "+JSON.stringify(res);
       });
     }
     this.disable_solve = false;
   }
 
-  async mergeSort (arr, index, depth) {
+  async mergeSort (arr, index, depth, parent) {
     if (arr.length < 2) {
       await this.sleep(this.mergeSleepTime);
       // this.treeBreakArr[depth].nativeElement.innerHTML += "node: "+JSON.stringify(arr) + " ";
@@ -187,14 +187,29 @@ export class MergesortComponent implements OnInit {
     await this.sleep(this.mergeSleepTime);
 
     // this.treeBreakArr[depth].nativeElement.innerHTML += "left: "+JSON.stringify(subLeft)+"right: "+JSON.stringify(subRight)+" ";
+    parent.children = [
+      {
+        depth: depth,
+        parent: depth-1,
+        value: subLeft
+      },
+      {
+        depth: depth,
+        parent: depth-1,
+        value: subRight
+      }
+    ]
+    this.d3Service.removeAll();
+    this.d3Service.setRoot(this.treeData);
+    this.d3Service.draw();
     
-    await this.mergeSort(subLeft, index, depth+1).then((res) => {
+    await this.mergeSort(subLeft, index, depth+1, parent.children[0]).then((res) => {
       subLeft = res;
     }).catch(console.log);
 
     await this.sleep(this.mergeSleepTime);
     
-    await this.mergeSort(subRight, index + subLeft.length,depth+1).then((res) => {
+    await this.mergeSort(subRight, index + subLeft.length,depth+1, parent.children[1]).then((res) => {
       subRight = res;
     }).catch(console.log);
 
