@@ -151,7 +151,7 @@ export class MergesortComponent implements OnInit {
       // this.tree = tree<Node>();
       // this.tree.size([this.height, this.width]);
       // this.root = this.tree(hierarchy<Node>(this.treeData));
-      // this.draw(this.root);
+      // this.d3Service.draw(this.root);
 
 
       //console.log(this.treeBreakArr);
