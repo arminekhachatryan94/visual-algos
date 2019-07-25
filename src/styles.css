@@ -1,0 +1,13 @@
+.integer {
+  background-color: pink;
+  border: 1px solid lightcoral;
+  padding: 5px;
+  font-size: 20px;
+  display: inline-block;
+}
+
+.display-parent {
+  background-color: black;
+  margin: 100px;
+  padding: 10px;
+}

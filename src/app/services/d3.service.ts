@@ -20,7 +20,7 @@ export class D3Service {
     private height: number;
     private root: HierarchyPointNode<Node>;
     private tree: TreeLayout<Node>;
-    private svg: any;
+    private parent: any;
     // private diagonal: any;
   
     constructor() {
@@ -29,19 +29,7 @@ export class D3Service {
     public initialize() {
         this.width = window.innerWidth - this.margin.right - this.margin.left;
         this.height = window.innerHeight - this.margin.top - this.margin.bottom;
-        this.svg = d3.select('.myTree').append("svg")
-            .attr("width", this.width + this.margin.right + this.margin.left)
-            .attr("height", this.height + this.margin.top + this.margin.bottom)
-            .append("g")
-            .attr("class", "g")
-            .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
-
-        // d3.select('svg g.g')
-        //     .append("g")
-        //     .attr("class", "links");
-        d3.select('svg g.g')
-            .append("g")
-            .attr("class", "nodes");
+        this.parent = d3.select('.myTree');
         
         // console.log("flare inside", this.treeData);
         this.tree = tree<Node>();
@@ -51,48 +39,18 @@ export class D3Service {
     }
 
     public draw() {
-        // Nodes
-        var parent = d3.select('svg g.nodes')
-            .selectAll('circle.node')
-            .data(this.root.descendants())
-            .enter()
-            .append('g')
-            .attr('style', "fill: #fff;stroke: #ccc;stroke-width: 3px;")
-            .attr('x', function (d) { return d.x-20; })
-            .attr('y', function (d) { return d.y-20; })
-            .attr('width', ()=>{ return "40px"})
-            .attr('height', ()=>{ return "40px"});
-    
-        // parent.append('rect')
-        //   .classed('node', true)
-        //   .attr('style', "fill: #fff;stroke: #ccc;stroke-width: 3px;")
-        //   .attr('x', function (d) { return d.x-20; })
-        //   .attr('y', function (d) { return d.y-20; })
-        //   .attr('width', ()=>{ return "40px"})
-        //   .attr('height', ()=>{ return "40px"});
-    
-        parent.append('text')
-            .attr('style', "fill: #000;stroke: #000;stroke-width: 1px;")
-            .attr("dy", "1em")
-            .attr('x', function (d) { return d.x-20; })
-            .attr('y', function (d) { return d.y-20; })
-            .attr("text-anchor", function(d) { return d.children || d.children ? "end" : "start";})
-            .text(function(d) {
-                return d.data.value;
-            })
-        
-        // Links
-        // d3.select('svg g.links')
-        //   .selectAll('line.link')
-        //   .data(this.root.links())
-        //   .enter()
-        //   .append('line')
-        //   .classed('link', true)
-        //   .attr('style', "stroke: #ccc;stroke-width: 3px;")
-        //   .attr('x1', function (d) { return d.source.x; })
-        //   .attr('y1', function (d) { return d.source.y; })
-        //   .attr('x2', function (d) { return d.target.x; })
-        //   .attr('y2', function (d) { return d.target.y; });
+        let parent = d3
+            .select(".myTree")
+            .append("div")
+            .classed("text-center display-parent", true);
+        let i = 0;
+        this.root.data.value.forEach((e) => {
+            parent
+                .insert("p")
+                .classed("integer", true)
+                .text(e);
+            i++;
+        });
     }
 
     public setRoot(treeData: Node) {
@@ -100,8 +58,8 @@ export class D3Service {
     }
 
     public removeAll() {
-        d3.select('svg g.nodes')
-            .selectAll('*')
+        d3.select('.myTree')
+            .select('div')
             .remove();
     }
 }
