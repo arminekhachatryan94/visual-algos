@@ -39,18 +39,58 @@ export class D3Service {
     }
 
     public draw() {
-        let parent = d3
-            .select(".myTree")
-            .append("div")
-            .classed("text-center display-parent", true);
-        let i = 0;
-        this.root.data.value.forEach((e) => {
-            parent
-                .insert("p")
-                .classed("integer", true)
-                .text(e);
-            i++;
-        });
+        // let parent = d3
+        //     .select('.myTree')
+        //     .append('div')
+        //     .classed('text-center display-parent', true);
+
+        if(this.root) {
+            this.drawRecursion(this.root.data);
+        }
+
+        // let i = 0;
+        // this.root.data.value.forEach((e) => {
+        //     parent
+        //         .insert("p")
+        //         .classed("integer", true)
+        //         .text(e);
+        //     i++;
+        // });
+    }
+
+    public drawRecursion(data) {
+        // let parent = d3.select('#depth' + data.depth);
+        // if(parent._groups[0][0] == null) {
+        //     parent = d3
+        //         .select('.myTree')
+        //         .append('div')
+        //         .attr('id', 'depth' + data.depth);
+        // }
+        
+        // console.log( d ? true : false);
+
+        // parent.insert('div')
+        //     .classed('text-center display-parent', true);
+
+        if(!data.children) {
+            let parent = d3
+                .select('.myTree')
+                .insert('div')
+                .classed('text-center display-parent', true);
+
+            let i = 0;
+            data.value.forEach((e) => {
+                parent
+                    .insert('p')
+                    .classed('integer', true)
+                    .text(e);
+                i++;
+            });
+        }
+        else {
+            this.drawRecursion(data.children[0]);
+            this.drawRecursion(data.children[1]);
+        }
     }
 
     public setRoot(treeData: Node) {
@@ -59,7 +99,7 @@ export class D3Service {
 
     public removeAll() {
         d3.select('.myTree')
-            .select('div')
+            .selectAll('div')
             .remove();
     }
 }

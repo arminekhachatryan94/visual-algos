@@ -7,7 +7,6 @@
 }
 
 .display-parent {
-  background-color: black;
-  margin: 100px;
-  padding: 10px;
+  margin: 10px;
+  display: inline-block;
 }
