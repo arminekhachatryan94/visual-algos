@@ -128,133 +128,65 @@ export class MergesortComponent implements OnInit {
     });
   }
 
+  queue1: Node[];
+
   async sortArray() {
     this.disable_solve = true;
     if(!this.input_error.length && this.int_array.length) {
-      // this.height_array = [];
-    
-      // var height = (Math.log2(this.int_array.length)+2);
-
-      // console.log("height of merge tree:", height);
-
-      // for (let index = 0; index < height; index++) {
-      //   this.height_array.push(index);
-      // }
-
-      // while(this.treeBreakArr.length < height && this.treeMergeArr.length < height)
-      // {
-      //   await this.sleep(10);
-      // }
-
-      // this.treeData.data = JSON.stringify(this.int_array);
-
-      // this.tree = tree<Node>();
-      // this.tree.size([this.height, this.width]);
-      // this.root = this.tree(hierarchy<Node>(this.treeData));
-      // this.d3Service.draw(this.root);
-
-
-      //console.log(this.treeBreakArr);
-      // this.treeBreakArr.forEach(el=>{
-      //   el.nativeElement.innerHTML = "";
-      // })
-      // this.treeMergeArr.forEach(el=>{
-      //   el.nativeElement.innerHTML = "";
-      // })
-
-      // this.treeBreakArr[0].nativeElement.innerHTML = "start: "+JSON.stringify(this.int_array);
-    
-      await this.mergeSort(this.int_array, 0,1, this.treeData).then((res) => {
-        // this.treeMergeArr[0].nativeElement.innerHTML += "end: "+JSON.stringify(res);
-      });
+      this.queue1 = [];
+      this.queue1.push(this.treeData);
+      this.split();
     }
     this.disable_solve = false;
   }
 
-  async mergeSort (arr, index, depth, parent) {
-    if (arr.length < 2) {
-      await this.sleep(this.mergeSleepTime);
-      // this.treeBreakArr[depth].nativeElement.innerHTML += "node: "+JSON.stringify(arr) + " ";
-      return await arr;
-    }
+  async split() {
+    while(this.queue1.length < this.int_array.length) {
+      let node = this.queue1.shift();
+
+      if(node.value.length > 1) {
+        var mid = Math.floor(node.value.length / 2);
+        
+        var subLeft = node.value.slice(0, mid);
+
+        var subRight = node.value.slice(mid);
+
+        let leftNode = {
+          depth: node.depth+1,
+          parent: node.depth,
+          value: subLeft
+        };
+        
+        let rightNode = {
+          depth: node.depth+1,
+          parent: node.depth,
+          value: subRight
+        };
+
+        node.children = [
+          leftNode,
+          rightNode
+        ];
+
+        this.queue1.push(leftNode);
+        this.queue1.push(rightNode);
+
+        this.d3Service.removeAll();
+        this.d3Service.setRoot(this.treeData);
+        this.d3Service.draw();
     
-    var mid = Math.floor(arr.length / 2);
-    
-    var subLeft = arr.slice(0, mid);
-
-    var subRight = arr.slice(mid);
-
-    await this.sleep(this.mergeSleepTime);
-
-    // this.treeBreakArr[depth].nativeElement.innerHTML += "left: "+JSON.stringify(subLeft)+"right: "+JSON.stringify(subRight)+" ";
-    parent.children = [
-      {
-        depth: depth,
-        parent: depth-1,
-        value: subLeft
-      },
-      {
-        depth: depth,
-        parent: depth-1,
-        value: subRight
+        await this.sleep(this.mergeSleepTime);
       }
-    ]
-    this.d3Service.removeAll();
-    this.d3Service.setRoot(this.treeData);
-    this.d3Service.draw();
-    
-    await this.mergeSort(subLeft, index, depth+1, parent.children[0]).then((res) => {
-      subLeft = res;
-    }).catch(console.log);
+    }
+    console.log(this.treeData);
+  }
 
-    await this.sleep(this.mergeSleepTime);
-    
-    await this.mergeSort(subRight, index + subLeft.length,depth+1, parent.children[1]).then((res) => {
-      subRight = res;
-    }).catch(console.log);
-
-    await this.sleep(this.mergeSleepTime);
-    
-    var merged = await this.merge(subLeft, subRight, index);
-
-    // this.treeMergeArr[depth].nativeElement.innerHTML += "merged: "+JSON.stringify(merged);
-
-    await this.sleep(this.mergeSleepTime);
-
-    return merged; 
+  merge() {
+    ;
   }
 
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  merge (left, right, index) {
-    let result = [];
-    let indexLeft = 0;
-    let indexRight = 0;
-
-    while (indexLeft < left.length && indexRight < right.length) {
-      console.log(left, right)
-      if(this.ordering == 'ASC') {
-        if (parseFloat(left[indexLeft]) < parseFloat(right[indexRight])) {
-          result.push(left[indexLeft]);
-          indexLeft++;
-        } else {
-          result.push(right[indexRight]);
-          indexRight++;
-        }
-      } else {
-        if (parseFloat(left[indexLeft]) > parseFloat(right[indexRight])) {
-          result.push(left[indexLeft]);
-          indexLeft++;
-        } else {
-          result.push(right[indexRight]);
-          indexRight++;
-        }
-      }
-    }
-  
-    return result.concat(left.slice(indexLeft)).concat(right.slice(indexRight));
   }
 
   clearInputError() {
