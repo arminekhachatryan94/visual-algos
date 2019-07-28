@@ -129,13 +129,17 @@ export class MergesortComponent implements OnInit {
   }
 
   queue1: Node[];
+  maxDepth: number;
 
   async sortArray() {
     this.disable_solve = true;
     if(!this.input_error.length && this.int_array.length) {
       this.queue1 = [];
+      this.maxDepth = 0;
       this.queue1.push(this.treeData);
-      this.split();
+      await this.split();
+      console.log('tree', this.treeData);
+      await this.merge();
     }
     this.disable_solve = false;
   }
@@ -163,6 +167,10 @@ export class MergesortComponent implements OnInit {
           value: subRight
         };
 
+        if(this.maxDepth < node.depth + 1) {
+          this.maxDepth = node.depth+1;
+        }
+
         node.children = [
           leftNode,
           rightNode
@@ -176,13 +184,75 @@ export class MergesortComponent implements OnInit {
         this.d3Service.draw();
     
         await this.sleep(this.mergeSleepTime);
+      } else {
+        this.queue1.push(node);
       }
     }
-    console.log(this.treeData);
   }
 
-  merge() {
-    ;
+  async merge() {
+    // console.log(this.queue1, this.maxDepth);
+    for(let depth = this.maxDepth-1; depth >= 0; depth--) {
+      this.traverse(this.treeData, depth);
+      await this.sleep(this.mergeSleepTime);
+      this.d3Service.removeAll();
+      this.d3Service.setRoot(this.treeData);
+      this.d3Service.draw();
+    }
+  }
+
+  async traverse(tree, depth) {
+    console.log(depth, tree);
+    if(tree.children) {
+      if(tree.depth === depth) {
+        let nodeLeft = tree.children[0].value;
+        let nodeRight = tree.children[1].value;
+        tree.value = this.sort(nodeLeft, nodeRight);
+        delete tree.children;
+      } else {
+        let nodeLeft = tree.children[0];
+        let nodeRight = tree.children[1];
+        this.traverse(nodeLeft, depth);
+        this.traverse(nodeRight, depth);
+      }
+    }
+  }
+
+  sort(arr1, arr2) {
+    let ret = [];
+    let size = 0;
+    let i = 0;
+    let j = 0;
+    while(size < (arr1.length + arr2.length)) {
+      if(this.ordering == 'ASC') {
+        if( arr1[0] <= arr2[0] ) {
+          ret.push(arr1[0]);
+          arr1.shift();
+        } else {
+          ret.push(arr2[0]);
+          arr2.shift();
+        }
+      } else {
+        if( arr1[0] >= arr2[0] ) {
+          ret.push(arr1[0]);
+          arr1.shift();
+        } else {
+          ret.push(arr2[0]);
+          arr2.shift();
+        }
+      }
+      size++;
+    }
+    if(arr1.length > 0) {
+      while(arr1.length) {
+        ret.push(arr1.shift());
+      }
+    } else if(arr2.length > 0) {
+      while(arr2.length) {
+        ret.push(arr2.shift());
+      }
+    }
+    return ret;
   }
 
   sleep(ms) {
