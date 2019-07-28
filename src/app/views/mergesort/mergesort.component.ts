@@ -26,14 +26,10 @@ export class MergesortComponent implements OnInit {
   ordering: String;
   disable_solve: Boolean;
 
+  mergedArray: number[];
+
   treeData : Node;
-  // private margin: any = { top: 20, right: 120, bottom: 20, left: 120 };
-  // private width: number;
-  // private height: number;
   private root: HierarchyPointNode<Node>;
-  // private tree: TreeLayout<Node>;
-  // private svg: any;
-  // private diagonal: any;
 
   @ViewChildren("treeBreak") treeBreakRef : QueryList<ElementRef>;
   @ViewChildren("treeMerge") treeMergeRef : QueryList<ElementRef>;
@@ -47,6 +43,7 @@ export class MergesortComponent implements OnInit {
     this.userText = "";
     this.input_error = "";
     this.disable_solve = false;
+    this.mergedArray = [];
   }
 
   ngOnInit() {
@@ -55,12 +52,6 @@ export class MergesortComponent implements OnInit {
   }
 
   ngAfterContentInit(){
-    // this.treeData = {
-    //   depth: 0,
-    //   parent: -1,
-    //   value: '["1","0","5"]',
-    //   children: []
-    // }
     this.d3Service.initialize();
   }
 
@@ -91,7 +82,6 @@ export class MergesortComponent implements OnInit {
     let arr = this.userText.replace(/\s+/g,' ').trim().split(" ");
     arr.forEach(value => {
       if(!this.isNumeric(value)) {
-        // console.log(value + " : invalid");
         this.input_error = "Error in input.";
         this.treeData = {
           depth: 0,
@@ -171,6 +161,21 @@ export class MergesortComponent implements OnInit {
     this.disable_solve = false;
   }
 
+  async traverse(tree, depth) {
+
+    if(tree.children && depth > 0)
+    {
+      var left = this.treeData.children[0];
+      var right = this.treeData.children[1];
+
+      this.traverse(left,depth-1);
+      this.traverse(right,depth-1);
+    
+    }else{
+      return await tree.children;
+    }
+  }
+
   async mergeSort (arr, index, depth, parent) {
     if (arr.length < 2) {
       await this.sleep(this.mergeSleepTime);
@@ -198,7 +203,8 @@ export class MergesortComponent implements OnInit {
         parent: depth-1,
         value: subRight
       }
-    ]
+    ];
+    
     this.d3Service.removeAll();
     this.d3Service.setRoot(this.treeData);
     this.d3Service.draw();
@@ -215,8 +221,15 @@ export class MergesortComponent implements OnInit {
 
     await this.sleep(this.mergeSleepTime);
     
-    var merged = await this.merge(subLeft, subRight, index);
-
+    var merged = await this.merge(subLeft, subRight, parent);
+    
+    parent.value = merged;
+    parent.children = null;
+    
+    this.d3Service.removeAll();
+    this.d3Service.setRoot(this.treeData);
+    this.d3Service.draw();
+    
     // this.treeMergeArr[depth].nativeElement.innerHTML += "merged: "+JSON.stringify(merged);
 
     await this.sleep(this.mergeSleepTime);
@@ -228,32 +241,59 @@ export class MergesortComponent implements OnInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  merge (left, right, index) {
+  merge (left, right, parent) {
+    this.mergedArray = [];
     let result = [];
     let indexLeft = 0;
     let indexRight = 0;
 
-    while (indexLeft < left.length && indexRight < right.length) {
+    while (left.length && right.length) {
       console.log(left, right)
       if(this.ordering == 'ASC') {
-        if (parseFloat(left[indexLeft]) < parseFloat(right[indexRight])) {
-          result.push(left[indexLeft]);
-          indexLeft++;
+        if (parseFloat(left[0]) < parseFloat(right[0])) {
+          let node = left.shift();
+          result.push(node);
+          this.mergedArray.push(node);
         } else {
-          result.push(right[indexRight]);
-          indexRight++;
+          let node = right.shift();
+          result.push(node);
+          this.mergedArray.push(node);
         }
       } else {
-        if (parseFloat(left[indexLeft]) > parseFloat(right[indexRight])) {
-          result.push(left[indexLeft]);
-          indexLeft++;
+        if (parseFloat(left[0]) > parseFloat(right[0])) {
+          let node = left.shift();
+          result.push(node);
+          this.mergedArray.push(node);
         } else {
-          result.push(right[indexRight]);
-          indexRight++;
+          let node = right.shift();
+          result.push(node);
+          this.mergedArray.push(node);
         }
       }
+      this.d3Service.removeAll();
+      this.d3Service.setRoot(this.treeData);
+      this.d3Service.draw();
+      this.sleep(this.mergeSleepTime);
     }
-  
+    while(left.length) {
+      let node = left.shift();
+      result.push(node);
+      this.mergedArray.push(node);
+
+      this.d3Service.removeAll();
+      this.d3Service.setRoot(this.treeData);
+      this.d3Service.draw();
+    }
+    while(right.length) {
+      let node = right.shift();
+      result.push(node);
+      this.mergedArray.push(node);
+
+      this.d3Service.removeAll();
+      this.d3Service.setRoot(this.treeData);
+      this.d3Service.draw();
+    }
+
     return result.concat(left.slice(indexLeft)).concat(right.slice(indexRight));
   }
 
