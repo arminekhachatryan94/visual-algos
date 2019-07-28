@@ -38,7 +38,7 @@ export class D3Service {
         // this.draw(this.root);
     }
 
-    public draw() {
+    public draw() { // conditional = whether or not draw the parent
         // let parent = d3
         //     .select('.myTree')
         //     .append('div')

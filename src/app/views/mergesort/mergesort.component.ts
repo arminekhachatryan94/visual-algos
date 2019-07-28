@@ -207,7 +207,7 @@ export class MergesortComponent implements OnInit {
       if(tree.depth === depth) {
         let nodeLeft = tree.children[0].value;
         let nodeRight = tree.children[1].value;
-        tree.value = this.sort(nodeLeft, nodeRight);
+        this.sort(nodeLeft, nodeRight, tree);
         delete tree.children;
       } else {
         let nodeLeft = tree.children[0];
@@ -218,26 +218,26 @@ export class MergesortComponent implements OnInit {
     }
   }
 
-  sort(arr1, arr2) {
-    let ret = [];
+  async sort(arr1, arr2, parent) {
+    parent.value = [];
     let size = 0;
     let i = 0;
     let j = 0;
     while(size < (arr1.length + arr2.length)) {
       if(this.ordering == 'ASC') {
         if( arr1[0] <= arr2[0] ) {
-          ret.push(arr1[0]);
+          parent.value.push(arr1[0]);
           arr1.shift();
         } else {
-          ret.push(arr2[0]);
+          parent.value.push(arr2[0]);
           arr2.shift();
         }
       } else {
         if( arr1[0] >= arr2[0] ) {
-          ret.push(arr1[0]);
+          parent.value.push(arr1[0]);
           arr1.shift();
         } else {
-          ret.push(arr2[0]);
+          parent.value.push(arr2[0]);
           arr2.shift();
         }
       }
@@ -245,14 +245,13 @@ export class MergesortComponent implements OnInit {
     }
     if(arr1.length > 0) {
       while(arr1.length) {
-        ret.push(arr1.shift());
+        parent.value.push(arr1.shift());
       }
     } else if(arr2.length > 0) {
       while(arr2.length) {
-        ret.push(arr2.shift());
+        parent.value.push(arr2.shift());
       }
     }
-    return ret;
   }
 
   sleep(ms) {
