@@ -88,6 +88,7 @@ export class MergesortComponent implements OnInit {
           parent: -1,
           value: undefined
         };
+        this.sleep(this.mergeSleepTime);
         this.d3Service.setRoot(this.treeData);
         this.d3Service.draw();
         return false;
@@ -121,39 +122,7 @@ export class MergesortComponent implements OnInit {
   async sortArray() {
     this.disable_solve = true;
     if(!this.input_error.length && this.int_array.length) {
-      // this.height_array = [];
-    
-      // var height = (Math.log2(this.int_array.length)+2);
 
-      // console.log("height of merge tree:", height);
-
-      // for (let index = 0; index < height; index++) {
-      //   this.height_array.push(index);
-      // }
-
-      // while(this.treeBreakArr.length < height && this.treeMergeArr.length < height)
-      // {
-      //   await this.sleep(10);
-      // }
-
-      // this.treeData.data = JSON.stringify(this.int_array);
-
-      // this.tree = tree<Node>();
-      // this.tree.size([this.height, this.width]);
-      // this.root = this.tree(hierarchy<Node>(this.treeData));
-      // this.d3Service.draw(this.root);
-
-
-      //console.log(this.treeBreakArr);
-      // this.treeBreakArr.forEach(el=>{
-      //   el.nativeElement.innerHTML = "";
-      // })
-      // this.treeMergeArr.forEach(el=>{
-      //   el.nativeElement.innerHTML = "";
-      // })
-
-      // this.treeBreakArr[0].nativeElement.innerHTML = "start: "+JSON.stringify(this.int_array);
-    
       await this.mergeSort(this.int_array, 0,1, this.treeData).then((res) => {
         // this.treeMergeArr[0].nativeElement.innerHTML += "end: "+JSON.stringify(res);
       });
@@ -168,10 +137,9 @@ export class MergesortComponent implements OnInit {
       var left = this.treeData.children[0];
       var right = this.treeData.children[1];
 
-      this.traverse(left,depth-1);
-      this.traverse(right,depth-1);
-    
-    }else{
+      await this.traverse(left,depth-1);
+      await this.traverse(right,depth-1);
+    } else{
       return await tree.children;
     }
   }
@@ -252,43 +220,97 @@ export class MergesortComponent implements OnInit {
       if(this.ordering == 'ASC') {
         if (parseFloat(left[0]) < parseFloat(right[0])) {
           let node = left.shift();
+
+          this.sleep(this.mergeSleepTime);
+          this.d3Service.removeAll();
+          this.d3Service.setRoot(this.treeData);
+          this.d3Service.draw();
+
           result.push(node);
           this.mergedArray.push(node);
+          
+          this.sleep(this.mergeSleepTime);
+          this.d3Service.removeAll();
+          this.d3Service.setRoot(this.treeData);
+          this.d3Service.draw();    
         } else {
           let node = right.shift();
+
+          this.sleep(this.mergeSleepTime);
+          this.d3Service.removeAll();
+          this.d3Service.setRoot(this.treeData);
+          this.d3Service.draw();
+
           result.push(node);
           this.mergedArray.push(node);
+
+          this.sleep(this.mergeSleepTime);
+          this.d3Service.removeAll();
+          this.d3Service.setRoot(this.treeData);
+          this.d3Service.draw();    
         }
       } else {
         if (parseFloat(left[0]) > parseFloat(right[0])) {
           let node = left.shift();
+
+          this.sleep(this.mergeSleepTime);
+          this.d3Service.removeAll();
+          this.d3Service.setRoot(this.treeData);
+          this.d3Service.draw();
+    
           result.push(node);
           this.mergedArray.push(node);
+
+          this.sleep(this.mergeSleepTime);
+          this.d3Service.removeAll();
+          this.d3Service.setRoot(this.treeData);
+          this.d3Service.draw();    
         } else {
           let node = right.shift();
+
+          this.sleep(this.mergeSleepTime);
+          this.d3Service.removeAll();
+          this.d3Service.setRoot(this.treeData);
+          this.d3Service.draw();
+    
           result.push(node);
           this.mergedArray.push(node);
+
+          this.sleep(this.mergeSleepTime);
+          this.d3Service.removeAll();
+          this.d3Service.setRoot(this.treeData);
+          this.d3Service.draw();    
         }
       }
-      this.d3Service.removeAll();
-      this.d3Service.setRoot(this.treeData);
-      this.d3Service.draw();
-      this.sleep(this.mergeSleepTime);
     }
     while(left.length) {
       let node = left.shift();
+
+      this.sleep(this.mergeSleepTime);
+      this.d3Service.removeAll();
+      this.d3Service.setRoot(this.treeData);
+      this.d3Service.draw();
+
       result.push(node);
       this.mergedArray.push(node);
 
+      this.sleep(this.mergeSleepTime);
       this.d3Service.removeAll();
       this.d3Service.setRoot(this.treeData);
       this.d3Service.draw();
     }
     while(right.length) {
       let node = right.shift();
+
+      this.sleep(this.mergeSleepTime);
+      this.d3Service.removeAll();
+      this.d3Service.setRoot(this.treeData);
+      this.d3Service.draw();
+
       result.push(node);
       this.mergedArray.push(node);
 
+      this.sleep(this.mergeSleepTime);
       this.d3Service.removeAll();
       this.d3Service.setRoot(this.treeData);
       this.d3Service.draw();
