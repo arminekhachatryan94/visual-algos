@@ -123,29 +123,29 @@ export class MergesortComponent implements OnInit {
     this.disable_solve = true;
     if(!this.input_error.length && this.int_array.length) {
 
-      await this.mergeSort(this.int_array, 0,1, this.treeData).then((res) => {
+      await this.depthMergeSort(this.int_array, 0,1, this.treeData).then((res) => {
         // this.treeMergeArr[0].nativeElement.innerHTML += "end: "+JSON.stringify(res);
       });
     }
     this.disable_solve = false;
   }
 
-  async traverse(tree, depth) {
+  async depthTraverse(tree, depth) {
     if( depth > 0) {
       if(tree.left) {
         var left = this.treeData.left;
-        await this.traverse(left,depth-1);
+        await this.depthTraverse(left,depth-1);
       }
       if(tree.right) {
         var right = this.treeData.right;
-        await this.traverse(right,depth-1);
+        await this.depthTraverse(right,depth-1);
       }
     } else{
       return await tree.left && tree.right;
     }
   }
 
-  async mergeSort (arr, index, depth, parent) {
+  async depthMergeSort (arr, index, depth, parent) {
     if (arr.length < 2) {
       await this.sleep(this.mergeSleepTime);
       // this.treeBreakArr[depth].nativeElement.innerHTML += "node: "+JSON.stringify(arr) + " ";
@@ -176,19 +176,19 @@ export class MergesortComponent implements OnInit {
     this.d3Service.setRoot(this.treeData);
     this.d3Service.draw();
     
-    await this.mergeSort(subLeft, index, depth+1, parent.left).then((res) => {
+    await this.depthMergeSort(subLeft, index, depth+1, parent.left).then((res) => {
       subLeft = res;
     }).catch(console.log);
 
     await this.sleep(this.mergeSleepTime);
     
-    await this.mergeSort(subRight, index + subLeft.length,depth+1, parent.right).then((res) => {
+    await this.depthMergeSort(subRight, index + subLeft.length,depth+1, parent.right).then((res) => {
       subRight = res;
     }).catch(console.log);
 
     await this.sleep(this.mergeSleepTime);
     
-    var merged = await this.merge(parent.left, parent.right, parent);
+    var merged = await this.depthMerge(parent.left, parent.right, parent);
     
     parent.left = null;
     parent.right = null;
@@ -207,11 +207,7 @@ export class MergesortComponent implements OnInit {
     return merged; 
   }
 
-  sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  async merge (leftNode, rightNode, parent) {
+  async depthMerge (leftNode, rightNode, parent) {
     this.mergedArray = [];
     let result = [];
     let indexLeft = 0;
@@ -222,11 +218,6 @@ export class MergesortComponent implements OnInit {
       if(this.ordering == 'ASC') {
         if(parseFloat(leftNode.value[0]) < parseFloat(rightNode.value[0])) {
           let node = leftNode.value.shift();
-
-          await this.sleep(this.mergeSleepTime);
-          this.d3Service.removeAll();
-          this.d3Service.setRoot(this.treeData);
-          this.d3Service.draw();
 
           result.push(node);
           this.mergedArray.push(node);
@@ -323,6 +314,10 @@ export class MergesortComponent implements OnInit {
     this.mergedArray = [];
     
     return result.concat(leftNode.value.slice(indexLeft)).concat(rightNode.value.slice(indexRight));
+  }
+
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   clearInputError() {
