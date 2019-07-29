@@ -55,12 +55,6 @@ export class MergesortComponent implements OnInit {
   }
 
   ngAfterContentInit(){
-    // this.treeData = {
-    //   depth: 0,
-    //   parent: -1,
-    //   value: '["1","0","5"]',
-    //   children: []
-    // }
     this.d3Service.initialize();
   }
 
@@ -137,14 +131,14 @@ export class MergesortComponent implements OnInit {
       this.queue1 = [];
       this.maxDepth = 0;
       this.queue1.push(this.treeData);
-      await this.split();
+      await this.breadthSplit();
       console.log('tree', this.treeData);
-      await this.merge();
+      await this.breadthMerge();
     }
     this.disable_solve = false;
   }
 
-  async split() {
+  async breadthSplit() {
     while(this.queue1.length < this.int_array.length) {
       let node = this.queue1.shift();
 
@@ -190,10 +184,10 @@ export class MergesortComponent implements OnInit {
     }
   }
 
-  async merge() {
+  async breadthMerge() {
     // console.log(this.queue1, this.maxDepth);
     for(let depth = this.maxDepth-1; depth >= 0; depth--) {
-      this.traverse(this.treeData, depth);
+      await this.breadthTraverse(this.treeData, depth);
       await this.sleep(this.mergeSleepTime);
       this.d3Service.removeAll();
       this.d3Service.setRoot(this.treeData);
@@ -201,24 +195,24 @@ export class MergesortComponent implements OnInit {
     }
   }
 
-  async traverse(tree, depth) {
+  async breadthTraverse(tree, depth) {
     console.log(depth, tree);
     if(tree.children) {
       if(tree.depth === depth) {
         let nodeLeft = tree.children[0].value;
         let nodeRight = tree.children[1].value;
-        this.sort(nodeLeft, nodeRight, tree);
+        await this.breadthSort(nodeLeft, nodeRight, tree);
         delete tree.children;
       } else {
         let nodeLeft = tree.children[0];
         let nodeRight = tree.children[1];
-        this.traverse(nodeLeft, depth);
-        this.traverse(nodeRight, depth);
+        await this.breadthTraverse(nodeLeft, depth);
+        await this.breadthTraverse(nodeRight, depth);
       }
     }
   }
 
-  async sort(arr1, arr2, parent) {
+  async breadthSort(arr1, arr2, parent) {
     parent.value = [];
     let size = 0;
     let i = 0;
@@ -226,7 +220,7 @@ export class MergesortComponent implements OnInit {
     while(size < (arr1.length + arr2.length)) {
       if(this.ordering == 'ASC') {
         if( arr1[0] <= arr2[0] ) {
-          parent.value.push(arr1[0]);
+          parent.value.push(arr1.shift());
           arr1.shift();
         } else {
           parent.value.push(arr2[0]);
