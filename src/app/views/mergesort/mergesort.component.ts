@@ -26,10 +26,11 @@ export class MergesortComponent implements OnInit {
   ordering: String;
   disable_solve: Boolean;
 
-  mergedArray: number[];
-
   treeData : Node;
-  private root: HierarchyPointNode<Node>;
+
+  mergedArray: number[];
+  queue1: Node[];
+  maxDepth: number;
 
   @ViewChildren("treeBreak") treeBreakRef : QueryList<ElementRef>;
   @ViewChildren("treeMerge") treeMergeRef : QueryList<ElementRef>;
@@ -122,10 +123,17 @@ export class MergesortComponent implements OnInit {
   async sortArray() {
     this.disable_solve = true;
     if(!this.input_error.length && this.int_array.length) {
+      // depth
+      // await this.depthMergeSort(this.int_array, 0,1, this.treeData);
 
-      await this.depthMergeSort(this.int_array, 0,1, this.treeData).then((res) => {
-        // this.treeMergeArr[0].nativeElement.innerHTML += "end: "+JSON.stringify(res);
-      });
+      // breadth
+      this.queue1 = [];
+      this.maxDepth = 0;
+      this.queue1.push(this.treeData);
+      await this.breadthSplit();
+      console.log('tree', this.treeData);
+      await this.breadthMerge();
+
     }
     this.disable_solve = false;
   }
@@ -188,7 +196,7 @@ export class MergesortComponent implements OnInit {
 
     await this.sleep(this.mergeSleepTime);
     
-    var merged = await this.depthMerge(parent.left, parent.right, parent);
+    var merged = await this.merge(parent.left, parent.right);
     
     parent.left = null;
     parent.right = null;
@@ -207,7 +215,7 @@ export class MergesortComponent implements OnInit {
     return merged; 
   }
 
-  async depthMerge (leftNode, rightNode, parent) {
+  async merge(leftNode, rightNode) {
     this.mergedArray = [];
     let result = [];
     let indexLeft = 0;
@@ -314,6 +322,85 @@ export class MergesortComponent implements OnInit {
     this.mergedArray = [];
     
     return result.concat(leftNode.value.slice(indexLeft)).concat(rightNode.value.slice(indexRight));
+  }
+
+  async breadthSplit() {
+    while(this.queue1.length < this.int_array.length) {
+      let node = this.queue1.shift();
+
+      if(node.value.length > 1) {
+        var mid = Math.floor(node.value.length / 2);
+        
+        var subLeft = node.value.slice(0, mid);
+
+        var subRight = node.value.slice(mid);
+
+        let leftNode = {
+          depth: node.depth+1,
+          parent: node.depth,
+          value: subLeft
+        };
+        
+        let rightNode = {
+          depth: node.depth+1,
+          parent: node.depth,
+          value: subRight
+        };
+
+        if(this.maxDepth < node.depth + 1) {
+          this.maxDepth = node.depth+1;
+        }
+
+        node.left = leftNode;
+        node.right = rightNode;
+
+        this.queue1.push(leftNode);
+        this.queue1.push(rightNode);
+
+        this.d3Service.removeAll();
+        this.d3Service.setRoot(this.treeData);
+        this.d3Service.draw();
+    
+        await this.sleep(this.mergeSleepTime);
+      } else {
+        this.queue1.push(node);
+      }
+    }
+  }
+
+  async breadthMerge() {
+    console.log("depth", this.maxDepth);
+    // console.log(this.queue1, this.maxDepth);
+    for(let depth = this.maxDepth-1; depth >= 0; depth--) {
+      await this.breadthTraverse(this.treeData, depth);
+      await this.sleep(this.mergeSleepTime);
+      this.d3Service.removeAll();
+      this.d3Service.setRoot(this.treeData);
+      this.d3Service.draw();
+    }
+  }
+
+  async breadthTraverse(tree, depth) {
+    // console.log(depth, tree);
+    if(tree.left && tree.right) {
+      if(tree.depth === depth) {
+        let nodeLeft = tree.left;
+        let nodeRight = tree.right;
+        console.log("merging....");
+        this.sleep(this.mergeSleepTime);
+        console.log("....merged");
+        let merged = await this.merge(nodeLeft, nodeRight);
+        tree.value = merged;
+        tree.left = null;
+        tree.right = null;
+
+      } else {
+        let nodeLeft = tree.left;
+        let nodeRight = tree.right;
+        await this.breadthTraverse(nodeLeft, depth);
+        await this.breadthTraverse(nodeRight, depth);
+      }
+    }
   }
 
   sleep(ms) {
