@@ -72,7 +72,7 @@ export class D3Service {
         // parent.insert('div')
         //     .classed('text-center display-parent', true);
 
-        if(!data.children) {
+        if(!(data.left && data.right)) {
             let parent = d3
                 .select('.myTree')
                 .insert('div')
@@ -87,9 +87,11 @@ export class D3Service {
                 i++;
             });
         }
-        else {
-            this.drawRecursion(data.children[0]);
-            this.drawRecursion(data.children[1]);
+        if(data.left) {
+            this.drawRecursion(data.left);
+        }
+        if(data.right) {
+            this.drawRecursion(data.right);
         }
     }
 

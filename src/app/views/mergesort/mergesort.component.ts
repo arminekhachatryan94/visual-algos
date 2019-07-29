@@ -131,16 +131,17 @@ export class MergesortComponent implements OnInit {
   }
 
   async traverse(tree, depth) {
-
-    if(tree.children && depth > 0)
-    {
-      var left = this.treeData.children[0];
-      var right = this.treeData.children[1];
-
-      await this.traverse(left,depth-1);
-      await this.traverse(right,depth-1);
+    if( depth > 0) {
+      if(tree.left) {
+        var left = this.treeData.left;
+        await this.traverse(left,depth-1);
+      }
+      if(tree.right) {
+        var right = this.treeData.right;
+        await this.traverse(right,depth-1);
+      }
     } else{
-      return await tree.children;
+      return await tree.left && tree.right;
     }
   }
 
@@ -160,40 +161,41 @@ export class MergesortComponent implements OnInit {
     await this.sleep(this.mergeSleepTime);
 
     // this.treeBreakArr[depth].nativeElement.innerHTML += "left: "+JSON.stringify(subLeft)+"right: "+JSON.stringify(subRight)+" ";
-    parent.children = [
-      {
-        depth: depth,
-        parent: depth-1,
-        value: subLeft
-      },
-      {
-        depth: depth,
-        parent: depth-1,
-        value: subRight
-      }
-    ];
+    parent.left = {
+      depth: depth,
+      parent: depth-1,
+      value: subLeft
+    };
+    parent.right = {
+      depth: depth,
+      parent: depth-1,
+      value: subRight
+    }
     
     this.d3Service.removeAll();
     this.d3Service.setRoot(this.treeData);
     this.d3Service.draw();
     
-    await this.mergeSort(subLeft, index, depth+1, parent.children[0]).then((res) => {
+    await this.mergeSort(subLeft, index, depth+1, parent.left).then((res) => {
       subLeft = res;
     }).catch(console.log);
+    parent.left = null;
 
     await this.sleep(this.mergeSleepTime);
     
-    await this.mergeSort(subRight, index + subLeft.length,depth+1, parent.children[1]).then((res) => {
+    await this.mergeSort(subRight, index + subLeft.length,depth+1, parent.right).then((res) => {
       subRight = res;
     }).catch(console.log);
+    parent.right = null;
 
     await this.sleep(this.mergeSleepTime);
     
     var merged = await this.merge(subLeft, subRight, parent);
     
     parent.value = merged;
-    parent.children = null;
     
+    await this.sleep(this.mergeSleepTime);
+
     this.d3Service.removeAll();
     this.d3Service.setRoot(this.treeData);
     this.d3Service.draw();
@@ -209,19 +211,19 @@ export class MergesortComponent implements OnInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  merge (left, right, parent) {
+  async merge (left, right, parent) {
     this.mergedArray = [];
     let result = [];
     let indexLeft = 0;
     let indexRight = 0;
 
     while (left.length && right.length) {
-      console.log(left, right)
+      console.log("before", left, right);
       if(this.ordering == 'ASC') {
         if (parseFloat(left[0]) < parseFloat(right[0])) {
           let node = left.shift();
 
-          this.sleep(this.mergeSleepTime);
+          await this.sleep(this.mergeSleepTime);
           this.d3Service.removeAll();
           this.d3Service.setRoot(this.treeData);
           this.d3Service.draw();
@@ -229,14 +231,14 @@ export class MergesortComponent implements OnInit {
           result.push(node);
           this.mergedArray.push(node);
           
-          this.sleep(this.mergeSleepTime);
+          await this.sleep(this.mergeSleepTime);
           this.d3Service.removeAll();
           this.d3Service.setRoot(this.treeData);
-          this.d3Service.draw();    
+          this.d3Service.draw();
         } else {
           let node = right.shift();
 
-          this.sleep(this.mergeSleepTime);
+          await this.sleep(this.mergeSleepTime);
           this.d3Service.removeAll();
           this.d3Service.setRoot(this.treeData);
           this.d3Service.draw();
@@ -244,16 +246,16 @@ export class MergesortComponent implements OnInit {
           result.push(node);
           this.mergedArray.push(node);
 
-          this.sleep(this.mergeSleepTime);
+          await this.sleep(this.mergeSleepTime);
           this.d3Service.removeAll();
           this.d3Service.setRoot(this.treeData);
-          this.d3Service.draw();    
+          this.d3Service.draw();
         }
       } else {
         if (parseFloat(left[0]) > parseFloat(right[0])) {
           let node = left.shift();
 
-          this.sleep(this.mergeSleepTime);
+          await this.sleep(this.mergeSleepTime);
           this.d3Service.removeAll();
           this.d3Service.setRoot(this.treeData);
           this.d3Service.draw();
@@ -261,14 +263,14 @@ export class MergesortComponent implements OnInit {
           result.push(node);
           this.mergedArray.push(node);
 
-          this.sleep(this.mergeSleepTime);
+          await this.sleep(this.mergeSleepTime);
           this.d3Service.removeAll();
           this.d3Service.setRoot(this.treeData);
-          this.d3Service.draw();    
+          this.d3Service.draw();
         } else {
           let node = right.shift();
 
-          this.sleep(this.mergeSleepTime);
+          await this.sleep(this.mergeSleepTime);
           this.d3Service.removeAll();
           this.d3Service.setRoot(this.treeData);
           this.d3Service.draw();
@@ -276,17 +278,18 @@ export class MergesortComponent implements OnInit {
           result.push(node);
           this.mergedArray.push(node);
 
-          this.sleep(this.mergeSleepTime);
+          await this.sleep(this.mergeSleepTime);
           this.d3Service.removeAll();
           this.d3Service.setRoot(this.treeData);
-          this.d3Service.draw();    
+          this.d3Service.draw();          
         }
       }
+      console.log("after", left, right);
     }
     while(left.length) {
       let node = left.shift();
 
-      this.sleep(this.mergeSleepTime);
+      await this.sleep(this.mergeSleepTime);
       this.d3Service.removeAll();
       this.d3Service.setRoot(this.treeData);
       this.d3Service.draw();
@@ -294,7 +297,7 @@ export class MergesortComponent implements OnInit {
       result.push(node);
       this.mergedArray.push(node);
 
-      this.sleep(this.mergeSleepTime);
+      await this.sleep(this.mergeSleepTime);
       this.d3Service.removeAll();
       this.d3Service.setRoot(this.treeData);
       this.d3Service.draw();
@@ -302,7 +305,7 @@ export class MergesortComponent implements OnInit {
     while(right.length) {
       let node = right.shift();
 
-      this.sleep(this.mergeSleepTime);
+      await this.sleep(this.mergeSleepTime);
       this.d3Service.removeAll();
       this.d3Service.setRoot(this.treeData);
       this.d3Service.draw();
@@ -310,12 +313,15 @@ export class MergesortComponent implements OnInit {
       result.push(node);
       this.mergedArray.push(node);
 
-      this.sleep(this.mergeSleepTime);
+      await this.sleep(this.mergeSleepTime);
       this.d3Service.removeAll();
       this.d3Service.setRoot(this.treeData);
       this.d3Service.draw();
     }
 
+    await this.sleep(this.mergeSleepTime);
+    this.mergedArray = [];
+    
     return result.concat(left.slice(indexLeft)).concat(right.slice(indexRight));
   }
 
