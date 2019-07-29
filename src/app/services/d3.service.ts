@@ -86,11 +86,8 @@ export class D3Service {
                     .text(e);
                 i++;
             });
-        }
-        if(data.left) {
+        } else {
             this.drawRecursion(data.left);
-        }
-        if(data.right) {
             this.drawRecursion(data.right);
         }
     }
