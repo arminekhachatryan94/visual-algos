@@ -14,7 +14,7 @@ import * as d3 from 'd3';
 // import 'rxjs/Rx';
 
 @Injectable()
-export class D3Service {
+export class MergesortService {
     private margin: any = { top: 20, right: 120, bottom: 20, left: 120 };
     private width: number;
     private height: number;

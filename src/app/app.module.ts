@@ -9,7 +9,7 @@ import { MergesortComponent } from './views/mergesort/mergesort.component';
 import { HuffmancodeComponent } from './views/huffmancode/huffmancode.component';
 import { KruskalComponent } from './views/kruskal/kruskal.component';
 import { HomeComponent } from './views/home/home.component';
-import { D3Service } from './services/d3.service';
+import { MergesortService } from './services/mergesort.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,7 @@ import { D3Service } from './services/d3.service';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [D3Service],
+  providers: [MergesortService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
