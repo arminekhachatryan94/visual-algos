@@ -10,6 +10,7 @@ import { HuffmancodeComponent } from './views/huffmancode/huffmancode.component'
 import { KruskalComponent } from './views/kruskal/kruskal.component';
 import { HomeComponent } from './views/home/home.component';
 import { MergesortService } from './services/mergesort.service';
+import { KruskalService } from './services/kruskal.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,10 @@ import { MergesortService } from './services/mergesort.service';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [MergesortService],
+  providers: [
+    MergesortService,
+    KruskalService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
