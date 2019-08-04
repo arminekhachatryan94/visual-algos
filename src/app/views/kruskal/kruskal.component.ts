@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { KruskalService } from 'src/app/services/kruskal.service';
 import { Edge } from 'src/app/models/edge.model';
 import { Vertice } from 'src/app/models/vertice.model';
+import PriorityQueue from 'ts-priority-queue';
 
 @Component({
   selector: 'app-kruskal',
@@ -12,6 +13,7 @@ export class KruskalComponent implements OnInit {
   drawService: KruskalService;
   vertices: Vertice[];
   edges: Edge[];
+  queue: any;
 
   sleepTime = 1000;
 
@@ -19,6 +21,7 @@ export class KruskalComponent implements OnInit {
     this.drawService = drawService;
     this.vertices = [];
     this.edges = [];
+    this.queue = new PriorityQueue({ comparator: function(a:any, b:any) { return b - a; }});
   }
 
   ngOnInit() {
@@ -96,8 +99,15 @@ export class KruskalComponent implements OnInit {
   }
 
   async getKruskal() {
-    await this.sleep(this.sleepTime);
-    console.log(this.drawService.getKruskal());
+    this.addEdgesToQueue();
+    // await this.sleep(this.sleepTime);
+    // console.log(this.drawService.getKruskal());
+  }
+
+  addEdgesToQueue() {
+    this.edges.forEach(edge => {
+      this.queue.push(edge);
+    });
   }
 
   sleep(ms) {
