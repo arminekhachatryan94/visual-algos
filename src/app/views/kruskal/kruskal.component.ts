@@ -21,7 +21,7 @@ export class KruskalComponent implements OnInit {
     this.drawService = drawService;
     this.vertices = [];
     this.edges = [];
-    this.queue = new PriorityQueue({ comparator: function(a:any, b:any) { return b - a; }});
+    this.queue = new PriorityQueue({ comparator: function(a: Edge, b: Edge) { return b.data.weight - a.data.weight; }});
   }
 
   ngOnInit() {

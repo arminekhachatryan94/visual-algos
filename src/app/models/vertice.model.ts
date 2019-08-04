@@ -1,5 +1,7 @@
 export class Vertice {
-    id: string;
+    data: {
+        id: string;
+    }
 
     constructor(id: string) {
         this.data = {

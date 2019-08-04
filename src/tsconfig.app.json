@@ -9,7 +9,7 @@
     "**/*.spec.ts"
   ],
   "include": [
-    "src/**/*.ts",
-    "node_modules/ts-priority-queue/src/*.ts"
+    "**/*.ts",
+    "../node_modules/ts-priority-queue/src/*.ts"
   ]
 }
