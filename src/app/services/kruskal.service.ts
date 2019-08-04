@@ -1,72 +1,32 @@
 
 import { Injectable } from '@angular/core';
 import cytoscape from 'cytoscape';
-
-// import 'rxjs/Rx';
+import { Edge } from 'src/app/models/edge.model';
+import { Vertice } from 'src/app/models/vertice.model';
 
 @Injectable()
 export class KruskalService {
     cy: cytoscape;
+    vertices: Vertice[];
+    edges: Edge[];
 
     constructor() {
+      this.vertices = [];
+      this.edges = [];
     }
 
     public draw() {
         this.cy = cytoscape({
             container: document.getElementById('cy'),
             elements: {
-              nodes: [
-                {
-                  data: { id: 'a' }
-                },
-                {
-                  data: { id: 'b' }
-                },
-                {
-                  data: { id: 'c' }
-                },
-                {
-                  data: { id: 'd' }
-                },
-                {
-                  data: { id: 'e' }
-                },
-                {
-                  data: { id: 'f' }
-                },
-              ],
-              edges: [
-                {
-                  data: { id: 'ab', source: 'a', target: 'b' }
-                },
-                {
-                  data: { id: 'bc', source: 'b', target: 'c' }
-                },
-                {
-                  data: { id: 'cd', source: 'c', target: 'd' }
-                },
-                {
-                  data: { id: 'de', source: 'd', target: 'e' }
-                },
-                {
-                  data: { id: 'ef', source: 'e', target: 'f' }
-                },
-                {
-                  data: { id: 'fa', source: 'f', target: 'a' }
-                },
-                {
-                  data: { id: 'cf', source: 'c', target: 'f' }
-                },
-                {
-                  data: { id: 'ac', source: 'a', target: 'c' }
-                },
-              ]
+              nodes: this.vertices,
+              edges: this.edges
             },
             layout: {
               name: 'circle',
               rows: 5
             },
-            directed: true,
+            directed: false,
             style: [
               {
                 selector: 'node',
@@ -76,6 +36,14 @@ export class KruskalService {
               }
             ]
           });          
+    }
+
+    addVertice(vertice: Vertice) {
+      this.vertices.push(vertice);
+    }
+    
+    addEdge(edge: Edge) {
+      this.edges.push(edge);
     }
 
     public getKruskal() {
