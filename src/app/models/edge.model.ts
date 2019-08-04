@@ -3,13 +3,15 @@ export class Edge {
         id: string,
         source: string,
         target: string
+        weight: number
     }
 
-    constructor(id: string, source: string, target: string) {
+    constructor(id: string, source: string, target: string, weight: number) {
         this.data = {
             id: id,
             source: source,
-            target: target
+            target: target,
+            weight: weight
         }
     }
 

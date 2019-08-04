@@ -9,33 +9,41 @@ export class KruskalService {
     cy: cytoscape;
     vertices: Vertice[];
     edges: Edge[];
+    kruskalEdges: Edge[];
 
     constructor() {
       this.vertices = [];
       this.edges = [];
+      this.kruskalEdges = [];
     }
 
-    public draw() {
-        this.cy = cytoscape({
-            container: document.getElementById('cy'),
-            elements: {
-              nodes: this.vertices,
-              edges: this.edges
-            },
-            layout: {
-              name: 'circle',
-              rows: 5
-            },
-            directed: false,
-            style: [
-              {
-                selector: 'node',
-                style: {
-                  'label': 'data(id)'
-                }
-              }
-            ]
-          });          
+    public draw(id: string) {
+      this.cy = cytoscape({
+        container: document.getElementById(id),
+        elements: {
+          nodes: this.vertices,
+          edges: this.edges
+        },
+        layout: {
+          name: 'circle',
+          rows: 5
+        },
+        directed: false,
+        style: [
+          {
+            selector: 'node',
+            style: {
+              'label': 'data(id)'
+            }
+          },
+          {
+            selector: 'edge',
+            style: {
+              'label': 'data(weight)'
+            }
+          }
+        ]
+        });
     }
 
     addVertice(vertice: Vertice) {
@@ -44,6 +52,10 @@ export class KruskalService {
     
     addEdge(edge: Edge) {
       this.edges.push(edge);
+    }
+
+    addKruskalEdge(edge: Edge) {
+      this.kruskalEdges.push(edge);
     }
 
     public getKruskal() {
