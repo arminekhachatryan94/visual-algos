@@ -21,7 +21,7 @@ export class KruskalComponent implements OnInit {
     this.drawService = drawService;
     this.vertices = [];
     this.edges = [];
-    this.queue = new PriorityQueue({ comparator: function(a: Edge, b: Edge) { return b.data.weight - a.data.weight; }});
+    this.queue = new PriorityQueue({ comparator: function(a: Edge, b: Edge) { return a.data.weight - b.data.weight; }});
   }
 
   ngOnInit() {
@@ -99,15 +99,35 @@ export class KruskalComponent implements OnInit {
   }
 
   async getKruskal() {
+    this.drawService.draw('mst');
+    await this.sleep(this.sleepTime);
     this.addEdgesToQueue();
-    // await this.sleep(this.sleepTime);
-    // console.log(this.drawService.getKruskal());
+
+    while(this.queue.length) {
+      let e = this.queue.dequeue();
+      this.drawService.addKruskalEdge(e);
+      console.log('kruskal edge added');
+      this.drawService.draw('mst');
+      await this.sleep(this.sleepTime);
+      console.log('drawn');
+    }
   }
 
   addEdgesToQueue() {
     this.edges.forEach(edge => {
-      this.queue.push(edge);
+      this.queue.queue(edge);
     });
+  }
+
+  cyclicRecursion() {
+    let visited = [];
+    for(let i = 0; i < this.vertices.length; i++) {
+      visited.push(false);
+    }
+  }
+
+  isCyclic() {
+    ;
   }
 
   sleep(ms) {

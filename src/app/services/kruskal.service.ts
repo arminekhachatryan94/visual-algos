@@ -22,7 +22,7 @@ export class KruskalService {
         container: document.getElementById(id),
         elements: {
           nodes: this.vertices,
-          edges: this.edges
+          edges: (id == 'cy' ? this.edges : this.kruskalEdges)
         },
         layout: {
           name: 'circle',
@@ -56,9 +56,5 @@ export class KruskalService {
 
     addKruskalEdge(edge: Edge) {
       this.kruskalEdges.push(edge);
-    }
-
-    public getKruskal() {
-        return this.cy.elements().kruskal();
     }
 }

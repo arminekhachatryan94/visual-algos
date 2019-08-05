@@ -1,11 +1,11 @@
 #cy {
-  width: 100%;
+  width: 50%;
   height: 400px;
-  display: block;
+  display: inline-block;
 }
 
 #mst {
-  width: 100%;
+  width: 50%;
   height: 400px;
-  display: block;
+  display: inline-block;
 }
