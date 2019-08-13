@@ -22,6 +22,7 @@
     "core-js": "^2.5.4",
     "cytoscape": "^3.8.2",
     "d3": "^5.9.7",
+    "linked-list-typescript": "^1.0.15",
     "rxjs": "~6.3.3",
     "ts-priority-queue": "^0.1.1",
     "tslib": "^1.9.0",

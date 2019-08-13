@@ -32,7 +32,7 @@ export class KruskalComponent implements OnInit {
     this.drawService.draw('cy');
   }
 
-  createVertices() {
+  createVertices(): void {
     let a = new Vertice('a');
     this.vertices.push(a);
     let b = new Vertice('b');
@@ -55,7 +55,7 @@ export class KruskalComponent implements OnInit {
     this.vertices.push(j);
   }
 
-  createEdges() {
+  createEdges(): void {
     let ab = new Edge('ab', 'a', 'b', 10);
     this.edges.push(ab);
     let bc = new Edge('bc', 'b', 'c', 14);
@@ -86,15 +86,21 @@ export class KruskalComponent implements OnInit {
     this.edges.push(hd);
   }
 
-  addVertices() {
+  addVertices(): void {
     this.vertices.forEach(vertice => {
       this.drawService.addVertice(vertice);
     });
   }
 
-  addEdges() {
+  addEdges(): void {
     this.edges.forEach(edge => {
       this.drawService.addEdge(edge);
+    });
+  }
+
+  addEdgesToQueue(): void {
+    this.edges.forEach(edge => {
+      this.queue.queue(edge);
     });
   }
 
@@ -102,32 +108,15 @@ export class KruskalComponent implements OnInit {
     this.drawService.draw('mst');
     await this.sleep(this.sleepTime);
     this.addEdgesToQueue();
-
+    
     while(this.queue.length) {
       let e = this.queue.dequeue();
-      this.drawService.addKruskalEdge(e);
-      console.log('kruskal edge added');
-      this.drawService.draw('mst');
-      await this.sleep(this.sleepTime);
-      console.log('drawn');
+      if(!this.drawService.isKruskalCyclic()) {
+        this.drawService.addKruskalEdge(e);
+        this.drawService.draw('mst');
+        await this.sleep(this.sleepTime);
+      }
     }
-  }
-
-  addEdgesToQueue() {
-    this.edges.forEach(edge => {
-      this.queue.queue(edge);
-    });
-  }
-
-  cyclicRecursion() {
-    let visited = [];
-    for(let i = 0; i < this.vertices.length; i++) {
-      visited.push(false);
-    }
-  }
-
-  isCyclic() {
-    ;
   }
 
   sleep(ms) {
