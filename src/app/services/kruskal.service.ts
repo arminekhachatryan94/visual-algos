@@ -85,22 +85,30 @@ export class KruskalService {
     this.kruskalAdj[end].append(new Edge(edge.data.id, edge.data.target, edge.data.source, edge.data.weight));
   }
 
-  isCyclicRecursion(v: number, visited: boolean[], parent: number): boolean {
-    visited[v] = true;
+  removeLastKruskalEdge() {
+    let edge = this.kruskalEdges.pop();
+
+    let sourceIndex = this.findVerticeIndex(edge.data.source);
+    let targetIndex = this.findVerticeIndex(edge.data.target);
+
+    this.kruskalAdj[sourceIndex].removeTail();
+    this.kruskalAdj[targetIndex].removeTail();
+  }
+
+  visited = [];
+  isCyclicRecursion(v: number, parent: number): boolean {
+    this.visited[v] = true;
     
     var item = this.kruskalAdj[v]
 
     for(let it of item){
       let target = this.findVerticeIndex(it.data.target);
       console.log(target);
-      if(!visited[target])
-      {
-        if(this.isCyclicRecursion(target,visited,v))
-        {
+      if(!this.visited[target]) {
+        if(this.isCyclicRecursion(target, v)) {
           return true;
         }
-        else if(target != parent)
-        {
+        else if(target != parent) {
           return true;
         }
       }
@@ -113,14 +121,13 @@ export class KruskalService {
       return false;
     }
 
-    let visited = [];
     for(let i = 0; i < this.vertices.length; i++) {
-      visited.push(false);
+      this.visited.push(false);
     }
 
     for(let i = 0; i < this.vertices.length; i++) {
-      if(!visited[i]) {
-        if(this.isCyclicRecursion(i, visited, -1)) {
+      if(!this.visited[i]) {
+        if(this.isCyclicRecursion(i, -1)) {
           return true;
         }
       }
