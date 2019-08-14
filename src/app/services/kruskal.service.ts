@@ -91,13 +91,15 @@ export class KruskalService {
     var item = this.kruskalAdj[v]
 
     for(let it of item){
-      if(!visited[it.data.target])
+      let target = this.findVerticeIndex(it.data.target);
+      console.log(target);
+      if(!visited[target])
       {
-        if(this.isCyclicRecursion(this.findVerticeIndex(it.data.target),visited,v))
+        if(this.isCyclicRecursion(target,visited,v))
         {
           return true;
         }
-        else if(this.findVerticeIndex(it.data.target) != parent)
+        else if(target != parent)
         {
           return true;
         }
