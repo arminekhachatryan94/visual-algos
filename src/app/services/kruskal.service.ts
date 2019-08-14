@@ -99,10 +99,10 @@ export class KruskalService {
   isCyclicRecursion(v: number, parent: number): boolean {
     this.visited[v] = true;
     
-    var item = this.kruskalAdj[v]
+    var adjList = this.kruskalAdj[v]
 
-    for(let it of item){
-      let target = this.findVerticeIndex(it.data.target);
+    for(let el of adjList){
+      let target = this.findVerticeIndex(el.data.target);
       console.log(target);
       if(!this.visited[target]) {
         if(this.isCyclicRecursion(target, v)) {
