@@ -87,17 +87,23 @@ export class KruskalService {
 
   isCyclicRecursion(v: number, visited: boolean[], parent: number): boolean {
     visited[v] = true;
-    for(let it = this.kruskalAdj[v]._head; it != null; it=it.next) {
-      if(!visited[it.value.data.target]) {
-        if(this.isCyclicRecursion(this.findVerticeIndex(it.value.data.target), visited, v)) {
+    
+    var item = this.kruskalAdj[v]
+
+    for(let it of item){
+      if(!visited[it.data.target])
+      {
+        if(this.isCyclicRecursion(this.findVerticeIndex(it.data.target),visited,v))
+        {
+          return true;
+        }
+        else if(this.findVerticeIndex(it.data.target) != parent)
+        {
           return true;
         }
       }
-      else if(it.value.data.target != parent) {
-        return true;
-      }
+      return false;
     }
-    return false;
   }
 
   isKruskalCyclic(): boolean {
