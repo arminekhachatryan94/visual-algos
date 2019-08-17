@@ -11,8 +11,9 @@ export class KruskalService {
   vertices: Vertice[];
   edges: Edge[];
   kruskalEdges: Edge[];
-  adj: LinkedList<Edge>[];
-  kruskalAdj: LinkedList<Edge>[];
+  adj: LinkedList<Vertice>[];
+  kruskalAdj: LinkedList<Vertice>[];
+  visited: boolean[];
 
   constructor() {
     this.vertices = [];
@@ -20,6 +21,7 @@ export class KruskalService {
     this.kruskalEdges = [];
     this.adj = [];
     this.kruskalAdj = [];
+    this.visited = [];
   }
 
   public draw(id: string) {
@@ -65,64 +67,61 @@ export class KruskalService {
     let list = new LinkedList<Edge>();
     this.adj.push(list);
     this.kruskalAdj.push(list);
+    this.visited.push(false);
   }
   
   addEdge(edge: Edge) {
     this.edges.push(edge);
     
-    let start = this.findVerticeIndex(edge.data.source);
-    let end = this.findVerticeIndex(edge.data.target);
-    this.adj[start].append(new Edge(edge.data.id, edge.data.source, edge.data.target, edge.data.weight));
-    this.adj[end].append(new Edge(edge.data.id, edge.data.target, edge.data.source, edge.data.weight));
+    let source = this.findVerticeIndex(edge.data.source);
+    let target = this.findVerticeIndex(edge.data.target);
+    this.adj[source].append(this.vertices[target]);
+    this.adj[target].append(this.vertices[source]);
   }
 
   addKruskalEdge(edge: Edge) {
     this.kruskalEdges.push(edge);
 
-    let start = this.findVerticeIndex(edge.data.source);
-    let end = this.findVerticeIndex(edge.data.target);
-    this.kruskalAdj[start].append(new Edge(edge.data.id, edge.data.source, edge.data.target, edge.data.weight));
-    this.kruskalAdj[end].append(new Edge(edge.data.id, edge.data.target, edge.data.source, edge.data.weight));
+    let source = this.findVerticeIndex(edge.data.source);
+    let target = this.findVerticeIndex(edge.data.target);
+    console.log('add', edge, source, target);
+    this.kruskalAdj[source].append(this.vertices[target]);
+    this.kruskalAdj[target].append(this.vertices[source]);
   }
 
   removeLastKruskalEdge() {
     let edge = this.kruskalEdges.pop();
 
-    let sourceIndex = this.findVerticeIndex(edge.data.source);
-    let targetIndex = this.findVerticeIndex(edge.data.target);
+    let source = this.findVerticeIndex(edge.data.source);
+    let target = this.findVerticeIndex(edge.data.target);
 
-    this.kruskalAdj[sourceIndex].removeTail();
-    this.kruskalAdj[targetIndex].removeTail();
+    let sourceRemoved = this.kruskalAdj[source].removeTail();
+    let targetRemoved = this.kruskalAdj[target].removeTail();
+    console.log('remove', edge, sourceRemoved, targetRemoved);
   }
 
-  visited = [];
   isCyclicRecursion(v: number, parent: number): boolean {
     this.visited[v] = true;
     
-    var adjList = this.kruskalAdj[v]
-
-    for(let el of adjList){
-      let target = this.findVerticeIndex(el.data.target);
+    var adjList = this.kruskalAdj[v];
+    for(let vertice of adjList){
+      let target = this.findVerticeIndex(vertice.data.id);
       console.log(target);
       if(!this.visited[target]) {
         if(this.isCyclicRecursion(target, v)) {
           return true;
         }
-        else if(target != parent) {
-          return true;
-        }
       }
-      return false;
+      else if(target != parent) {
+        return true;
+      }
     }
+    return false;
   }
 
   isKruskalCyclic(): boolean {
-    if(this.kruskalEdges.length == 0) {
-      return false;
-    }
-
-    for(let i = 0; i < this.vertices.length; i++) {
-      this.visited.push(false);
+    for(let i = 0; i < this.visited.length; i++) {
+      this.visited[i] = false;
     }
 
     for(let i = 0; i < this.vertices.length; i++) {
