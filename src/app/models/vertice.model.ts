@@ -1,15 +1,10 @@
+import { Pair } from './pair.model';
+
 export class Vertice {
-    data: {
-        id: string;
+    id: Pair;
+
+    constructor(id: Pair) {
+        this.id = id;
     }
 
-    constructor(id: string) {
-        this.data = {
-            id: id
-        };
-    }
-
-    // setId(id: string) {
-    //     this.id = id;
-    // }
 }
