@@ -109,22 +109,22 @@ export class KruskalService {
     let target = edge.target.key;
     let s = await this.findIndexInKruskalArray(source);
     let t = await this.findIndexInKruskalArray(target);
-    console.log(this.kruskalCyc, s, t);
-    // console.log(this.kruskalCyc[source], this.kruskalCyc[target]);
     this.kruskalCyc[s] = (this.kruskalCyc[s]).concat(this.kruskalCyc[t]);
     this.kruskalCyc.splice(t, 1);
   }
 
   async findIndexInKruskalArray(key: number) {
+    let ret = -1;
     for(let i = 0; i < this.kruskalCyc.length; i++) {
-      await this.kruskalCyc[i].forEach(v => {
-        // console.log(v, key);
-        if(v === key) {
-          return i;
+      for(let j = 0; j < this.kruskalCyc[i].length; j++) {
+        let v = this.kruskalCyc[i][j];
+        if(v == key) {
+          ret = i;
+          break;
         }
-      });
+      }
     }
-    return -1;
+    return ret;
   }
 
   async isKruskalCyclic(edge: Edge){
