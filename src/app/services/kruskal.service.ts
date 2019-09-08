@@ -64,9 +64,13 @@ export class KruskalService {
         {
           selector: 'edge',
           style: {
-            'label': 'data(kruskal)',
-            'line-color': ('data(kruskal)' === 'true' ? 'red' : 'black'),
-            'line-style': ('data(kruskal)' === 'true' ? 'solid' : 'dashed'),
+            'label': 'data(weight)',
+            'line-color': function( edge ){
+              return (edge.data('kruskal') ? 'red' : 'black');
+            },
+            'line-style': function( edge ){
+              return (edge.data('kruskal') ? 'solid' : 'dashed');
+            },
             'color': 'magenta'
           }
         }
