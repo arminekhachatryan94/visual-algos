@@ -35,7 +35,6 @@ export class KruskalComponent implements OnInit {
 
   createVertices(): void {
     let a = new Vertice(new Pair(0,'a'));
-    console.log(a.id.key);
     this.vertices.push(a);
     let b = new Vertice(new Pair(1,'b'));
     this.vertices.push(b);
@@ -113,7 +112,7 @@ export class KruskalComponent implements OnInit {
     
     while(this.queue.length) {
       let e = this.queue.dequeue();
-      let cyclic = this.drawService.isKruskalCyclic(e);
+      let cyclic = await this.drawService.isKruskalCyclic(e);
       console.log(cyclic);
       if(!cyclic) {
         this.drawService.addKruskalEdge(e);

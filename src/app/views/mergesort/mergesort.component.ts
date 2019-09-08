@@ -123,15 +123,15 @@ export class MergesortComponent implements OnInit {
     this.disable_solve = true;
     if(!this.input_error.length && this.int_array.length) {
       // depth
-      // await this.depthMergeSort(this.int_array, 0,1, this.treeData);
+      await this.depthMergeSort(this.int_array, 0,1, this.treeData);
 
       // breadth
-      this.queue1 = [];
-      this.maxDepth = 0;
-      this.queue1.push(this.treeData);
-      await this.breadthSplit();
-      console.log('tree', this.treeData);
-      await this.breadthMerge();
+      // this.queue1 = [];
+      // this.maxDepth = 0;
+      // this.queue1.push(this.treeData);
+      // await this.breadthSplit();
+      // console.log('tree', this.treeData);
+      // await this.breadthMerge();
 
     }
     this.disable_solve = false;
