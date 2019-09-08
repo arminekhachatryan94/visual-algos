@@ -57,33 +57,33 @@ export class KruskalComponent implements OnInit {
   }
 
   createEdges(): void {
-    let ab = new Edge('ab', this.vertices[0].id, this.vertices[1].id, 10);
+    let ab = new Edge('ab', this.vertices[0].id, this.vertices[1].id, 10, false);
     this.edges.push(ab);
-    let bc = new Edge('bc', this.vertices[1].id, this.vertices[2].id, 14);
+    let bc = new Edge('bc', this.vertices[1].id, this.vertices[2].id, 14, false);
     this.edges.push(bc);
-    let cd = new Edge('cd', this.vertices[2].id, this.vertices[3].id, 2);
+    let cd = new Edge('cd', this.vertices[2].id, this.vertices[3].id, 2, false);
     this.edges.push(cd);
-    let de = new Edge('de', this.vertices[3].id, this.vertices[4].id, 3);
+    let de = new Edge('de', this.vertices[3].id, this.vertices[4].id, 3, false);
     this.edges.push(de);
-    let ef = new Edge('ef', this.vertices[4].id, this.vertices[5].id, 6);
+    let ef = new Edge('ef', this.vertices[4].id, this.vertices[5].id, 6, false);
     this.edges.push(ef);
-    let fg = new Edge('fg', this.vertices[5].id, this.vertices[6].id, 11);
+    let fg = new Edge('fg', this.vertices[5].id, this.vertices[6].id, 11, false);
     this.edges.push(fg);
-    let gh = new Edge('gh', this.vertices[6].id, this.vertices[7].id, 1);
+    let gh = new Edge('gh', this.vertices[6].id, this.vertices[7].id, 1, false);
     this.edges.push(gh);
-    let hi = new Edge('hi', this.vertices[7].id, this.vertices[8].id, 5);
+    let hi = new Edge('hi', this.vertices[7].id, this.vertices[8].id, 5, false);
     this.edges.push(hi);
-    let ij = new Edge('ij', this.vertices[8].id, this.vertices[9].id, 4);
+    let ij = new Edge('ij', this.vertices[8].id, this.vertices[9].id, 4, false);
     this.edges.push(ij);
-    let ja = new Edge('ja', this.vertices[9].id, this.vertices[0].id, 1);
+    let ja = new Edge('ja', this.vertices[9].id, this.vertices[0].id, 1, false);
     this.edges.push(ja);
-    let ad = new Edge('ad', this.vertices[0].id, this.vertices[3].id, 9);
+    let ad = new Edge('ad', this.vertices[0].id, this.vertices[3].id, 9, false);
     this.edges.push(ad);
-    let db = new Edge('db', this.vertices[3].id, this.vertices[1].id, 2);
+    let db = new Edge('db', this.vertices[3].id, this.vertices[1].id, 2, false);
     this.edges.push(db);
-    let ga = new Edge('ga', this.vertices[6].id, this.vertices[0].id, 7);
+    let ga = new Edge('ga', this.vertices[6].id, this.vertices[0].id, 7, false);
     this.edges.push(ga);
-    let hd = new Edge('hd', this.vertices[7].id, this.vertices[3].id, 11);
+    let hd = new Edge('hd', this.vertices[7].id, this.vertices[3].id, 11, false);
     this.edges.push(hd);
   }
 
@@ -106,17 +106,17 @@ export class KruskalComponent implements OnInit {
   }
 
   async getKruskal() {
-    this.drawService.draw('mst');
+    this.drawService.draw('cy');
     await this.sleep(this.sleepTime);
     this.addEdgesToQueue();
     
     while(this.queue.length) {
       let e = this.queue.dequeue();
       let cyclic = await this.drawService.isKruskalCyclic(e);
-      console.log(cyclic);
+      console.log(e);
       if(!cyclic) {
         this.drawService.addKruskalEdge(e);
-        this.drawService.draw('mst');
+        this.drawService.draw('cy');
         await this.sleep(this.sleepTime);
       }
     }

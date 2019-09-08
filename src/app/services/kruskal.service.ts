@@ -35,28 +35,17 @@ export class KruskalService {
             }
           }
         }),
-        edges: (
-          id == 'cy'
-          ? this.edges.map(function(edge) {
-            return {
-              data: {
-                id: edge.id,
-                source: edge.source.value,
-                target: edge.target.value,
-                weight: edge.weight
-              }
+        edges: this.edges.map(function(edge) {
+          return {
+            data: {
+              id: edge.id,
+              source: edge.source.value,
+              target: edge.target.value,
+              weight: edge.weight,
+              kruskal: edge.kruskal
             }
-          }) : this.kruskalEdges.map(function(edge) {
-            return {
-              data: {
-                id: edge.id,
-                source: edge.source.value,
-                target: edge.target.value,
-                weight: edge.weight
-              }
-            }
-          })
-        )
+          }
+        })
       },
       layout: {
         name: 'circle',
@@ -75,9 +64,9 @@ export class KruskalService {
         {
           selector: 'edge',
           style: {
-            'label': 'data(weight)',
-            'line-color': 'pink',
-            'line-style': 'dashed',
+            'label': 'data(kruskal)',
+            'line-color': ('data(kruskal)' === 'true' ? 'red' : 'black'),
+            'line-style': ('data(kruskal)' === 'true' ? 'solid' : 'dashed'),
             'color': 'magenta'
           }
         }
@@ -104,6 +93,8 @@ export class KruskalService {
 
   async addKruskalEdge(edge: Edge) {
     this.kruskalEdges.push(edge);
+    let edgeIndex = await this.findIndexOfEdge(edge);
+    this.edges[edgeIndex].kruskal = true;
 
     let source = edge.source.key;
     let target = edge.target.key;
@@ -111,6 +102,17 @@ export class KruskalService {
     let t = await this.findIndexInKruskalArray(target);
     this.kruskalCyc[s] = (this.kruskalCyc[s]).concat(this.kruskalCyc[t]);
     this.kruskalCyc.splice(t, 1);
+  }
+
+  async findIndexOfEdge(edge: Edge) {
+    let index = -1;
+    for(let i = 0; i < this.edges.length; i++) {
+      if(edge.id == this.edges[i].id) {
+        index = i;
+        break;
+      }
+    }
+    return index;
   }
 
   async findIndexInKruskalArray(key: number) {
