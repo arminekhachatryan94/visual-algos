@@ -113,10 +113,10 @@ export class KruskalComponent implements OnInit {
     while(this.queue.length) {
       let e = this.queue.dequeue();
       let cyclic = await this.drawService.isKruskalCyclic(e);
-      console.log(e);
+      console.log(cyclic);
       if(!cyclic) {
-        this.drawService.addKruskalEdge(e);
-        this.drawService.draw('cy');
+        await this.drawService.addKruskalEdge(e);
+        await this.drawService.draw('cy');
         await this.sleep(this.sleepTime);
       }
     }
