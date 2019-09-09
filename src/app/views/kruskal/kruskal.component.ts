@@ -57,33 +57,33 @@ export class KruskalComponent implements OnInit {
   }
 
   createEdges(): void {
-    let ab = new Edge('ab', this.vertices[0].id, this.vertices[1].id, 10, false);
+    let ab = new Edge('ab', this.vertices[0].id, this.vertices[1].id, 10);
     this.edges.push(ab);
-    let bc = new Edge('bc', this.vertices[1].id, this.vertices[2].id, 14, false);
+    let bc = new Edge('bc', this.vertices[1].id, this.vertices[2].id, 14);
     this.edges.push(bc);
-    let cd = new Edge('cd', this.vertices[2].id, this.vertices[3].id, 2, false);
+    let cd = new Edge('cd', this.vertices[2].id, this.vertices[3].id, 2);
     this.edges.push(cd);
-    let de = new Edge('de', this.vertices[3].id, this.vertices[4].id, 3, false);
+    let de = new Edge('de', this.vertices[3].id, this.vertices[4].id, 3);
     this.edges.push(de);
-    let ef = new Edge('ef', this.vertices[4].id, this.vertices[5].id, 6, false);
+    let ef = new Edge('ef', this.vertices[4].id, this.vertices[5].id, 6);
     this.edges.push(ef);
-    let fg = new Edge('fg', this.vertices[5].id, this.vertices[6].id, 11, false);
+    let fg = new Edge('fg', this.vertices[5].id, this.vertices[6].id, 11);
     this.edges.push(fg);
-    let gh = new Edge('gh', this.vertices[6].id, this.vertices[7].id, 1, false);
+    let gh = new Edge('gh', this.vertices[6].id, this.vertices[7].id, 1);
     this.edges.push(gh);
-    let hi = new Edge('hi', this.vertices[7].id, this.vertices[8].id, 5, false);
+    let hi = new Edge('hi', this.vertices[7].id, this.vertices[8].id, 5);
     this.edges.push(hi);
-    let ij = new Edge('ij', this.vertices[8].id, this.vertices[9].id, 4, false);
+    let ij = new Edge('ij', this.vertices[8].id, this.vertices[9].id, 4);
     this.edges.push(ij);
-    let ja = new Edge('ja', this.vertices[9].id, this.vertices[0].id, 1, false);
+    let ja = new Edge('ja', this.vertices[9].id, this.vertices[0].id, 1);
     this.edges.push(ja);
-    let ad = new Edge('ad', this.vertices[0].id, this.vertices[3].id, 9, false);
+    let ad = new Edge('ad', this.vertices[0].id, this.vertices[3].id, 9);
     this.edges.push(ad);
-    let db = new Edge('db', this.vertices[3].id, this.vertices[1].id, 2, false);
+    let db = new Edge('db', this.vertices[3].id, this.vertices[1].id, 2);
     this.edges.push(db);
-    let ga = new Edge('ga', this.vertices[6].id, this.vertices[0].id, 7, false);
+    let ga = new Edge('ga', this.vertices[6].id, this.vertices[0].id, 7);
     this.edges.push(ga);
-    let hd = new Edge('hd', this.vertices[7].id, this.vertices[3].id, 11, false);
+    let hd = new Edge('hd', this.vertices[7].id, this.vertices[3].id, 11);
     this.edges.push(hd);
   }
 

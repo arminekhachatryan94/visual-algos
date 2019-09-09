@@ -31,7 +31,8 @@ export class KruskalService {
         nodes: this.vertices.map(function(vertice) {
           return {
             data: {
-              id: vertice.id.value
+              id: vertice.id.value,
+              kruskal: vertice.kruskal
             }
           }
         }),
@@ -57,21 +58,32 @@ export class KruskalService {
           selector: 'node',
           style: {
             'label': 'data(id)',
-            'background-color': 'orange',
-            'color': 'black'
+            'background-color': function(v) {
+              console.log(v.data());
+              return (v.data('kruskal') ? 'red' : 'black');
+            },
+            'color': 'white',
+            'text-halign': 'center',
+            'text-valign': 'center'
           }
         },
         {
           selector: 'edge',
           style: {
             'label': 'data(weight)',
-            'line-color': function( edge ){
-              return (edge.data('kruskal') ? 'red' : 'black');
+            'line-color': function(e){
+              return (e.data('kruskal') ? 'red' : 'gray');
             },
-            'line-style': function( edge ){
-              return (edge.data('kruskal') ? 'solid' : 'dashed');
+            'line-style': function(e){
+              return (e.data('kruskal') ? 'solid' : 'dashed');
             },
-            'color': 'magenta'
+            'width': '2px',
+            'color': function(e){
+              return (e.data('kruskal') ? 'red' : 'black');
+            },
+            'text-background-color': 'white',
+            'text-background-opacity': '1',
+            'text-background-padding': '3px'
           }
         }
       ]
@@ -106,12 +118,29 @@ export class KruskalService {
     let t = await this.findIndexInKruskalArray(target);
     this.kruskalCyc[s] = (this.kruskalCyc[s]).concat(this.kruskalCyc[t]);
     this.kruskalCyc.splice(t, 1);
+    
+    let v1 = await this.findIndexOfVertice(source);
+    let v2 = await this.findIndexOfVertice(target);
+    console.log(v1, v2);
+    this.vertices[v1].kruskal = true;
+    this.vertices[v2].kruskal = true;
   }
 
   async findIndexOfEdge(edge: Edge) {
     let index = -1;
     for(let i = 0; i < this.edges.length; i++) {
       if(edge.id == this.edges[i].id) {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  }
+
+  async findIndexOfVertice(key: number) {
+    let index = -1;
+    for(let i = 0; i < this.vertices.length; i++) {
+      if(this.vertices[i].id.key == key) {
         index = i;
         break;
       }

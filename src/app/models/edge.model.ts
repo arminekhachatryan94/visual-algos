@@ -7,12 +7,12 @@ export class Edge {
     weight: number;
     kruskal: boolean;
 
-    constructor(id: string, source: Pair, target: Pair, weight: number, kruskal: boolean) {
+    constructor(id: string, source: Pair, target: Pair, weight: number) {
         this.id = id;
         this.source = source,
         this.target = target;
         this.weight = weight;
-        this.kruskal = kruskal;
+        this.kruskal = false;
     }
 
 }
