@@ -1,7 +1,11 @@
 <div>
-  <div>Kruskal's Minimum Spanning Tree</div>
+  <div>Kruskal's Spanning Tree</div>
   <div>
     <div id="cy"></div>
   </div>
-  <button (click)="getKruskal()">Click here</button>
+  <div>
+    <input [(ngModel)]="treeType.type" type="radio" value="min" name="treeType"> Min
+    <input [(ngModel)]="treeType.type" type="radio" value="max" name="treeType"> Max
+  </div>
+  <button (click)="getKruskal()">Solve</button>
 </div>

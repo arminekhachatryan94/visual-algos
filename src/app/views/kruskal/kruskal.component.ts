@@ -15,6 +15,9 @@ export class KruskalComponent implements OnInit {
   vertices: Vertice[];
   edges: Edge[];
   queue: any;
+  treeType: {
+    type: string
+  };
 
   sleepTime = 1000;
 
@@ -22,7 +25,9 @@ export class KruskalComponent implements OnInit {
     this.drawService = drawService;
     this.vertices = [];
     this.edges = [];
-    this.queue = new PriorityQueue({ comparator: function(a: Edge, b: Edge) { return a.weight - b.weight; }});
+    this.treeType = {
+      type: 'min'
+    };
   }
 
   ngOnInit() {
@@ -106,6 +111,21 @@ export class KruskalComponent implements OnInit {
   }
 
   async getKruskal() {
+    console.log(this.treeType.type);
+    if(this.treeType.type === 'min') {
+      this.queue = await new PriorityQueue({
+        comparator: function(a: Edge, b: Edge) {
+          return a.weight - b.weight;
+        }
+      });
+    } else {
+      this.queue = await new PriorityQueue({
+        comparator: function(a: Edge, b: Edge) {
+          return b.weight - a.weight;
+        }
+      });
+    }
+
     this.drawService.draw('cy');
     await this.sleep(this.sleepTime);
     this.addEdgesToQueue();
