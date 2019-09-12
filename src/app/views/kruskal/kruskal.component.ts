@@ -35,7 +35,7 @@ export class KruskalComponent implements OnInit {
     this.createEdges();
     this.addVertices();
     this.addEdges();
-    this.drawService.draw('cy');
+    this.drawService.draw();
   }
 
   createVertices(): void {
@@ -111,7 +111,6 @@ export class KruskalComponent implements OnInit {
   }
 
   async getKruskal() {
-    console.log(this.treeType.type);
     if(this.treeType.type === 'min') {
       this.queue = await new PriorityQueue({
         comparator: function(a: Edge, b: Edge) {
@@ -126,20 +125,25 @@ export class KruskalComponent implements OnInit {
       });
     }
 
-    this.drawService.draw('cy');
+    this.drawService.draw();
     await this.sleep(this.sleepTime);
     this.addEdgesToQueue();
     
     while(this.queue.length) {
       let e = this.queue.dequeue();
       let cyclic = await this.drawService.isKruskalCyclic(e);
-      console.log(cyclic);
       if(!cyclic) {
         await this.drawService.addKruskalEdge(e);
-        await this.drawService.draw('cy');
+        await this.drawService.draw();
         await this.sleep(this.sleepTime);
       }
     }
+  }
+
+  async reset() {
+    this.drawService.reset();
+    await this.sleep(this.sleepTime);
+    this.drawService.draw();
   }
 
   sleep(ms) {

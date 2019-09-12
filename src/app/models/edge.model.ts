@@ -20,5 +20,4 @@ export class Edge {
             lineStyle: 'dashed'
         };
     }
-
 }

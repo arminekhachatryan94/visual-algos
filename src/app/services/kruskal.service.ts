@@ -26,9 +26,9 @@ export class KruskalService {
     this.kruskalCyc = [];
   }
 
-  public draw(id: string) {
+  public draw() {
     this.cy = cytoscape({
-      container: document.getElementById(id),
+      container: document.getElementById('cy'),
       elements: {
         nodes: this.vertices.map(function(vertice) {
           return {
@@ -175,6 +175,18 @@ export class KruskalService {
       await this.sleep(this.sleepTime);
     }
     return ret;
+  }
+
+  reset() {
+    for(let i = 0; i < this.vertices.length; i++) {
+      this.vertices[i].kruskal = false;
+    }
+    for(let i = 0; i < this.edges.length; i++) {
+      this.edges[i].style = {
+        color: 'black',
+        lineStyle: 'dashed'
+      };
+    }
   }
 
   sleep(ms) {
