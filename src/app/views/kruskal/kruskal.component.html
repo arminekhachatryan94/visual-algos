@@ -7,6 +7,6 @@
     <input [(ngModel)]="treeType.type" type="radio" value="min" name="treeType"> Min
     <input [(ngModel)]="treeType.type" type="radio" value="max" name="treeType"> Max
   </div>
-  <button (click)="getKruskal()">Solve</button>
+  <button (click)="getKruskal()" [disabled]="solving">Solve</button>
   <button (click)="reset()">Reset</button>
 </div>

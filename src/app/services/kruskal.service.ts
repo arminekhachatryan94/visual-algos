@@ -182,10 +182,7 @@ export class KruskalService {
       this.vertices[i].kruskal = false;
     }
     for(let i = 0; i < this.edges.length; i++) {
-      this.edges[i].style = {
-        color: 'black',
-        lineStyle: 'dashed'
-      };
+      this.edges[i].resetStyle();
     }
   }
 

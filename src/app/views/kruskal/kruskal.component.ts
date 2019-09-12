@@ -19,6 +19,8 @@ export class KruskalComponent implements OnInit {
     type: string
   };
 
+  solving = false;
+
   sleepTime = 1000;
 
   constructor(drawService: KruskalService) {
@@ -111,6 +113,7 @@ export class KruskalComponent implements OnInit {
   }
 
   async getKruskal() {
+    this.solving = true;
     if(this.treeType.type === 'min') {
       this.queue = await new PriorityQueue({
         comparator: function(a: Edge, b: Edge) {
@@ -138,6 +141,7 @@ export class KruskalComponent implements OnInit {
         await this.sleep(this.sleepTime);
       }
     }
+    this.solving = false;
   }
 
   async reset() {

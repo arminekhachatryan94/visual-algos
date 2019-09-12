@@ -20,4 +20,11 @@ export class Edge {
             lineStyle: 'dashed'
         };
     }
+
+    resetStyle() {
+        this.style = {
+            color: 'black',
+            lineStyle: 'dashed'
+        };
+    }
 }
