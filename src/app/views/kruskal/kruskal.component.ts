@@ -15,9 +15,11 @@ export class KruskalComponent implements OnInit {
   vertices: Vertice[];
   edges: Edge[];
   queue: any;
+  finishedQueue: any;
   treeType: {
     type: string
   };
+  edge: Edge;
 
   stopped = true;
   paused = true;
@@ -32,6 +34,7 @@ export class KruskalComponent implements OnInit {
     this.treeType = {
       type: 'min'
     };
+    this.edge = null;
   }
 
   ngOnInit() {
@@ -124,8 +127,18 @@ export class KruskalComponent implements OnInit {
           return a.weight - b.weight;
         }
       });
+      this.finishedQueue = await new PriorityQueue({
+        comparator: function(a: Edge, b: Edge) {
+          return a.weight - b.weight;
+        }
+      });
     } else {
       this.queue = await new PriorityQueue({
+        comparator: function(a: Edge, b: Edge) {
+          return b.weight - a.weight;
+        }
+      });
+      this.finishedQueue = await new PriorityQueue({
         comparator: function(a: Edge, b: Edge) {
           return b.weight - a.weight;
         }
@@ -139,6 +152,7 @@ export class KruskalComponent implements OnInit {
   }
 
   async kruskalAlgorithm() {
+    this.solving = true;
     this.stopped = false;
     this.paused = false;
     while(this.queue.length) {
@@ -147,21 +161,31 @@ export class KruskalComponent implements OnInit {
         this.paused = true;
         return;
       }
-      let e = this.queue.dequeue();
-      await this.drawService.changeEdgeStyle(e, 'blue');
+      if(this.edge === null) {
+        this.edge = this.queue.dequeue();
+      }
+      await this.drawService.changeEdgeStyle(this.edge, 'blue');
       await this.drawService.draw();
       await this.sleep(this.sleepTime);
 
-      let cyclic = await this.drawService.isKruskalCyclic(e);
+      if(this.stopped || this.paused) {
+        this.solving = true;
+        this.paused = true;
+        return;
+      }
+
+      let cyclic = await this.drawService.isKruskalCyclic(this.edge);
       if(!cyclic) {
-        await this.drawService.addKruskalEdge(e);
+        await this.drawService.addKruskalEdge(this.edge);
         await this.drawService.draw();
         await this.sleep(this.sleepTime);
       } else {
-        await this.drawService.changeEdgeStyle(e, 'gray');
+        await this.drawService.changeEdgeStyle(this.edge, 'gray');
         await this.drawService.draw();
         await this.sleep(this.sleepTime);
       }
+      this.finishedQueue.queue(this.edge);
+      this.edge = null;
     }
     this.solving = false;
     this.stopped = true;
@@ -176,11 +200,20 @@ export class KruskalComponent implements OnInit {
   }
 
   async reset() {
-    this.stopped = false;
-    this.solving = true;
-    this.drawService.reset();
+    this.stopped = true;
+    this.paused = true;
+    this.solving = false;
+    await this.drawService.reset();
     await this.sleep(this.sleepTime);
-    this.drawService.draw();
+    await this.drawService.draw();
+  }
+
+  async previous() {
+    console.log('previous');
+  }
+
+  async next() {
+    console.log('next');
   }
 
   sleep(ms) {

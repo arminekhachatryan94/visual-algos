@@ -1,13 +1,21 @@
 <div>
   <div>Kruskal's Spanning Tree</div>
-  <div>
-    <div id="cy"></div>
+  <div class="row col">
+    <div id="cy" class="col-8"></div>
+    <div class="col-4">
+      <div>
+        <input [(ngModel)]="treeType.type" type="radio" value="min" name="treeType"> Min
+        <input [(ngModel)]="treeType.type" type="radio" value="max" name="treeType"> Max
+      </div>
+      <div>
+        <button (click)="getKruskal()" [disabled]="solving">Solve</button>
+        <button (click)="reset()">Reset</button>
+        <button (click)="pauseContinueKruskal()" *ngIf="!stop && solving">{{this.paused ? 'Continue' : 'Pause'}}</button>
+      </div>
+      <div>
+        <button (click)="previous()">Previous</button>
+        <button (click)="next()">Next</button>
+      </div>
+    </div>
   </div>
-  <div>
-    <input [(ngModel)]="treeType.type" type="radio" value="min" name="treeType"> Min
-    <input [(ngModel)]="treeType.type" type="radio" value="max" name="treeType"> Max
-  </div>
-  <button (click)="getKruskal()" [disabled]="solving">Solve</button>
-  <button (click)="reset()">Reset</button>
-  <button (click)="pauseContinueKruskal()" *ngIf="!stop">{{this.paused ? 'Continue' : 'Pause'}}</button>
 </div>
