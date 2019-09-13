@@ -105,8 +105,7 @@ export class KruskalService {
   async addKruskalEdge(edge: Edge) {
     this.kruskalEdges.push(edge);
     let edgeIndex = await this.findIndexOfEdge(edge);
-    this.edges[edgeIndex].style.color = 'red';
-    this.edges[edgeIndex].style.lineStyle = 'solid';
+    await this.changeEdgeStyle(edge, 'red');
 
     let source = edge.source.key;
     let target = edge.target.key;
@@ -160,20 +159,8 @@ export class KruskalService {
   async isKruskalCyclic(edge: Edge){
     let s = await this.findIndexInKruskalArray(edge.source.key);
     let t = await this.findIndexInKruskalArray(edge.target.key);
-    
-    let edgeIndex = await this.findIndexOfEdge(edge);
-    this.edges[edgeIndex].style.color = 'blue';
-    this.edges[edgeIndex].style.lineStyle = 'solid';
-    this.draw();
-    await this.sleep(this.sleepTime);
 
     let ret = await (s === t && s !== -1);
-    if(ret) {
-      this.edges[edgeIndex].style.color = 'gray';
-      this.edges[edgeIndex].style.lineStyle = 'dashed';
-      this.draw();
-      await this.sleep(this.sleepTime);
-    }
     return ret;
   }
 
@@ -188,5 +175,22 @@ export class KruskalService {
 
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async changeEdgeStyle(edge: Edge, color: string) {
+    let indexEdge = await this.findIndexOfEdge(edge);
+    let style = await {color: 'black', lineStyle: 'dashed'};
+
+    if(color === 'blue') {
+      style = await {color: 'blue', lineStyle: 'solid'};
+    }
+    if(color === 'red') {
+      style = await {color: 'red', lineStyle: 'solid'};
+    }
+    if(color === 'gray') {
+      style = await {color: 'gray', lineStyle: 'dashed'};
+    }
+
+    await this.edges[indexEdge].setStyle(style);
   }
 }

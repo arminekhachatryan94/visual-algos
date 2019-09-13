@@ -148,9 +148,17 @@ export class KruskalComponent implements OnInit {
         return;
       }
       let e = this.queue.dequeue();
+      await this.drawService.changeEdgeStyle(e, 'blue');
+      await this.drawService.draw();
+      await this.sleep(this.sleepTime);
+
       let cyclic = await this.drawService.isKruskalCyclic(e);
       if(!cyclic) {
         await this.drawService.addKruskalEdge(e);
+        await this.drawService.draw();
+        await this.sleep(this.sleepTime);
+      } else {
+        await this.drawService.changeEdgeStyle(e, 'gray');
         await this.drawService.draw();
         await this.sleep(this.sleepTime);
       }

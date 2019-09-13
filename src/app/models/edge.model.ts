@@ -27,4 +27,11 @@ export class Edge {
             lineStyle: 'dashed'
         };
     }
+
+    setStyle(style: {color: string, lineStyle: string}) {
+        this.style = {
+            color: style.color,
+            lineStyle: style.lineStyle
+        };
+    }
 }
