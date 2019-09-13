@@ -9,4 +9,5 @@
   </div>
   <button (click)="getKruskal()" [disabled]="solving">Solve</button>
   <button (click)="reset()">Reset</button>
+  <button (click)="pauseContinueKruskal()" *ngIf="!stop">{{this.paused ? 'Continue' : 'Pause'}}</button>
 </div>

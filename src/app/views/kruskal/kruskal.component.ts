@@ -19,6 +19,8 @@ export class KruskalComponent implements OnInit {
     type: string
   };
 
+  stopped = true;
+  paused = true;
   solving = false;
 
   sleepTime = 1000;
@@ -113,6 +115,8 @@ export class KruskalComponent implements OnInit {
   }
 
   async getKruskal() {
+    this.stopped = false;
+    this.paused = false;
     this.solving = true;
     if(this.treeType.type === 'min') {
       this.queue = await new PriorityQueue({
@@ -127,12 +131,22 @@ export class KruskalComponent implements OnInit {
         }
       });
     }
-
     this.drawService.draw();
     await this.sleep(this.sleepTime);
     this.addEdgesToQueue();
-    
+
+    await this.kruskalAlgorithm();
+  }
+
+  async kruskalAlgorithm() {
+    this.stopped = false;
+    this.paused = false;
     while(this.queue.length) {
+      if(this.stopped || this.paused) {
+        this.solving = true;
+        this.paused = true;
+        return;
+      }
       let e = this.queue.dequeue();
       let cyclic = await this.drawService.isKruskalCyclic(e);
       if(!cyclic) {
@@ -142,9 +156,20 @@ export class KruskalComponent implements OnInit {
       }
     }
     this.solving = false;
+    this.stopped = true;
+    this.paused = true;
+  }
+
+  async pauseContinueKruskal() {
+    this.paused = !this.paused;
+    if(!this.paused) {
+      this.kruskalAlgorithm();
+    }
   }
 
   async reset() {
+    this.stopped = false;
+    this.solving = true;
     this.drawService.reset();
     await this.sleep(this.sleepTime);
     this.drawService.draw();

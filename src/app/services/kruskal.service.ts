@@ -164,14 +164,14 @@ export class KruskalService {
     let edgeIndex = await this.findIndexOfEdge(edge);
     this.edges[edgeIndex].style.color = 'blue';
     this.edges[edgeIndex].style.lineStyle = 'solid';
-    this.draw('cy');
+    this.draw();
     await this.sleep(this.sleepTime);
 
     let ret = await (s === t && s !== -1);
     if(ret) {
       this.edges[edgeIndex].style.color = 'gray';
       this.edges[edgeIndex].style.lineStyle = 'dashed';
-      this.draw('cy');
+      this.draw();
       await this.sleep(this.sleepTime);
     }
     return ret;
