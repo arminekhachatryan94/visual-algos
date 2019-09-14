@@ -14,7 +14,7 @@
       </div>
       <div>
         <button (click)="previous()">Previous</button>
-        <button (click)="next()">Next</button>
+        <button (click)="next()" *ngIf="isNext">Next</button>
       </div>
     </div>
   </div>

@@ -25,6 +25,8 @@ export class KruskalComponent implements OnInit {
   paused = true;
   solving = false;
 
+  isNext = false;
+
   sleepTime = 1000;
 
   constructor(drawService: KruskalService) {
@@ -147,6 +149,7 @@ export class KruskalComponent implements OnInit {
     this.drawService.draw();
     await this.sleep(this.sleepTime);
     this.addEdgesToQueue();
+    this.isNext = true;
 
     await this.kruskalAlgorithm();
   }
@@ -190,6 +193,7 @@ export class KruskalComponent implements OnInit {
     this.solving = false;
     this.stopped = true;
     this.paused = true;
+    this.isNext = false;
   }
 
   async pauseContinueKruskal() {
@@ -213,7 +217,27 @@ export class KruskalComponent implements OnInit {
   }
 
   async next() {
-    console.log('next');
+    if(this.edge == null) {
+      this.edge = this.queue.dequeue();
+      await this.drawService.changeEdgeStyle(this.edge, 'blue');
+      await this.drawService.draw();
+      await this.sleep(this.sleepTime);
+    } else {
+      let cyclic = await this.drawService.isKruskalCyclic(this.edge);
+      if(!cyclic) {
+        await this.drawService.addKruskalEdge(this.edge);
+        await this.drawService.draw();
+      } else {
+        await this.drawService.changeEdgeStyle(this.edge, 'gray');
+        await this.drawService.draw();
+      }
+      this.finishedQueue.queue(this.edge);
+      this.edge = null;
+      await this.sleep(this.sleepTime);
+    }
+    if(!this.queue.length && this.edge === null) {
+      this.isNext = false;
+    }
   }
 
   sleep(ms) {
