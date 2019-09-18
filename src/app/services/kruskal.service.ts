@@ -127,7 +127,9 @@ export class KruskalService {
       }
     }
 
-    await this.kruskalEdges.splice(i, 1);
+    this.kruskalEdges = this.kruskalEdges.splice(i, 1);
+    return this.kruskalEdges;
+    // console.log(this.kruskalEdges);
   }
 
   async findIndexOfEdge(edge: Edge) {
