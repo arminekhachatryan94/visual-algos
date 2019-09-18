@@ -26,6 +26,9 @@ export class KruskalComponent implements OnInit {
   solving = false;
 
   isNext = false;
+  isPrevious = false;
+
+  steps = [];
 
   sleepTime = 1000;
 
@@ -131,7 +134,7 @@ export class KruskalComponent implements OnInit {
       });
       this.finishedQueue = await new PriorityQueue({
         comparator: function(a: Edge, b: Edge) {
-          return a.weight - b.weight;
+          return b.weight - a.weight;
         }
       });
     } else {
@@ -142,7 +145,7 @@ export class KruskalComponent implements OnInit {
       });
       this.finishedQueue = await new PriorityQueue({
         comparator: function(a: Edge, b: Edge) {
-          return b.weight - a.weight;
+          return a.weight - b.weight;
         }
       });
     }
@@ -167,6 +170,7 @@ export class KruskalComponent implements OnInit {
       if(this.edge === null) {
         this.edge = this.queue.dequeue();
       }
+      this.isPrevious = true;
       await this.drawService.changeEdgeStyle(this.edge, 'blue');
       await this.drawService.draw();
       await this.sleep(this.sleepTime);
@@ -180,7 +184,10 @@ export class KruskalComponent implements OnInit {
       let cyclic = await this.drawService.isKruskalCyclic(this.edge);
       if(!cyclic) {
         await this.drawService.addKruskalEdge(this.edge);
+        await this.drawService.changeEdgeStyle(this.edge, 'red');
         await this.drawService.draw();
+        await this.steps.push(this.drawService.getKruskalArray());
+        console.log(this.steps);
         await this.sleep(this.sleepTime);
       } else {
         await this.drawService.changeEdgeStyle(this.edge, 'gray');
@@ -213,7 +220,27 @@ export class KruskalComponent implements OnInit {
   }
 
   async previous() {
-    console.log('previous');
+    if(this.edge === null) {
+      this.edge = this.finishedQueue.dequeue();
+      await this.drawService.changeEdgeStyle(this.edge, 'blue');
+      await this.drawService.draw();
+      await this.sleep(this.sleepTime);
+    } else {
+      if(this.edge.style.color === 'red') {
+        await this.drawService.removeKruskalEdge(this.edge);
+        let history = this.steps.pop();
+        await this.drawService.setKruskalArray(history);
+      }
+      this.queue.queue(this.edge);
+      await this.drawService.changeEdgeStyle(this.edge, 'black');
+      await this.drawService.draw();
+      await this.sleep(this.sleepTime);
+      this.edge = null;
+    }
+    this.isNext = true;
+    if(!this.finishedQueue.length && this.edge === null) {
+      this.isPrevious = false;
+    }
   }
 
   async next() {
@@ -225,7 +252,10 @@ export class KruskalComponent implements OnInit {
     } else {
       let cyclic = await this.drawService.isKruskalCyclic(this.edge);
       if(!cyclic) {
+        await this.drawService.changeEdgeStyle(this.edge, 'red');
         await this.drawService.addKruskalEdge(this.edge);
+        await this.steps.push(this.drawService.getKruskalArray());
+        console.log(this.steps);
         await this.drawService.draw();
       } else {
         await this.drawService.changeEdgeStyle(this.edge, 'gray');
@@ -235,6 +265,7 @@ export class KruskalComponent implements OnInit {
       this.edge = null;
       await this.sleep(this.sleepTime);
     }
+    this.isPrevious = true;
     if(!this.queue.length && this.edge === null) {
       this.isNext = false;
     }

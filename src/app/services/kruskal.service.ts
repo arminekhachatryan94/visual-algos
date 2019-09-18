@@ -105,7 +105,6 @@ export class KruskalService {
   async addKruskalEdge(edge: Edge) {
     this.kruskalEdges.push(edge);
     let edgeIndex = await this.findIndexOfEdge(edge);
-    await this.changeEdgeStyle(edge, 'red');
 
     let source = edge.source.key;
     let target = edge.target.key;
@@ -118,6 +117,17 @@ export class KruskalService {
     let v2 = await this.findIndexOfVertice(target);
     this.vertices[v1].kruskal = true;
     this.vertices[v2].kruskal = true;
+  }
+
+  async removeKruskalEdge(edge: Edge) {
+    let i = 0;
+    for(i = 0; i < this.kruskalEdges.length; i++) {
+      if(edge.id === this.kruskalEdges[i].id) {
+        break;
+      }
+    }
+
+    await this.kruskalEdges.splice(i, 1);
   }
 
   async findIndexOfEdge(edge: Edge) {
@@ -171,6 +181,14 @@ export class KruskalService {
     for(let i = 0; i < this.edges.length; i++) {
       this.edges[i].resetStyle();
     }
+  }
+
+  getKruskalArray() {
+    return [...this.kruskalCyc];
+  }
+
+  setKruskalArray(kruskalCyc) {
+    this.kruskalCyc = kruskalCyc;
   }
 
   sleep(ms) {
