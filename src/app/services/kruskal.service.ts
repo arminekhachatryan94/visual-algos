@@ -169,6 +169,7 @@ export class KruskalService {
   }
 
   async isKruskalCyclic(edge: Edge){
+    // console.log(this.kruskalCyc);
     let s = await this.findIndexInKruskalArray(edge.source.key);
     let t = await this.findIndexInKruskalArray(edge.target.key);
 
@@ -190,7 +191,7 @@ export class KruskalService {
   }
 
   setKruskalArray(kruskalCyc) {
-    this.kruskalCyc = kruskalCyc;
+    this.kruskalCyc = [...kruskalCyc];
   }
 
   sleep(ms) {

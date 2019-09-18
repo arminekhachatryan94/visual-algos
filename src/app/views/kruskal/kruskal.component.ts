@@ -127,7 +127,7 @@ export class KruskalComponent implements OnInit {
 
   addEdgesToBeforeArray() {
     while(this.queue.length > 0) {
-      this.before.push(this.queue.dequeue());
+      this.before.unshift(this.queue.dequeue());
     }
   }
 
@@ -138,13 +138,13 @@ export class KruskalComponent implements OnInit {
     if(this.treeType.type === 'min') {
       this.queue = await new PriorityQueue({
         comparator: function(a: Edge, b: Edge) {
-          return b.weight - a.weight;
+          return a.weight - b.weight;
         }
       });
     } else {
       this.queue = await new PriorityQueue({
         comparator: function(a: Edge, b: Edge) {
-          return a.weight - b.weight;
+          return b.weight - a.weight;
         }
       });
     }
@@ -172,6 +172,8 @@ export class KruskalComponent implements OnInit {
       }
       this.isPrevious = true;
       await this.drawService.changeEdgeStyle(this.edge, 'blue');
+      this.edge.style.color = 'blue';
+      this.edge.style.lineStyle = 'solid';
       await this.drawService.draw();
       await this.sleep(this.sleepTime);
 
@@ -185,12 +187,16 @@ export class KruskalComponent implements OnInit {
       if(!cyclic) {
         await this.drawService.addKruskalEdge(this.edge);
         await this.drawService.changeEdgeStyle(this.edge, 'red');
+        this.edge.style.color = 'red';
+        this.edge.style.lineStyle = 'solid';
         await this.drawService.draw();
         await this.steps.push(this.drawService.getKruskalArray());
-        console.log(this.steps);
+        // console.log(this.steps);
         await this.sleep(this.sleepTime);
       } else {
         await this.drawService.changeEdgeStyle(this.edge, 'gray');
+        this.edge.style.color = 'gray';
+        this.edge.style.lineStyle = 'dashed';
         await this.drawService.draw();
         await this.sleep(this.sleepTime);
       }
@@ -222,23 +228,27 @@ export class KruskalComponent implements OnInit {
   async previous() {
     if(this.edge === null) {
       this.edge = this.after.pop();
+      this.edge.style.color = 'blue';
+      this.edge.style.lineStyle = 'solid';
       await this.drawService.changeEdgeStyle(this.edge, 'blue');
+      this.edge.style.color = 'blue';
+      this.edge.style.lineStyle = 'solid';
       await this.drawService.draw();
       await this.sleep(this.sleepTime);
     } else {
-      if(this.edge.style.color === 'red') {
-        console.log('here');
+      if(this.edge.style.color === 'blue') {
         await this.drawService.removeKruskalEdge(this.edge);
         this.steps.pop();
         let history = this.steps.pop();
         this.steps.push(history);
-        console.log(this.steps);
+        // console.log(this.steps);
         await this.drawService.setKruskalArray(history);
+        console.log(this.drawService.getKruskalArray());
       }
-      this.edge.style.color = 'blue';
-      this.edge.style.lineStyle = 'solid';
       this.before.push(this.edge);
       await this.drawService.changeEdgeStyle(this.edge, 'black');
+      this.edge.style.color = 'black';
+      this.edge.style.lineStyle = 'dashed';
       await this.drawService.draw();
       await this.sleep(this.sleepTime);
       this.edge = null;
@@ -253,18 +263,24 @@ export class KruskalComponent implements OnInit {
     if(this.edge == null) {
       this.edge = this.before.pop();
       await this.drawService.changeEdgeStyle(this.edge, 'blue');
+      this.edge.style.color = 'blue';
+      this.edge.style.lineStyle = 'solid';
       await this.drawService.draw();
       await this.sleep(this.sleepTime);
     } else {
       let cyclic = await this.drawService.isKruskalCyclic(this.edge);
       if(!cyclic) {
-        await this.drawService.changeEdgeStyle(this.edge, 'red');
         await this.drawService.addKruskalEdge(this.edge);
+        await this.drawService.changeEdgeStyle(this.edge, 'red');
+        this.edge.style.color = 'red';
+        this.edge.style.lineStyle = 'solid';  
         await this.steps.push(this.drawService.getKruskalArray());
-        console.log(this.steps);
+        // console.log(this.steps);
         await this.drawService.draw();
       } else {
         await this.drawService.changeEdgeStyle(this.edge, 'gray');
+        this.edge.style.color = 'gray';
+        this.edge.style.lineStyle = 'dashed';
         await this.drawService.draw();
       }
       this.after.push(this.edge);
