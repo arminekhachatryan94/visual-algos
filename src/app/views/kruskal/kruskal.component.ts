@@ -194,7 +194,6 @@ export class KruskalComponent implements OnInit {
         this.edge.style.lineStyle = 'solid';
         await this.drawService.draw();
         await this.steps.push(this.drawService.getKruskalArray());
-        // console.log(this.steps);
         await this.sleep(this.sleepTime);
       } else {
         await this.drawService.changeEdgeStyle(this.edge, 'gray');
@@ -230,7 +229,6 @@ export class KruskalComponent implements OnInit {
 
   async previous() {
     this.previousSolving = true;
-    console.log("before", this.drawService.getKruskalArray());
     if(this.edge === null) {
       this.edge = this.after.pop();
       this.edge.style.color = 'blue';
@@ -257,12 +255,10 @@ export class KruskalComponent implements OnInit {
       this.isPrevious = false;
     }
     this.previousSolving = false;
-    console.log("after", this.drawService.getKruskalArray());
   }
 
   async next() {
     this.nextSolving = true;
-    console.log("before", this.drawService.getKruskalArray());
     if(this.edge === null) {
       this.edge = this.before.pop();
       this.edge.style.color = 'blue';
@@ -278,7 +274,6 @@ export class KruskalComponent implements OnInit {
         this.edge.style.color = 'red';
         this.edge.style.lineStyle = 'solid';  
         await this.steps.push(this.drawService.getKruskalArray());
-        // console.log(this.steps);
         await this.drawService.draw();
       } else {
         await this.drawService.changeEdgeStyle(this.edge, 'gray');
@@ -295,7 +290,6 @@ export class KruskalComponent implements OnInit {
       this.isNext = false;
     }
     this.nextSolving = false;
-    console.log("after", this.drawService.getKruskalArray());
   }
 
   sleep(ms) {
