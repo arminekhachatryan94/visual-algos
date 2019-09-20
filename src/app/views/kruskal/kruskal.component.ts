@@ -123,6 +123,7 @@ export class KruskalComponent implements OnInit {
     this.edges.forEach(edge => {
       this.queue.queue(edge);
     });
+    this.steps.push(this.drawService.getKruskalArray());
   }
 
   addEdgesToBeforeArray() {
@@ -226,13 +227,12 @@ export class KruskalComponent implements OnInit {
   }
 
   async previous() {
+    console.log("before", this.drawService.getKruskalArray());
     if(this.edge === null) {
       this.edge = this.after.pop();
       this.edge.style.color = 'blue';
       this.edge.style.lineStyle = 'solid';
       await this.drawService.changeEdgeStyle(this.edge, 'blue');
-      this.edge.style.color = 'blue';
-      this.edge.style.lineStyle = 'solid';
       await this.drawService.draw();
       await this.sleep(this.sleepTime);
     } else {
@@ -241,7 +241,7 @@ export class KruskalComponent implements OnInit {
         this.steps.pop();
         let history = this.steps.pop();
         this.steps.push(history);
-        // console.log(this.steps);
+        console.log(history);
         await this.drawService.setKruskalArray(history);
         console.log(this.drawService.getKruskalArray());
       }
@@ -257,14 +257,16 @@ export class KruskalComponent implements OnInit {
     if(!this.after.length && this.edge === null) {
       this.isPrevious = false;
     }
+    console.log("after", this.drawService.getKruskalArray());
   }
 
   async next() {
-    if(this.edge == null) {
+    console.log("before", this.drawService.getKruskalArray());
+    if(this.edge === null) {
       this.edge = this.before.pop();
-      await this.drawService.changeEdgeStyle(this.edge, 'blue');
       this.edge.style.color = 'blue';
       this.edge.style.lineStyle = 'solid';
+      await this.drawService.changeEdgeStyle(this.edge, 'blue');
       await this.drawService.draw();
       await this.sleep(this.sleepTime);
     } else {
@@ -291,6 +293,7 @@ export class KruskalComponent implements OnInit {
     if(!this.before.length && this.edge === null) {
       this.isNext = false;
     }
+    console.log("after", this.drawService.getKruskalArray());
   }
 
   sleep(ms) {

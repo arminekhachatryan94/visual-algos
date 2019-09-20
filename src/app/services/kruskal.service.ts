@@ -127,6 +127,11 @@ export class KruskalService {
       }
     }
 
+    let v1 = await this.findIndexOfVertice(edge.source.key);
+    let v2 = await this.findIndexOfVertice(edge.target.key);
+    this.vertices[v1].kruskal = false;
+    this.vertices[v2].kruskal = false;
+
     this.kruskalEdges = this.kruskalEdges.splice(i, 1);
     return this.kruskalEdges;
     // console.log(this.kruskalEdges);
