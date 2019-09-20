@@ -28,6 +28,8 @@ export class KruskalComponent implements OnInit {
 
   isNext = false;
   isPrevious = false;
+  nextSolving = false;
+  previousSolving = false;
 
   steps = [];
 
@@ -227,24 +229,21 @@ export class KruskalComponent implements OnInit {
   }
 
   async previous() {
+    this.previousSolving = true;
     console.log("before", this.drawService.getKruskalArray());
     if(this.edge === null) {
       this.edge = this.after.pop();
       this.edge.style.color = 'blue';
       this.edge.style.lineStyle = 'solid';
       await this.drawService.changeEdgeStyle(this.edge, 'blue');
+      await this.drawService.removeKruskalEdge(this.edge);
+      this.steps.pop();
+      let history = this.steps.pop();
+      this.steps.push(history);
+      await this.drawService.setKruskalArray(history);
       await this.drawService.draw();
       await this.sleep(this.sleepTime);
     } else {
-      if(this.edge.style.color === 'blue') {
-        await this.drawService.removeKruskalEdge(this.edge);
-        this.steps.pop();
-        let history = this.steps.pop();
-        this.steps.push(history);
-        console.log(history);
-        await this.drawService.setKruskalArray(history);
-        console.log(this.drawService.getKruskalArray());
-      }
       this.before.push(this.edge);
       await this.drawService.changeEdgeStyle(this.edge, 'black');
       this.edge.style.color = 'black';
@@ -257,10 +256,12 @@ export class KruskalComponent implements OnInit {
     if(!this.after.length && this.edge === null) {
       this.isPrevious = false;
     }
+    this.previousSolving = false;
     console.log("after", this.drawService.getKruskalArray());
   }
 
   async next() {
+    this.nextSolving = true;
     console.log("before", this.drawService.getKruskalArray());
     if(this.edge === null) {
       this.edge = this.before.pop();
@@ -293,6 +294,7 @@ export class KruskalComponent implements OnInit {
     if(!this.before.length && this.edge === null) {
       this.isNext = false;
     }
+    this.nextSolving = false;
     console.log("after", this.drawService.getKruskalArray());
   }
 

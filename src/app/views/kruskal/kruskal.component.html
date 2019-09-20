@@ -13,8 +13,8 @@
         <button (click)="pauseContinueKruskal()" *ngIf="!stop && solving">{{this.paused ? 'Continue' : 'Pause'}}</button>
       </div>
       <div>
-        <button (click)="previous()" *ngIf="isPrevious">Previous</button>
-        <button (click)="next()" *ngIf="isNext">Next</button>
+        <button (click)="previous()" *ngIf="isPrevious" [disabled]="previousSolving">Previous</button>
+        <button (click)="next()" *ngIf="isNext" [disabled]="nextSolving">Next</button>
       </div>
     </div>
   </div>
