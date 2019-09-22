@@ -12,6 +12,7 @@ import PriorityQueue from 'ts-priority-queue';
 })
 export class KruskalComponent implements OnInit {
   drawService: KruskalService;
+  numVertices: number;
   vertices: Vertice[];
   edges: Edge[];
   queue: any;
@@ -45,80 +46,37 @@ export class KruskalComponent implements OnInit {
     this.edge = null;
     this.before = [];
     this.after = [];
+    this.numVertices = 3;
+    this.createVertices();
   }
 
   ngOnInit() {
-    this.createVertices();
-    this.createEdges();
-    this.addVertices();
-    this.addEdges();
     this.drawService.draw();
   }
 
-  createVertices(): void {
-    let a = new Vertice(new Pair(0,'a'));
-    this.vertices.push(a);
-    let b = new Vertice(new Pair(1,'b'));
-    this.vertices.push(b);
-    let c = new Vertice(new Pair(2, 'c'));
-    this.vertices.push(c);
-    let d = new Vertice(new Pair(3, 'd'));
-    this.vertices.push(d);
-    let e = new Vertice(new Pair(4, 'e'));
-    this.vertices.push(e);
-    let f = new Vertice(new Pair(5, 'f'));
-    this.vertices.push(f);
-    let g = new Vertice(new Pair(6, 'g'));
-    this.vertices.push(g);
-    let h = new Vertice(new Pair(7, 'h'));
-    this.vertices.push(h);
-    let i = new Vertice(new Pair(8, 'i'));
-    this.vertices.push(i);
-    let j = new Vertice(new Pair(9, 'j'));
-    this.vertices.push(j);
+  async incrementVertices() {
+    await this.numVertices++;
+    await this.createVertices();
+    await this.drawService.draw();
+    console.log(this.vertices.length);
+  }
+  
+  async decrementVertices() {
+    await this.numVertices--;
+    this.drawService.removeLastVertice();
+    this.drawService.draw();
+    console.log(this.vertices.length);
   }
 
-  createEdges(): void {
-    let ab = new Edge('ab', this.vertices[0].id, this.vertices[1].id, 10);
-    this.edges.push(ab);
-    let bc = new Edge('bc', this.vertices[1].id, this.vertices[2].id, 14);
-    this.edges.push(bc);
-    let cd = new Edge('cd', this.vertices[2].id, this.vertices[3].id, 2);
-    this.edges.push(cd);
-    let de = new Edge('de', this.vertices[3].id, this.vertices[4].id, 3);
-    this.edges.push(de);
-    let ef = new Edge('ef', this.vertices[4].id, this.vertices[5].id, 6);
-    this.edges.push(ef);
-    let fg = new Edge('fg', this.vertices[5].id, this.vertices[6].id, 11);
-    this.edges.push(fg);
-    let gh = new Edge('gh', this.vertices[6].id, this.vertices[7].id, 1);
-    this.edges.push(gh);
-    let hi = new Edge('hi', this.vertices[7].id, this.vertices[8].id, 5);
-    this.edges.push(hi);
-    let ij = new Edge('ij', this.vertices[8].id, this.vertices[9].id, 4);
-    this.edges.push(ij);
-    let ja = new Edge('ja', this.vertices[9].id, this.vertices[0].id, 1);
-    this.edges.push(ja);
-    let ad = new Edge('ad', this.vertices[0].id, this.vertices[3].id, 9);
-    this.edges.push(ad);
-    let db = new Edge('db', this.vertices[3].id, this.vertices[1].id, 2);
-    this.edges.push(db);
-    let ga = new Edge('ga', this.vertices[6].id, this.vertices[0].id, 7);
-    this.edges.push(ga);
-    let hd = new Edge('hd', this.vertices[7].id, this.vertices[3].id, 11);
-    this.edges.push(hd);
-  }
-
-  addVertices(): void {
-    this.vertices.forEach(vertice => {
-      this.drawService.addVertice(vertice);
-    });
-  }
-
-  addEdges(): void {
-    this.edges.forEach(edge => {
-      this.drawService.addEdge(edge);
-    });
+  async createVertices() {
+    this.vertices = [];
+    let i = 0;
+    while(i < this.numVertices) {
+      let v = new Vertice(new Pair(i, i+''));
+      this.vertices.push(v);
+      await this.drawService.addVertice(v);
+      i++;
+    }
   }
 
   addEdgesToQueue(): void {

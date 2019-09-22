@@ -4,6 +4,11 @@
     <div id="cy" class="col-8"></div>
     <div class="col-4">
       <div>
+        <button (click)="decrementVertices()" [disabled]="numVertices <= 3">-</button>
+        <div class="display-inline">v = {{ numVertices }}</div>
+        <button (click)="incrementVertices()" [disabled]="numVertices >= 20">+</button>
+      </div>
+      <div>
         <input [(ngModel)]="treeType.type" type="radio" value="min" name="treeType"> Min
         <input [(ngModel)]="treeType.type" type="radio" value="max" name="treeType"> Max
       </div>

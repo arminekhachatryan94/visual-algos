@@ -4,6 +4,7 @@ import cytoscape from 'cytoscape';
 import { Edge } from 'src/app/models/edge.model';
 import { Vertice } from 'src/app/models/vertice.model';
 import { LinkedList } from 'linked-list-typescript';
+import { Pair } from '../models/pair.model';
 
 @Injectable()
 export class KruskalService {
@@ -14,6 +15,7 @@ export class KruskalService {
   adj: LinkedList<Vertice>[];
   kruskalCyc: Number[][];
   visited: boolean[];
+  tapped: boolean;
 
   sleepTime = 1000;
 
@@ -24,6 +26,7 @@ export class KruskalService {
     this.adj = [];
     this.visited = [];
     this.kruskalCyc = [];
+    this.tapped = false;
   }
 
   public draw() {
@@ -83,7 +86,22 @@ export class KruskalService {
         }
       ]
     });
+    // console.log('draw', this.vertices);
+    // this.verticeClickEvent();
   }
+
+  // clickEvent(event) {
+  //   console.log('click', this);
+  //   let x = event.position.x;
+  //   let y = event.position.y;
+  //   // let v = new Vertice(new Pair(this.vertices.length, this.vertices.length+''));
+  //   // this.vertices.push(v);
+  //   console.log(x, y);
+  // }
+
+  // verticeClickEvent() {
+  //   this.cy.on('tap', this.clickEvent).bind(this);
+  // }
 
   addVertice(vertice: Vertice) {
     this.vertices.push(vertice);
@@ -91,6 +109,10 @@ export class KruskalService {
     this.adj.push(list);
     this.visited.push(false);
     this.kruskalCyc.push([vertice.id.key]);
+  }
+
+  removeLastVertice() {
+    this.vertices.pop();
   }
   
   addEdge(edge: Edge) {
@@ -104,7 +126,7 @@ export class KruskalService {
 
   async addKruskalEdge(edge: Edge) {
     this.kruskalEdges.push(edge);
-    let edgeIndex = await this.findIndexOfEdge(edge);
+    // let edgeIndex = await this.findIndexOfEdge(edge);
 
     let source = edge.source.key;
     let target = edge.target.key;

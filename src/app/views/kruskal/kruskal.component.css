@@ -9,3 +9,7 @@
   height: 400px;
   display: inline-block;
 }
+
+.display-inline {
+  display: inline;
+}
