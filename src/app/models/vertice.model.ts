@@ -2,11 +2,11 @@ import { Pair } from './pair.model';
 
 export class Vertice {
     id: Pair;
-    kruskal: boolean;
+    color: string;
 
     constructor(id: Pair) {
         this.id = id;
-        this.kruskal = false;
+        this.color = 'black';
     }
 
 }
