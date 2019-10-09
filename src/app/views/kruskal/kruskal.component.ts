@@ -59,15 +59,12 @@ export class KruskalComponent implements OnInit {
     await this.drawService.addVertice(v);
     this.numVertices++;
     this.drawService.refresh();
-    // await this.drawService.draw();
-    console.log(this.vertices.length);
   }
   
   async decrementVertices() {
     await this.numVertices--;
     this.drawService.removeLastVertice();
     this.drawService.refresh();
-    console.log(this.vertices.length);
   }
 
   async createVertices() {
@@ -96,6 +93,8 @@ export class KruskalComponent implements OnInit {
   }
 
   async getKruskal() {
+    this.edges = this.drawService.getEdges();
+    console.log(this.edges);
     this.stopped = false;
     this.paused = false;
     this.solving = true;
@@ -112,7 +111,7 @@ export class KruskalComponent implements OnInit {
         }
       });
     }
-    this.drawService.draw();
+    this.drawService.refresh();
     await this.sleep(this.sleepTime);
     this.addEdgesToQueue();
     this.addEdgesToBeforeArray();
@@ -138,7 +137,7 @@ export class KruskalComponent implements OnInit {
       await this.drawService.changeEdgeStyle(this.edge, 'blue');
       this.edge.style.color = 'blue';
       this.edge.style.lineStyle = 'solid';
-      await this.drawService.draw();
+      await this.drawService.refresh();
       await this.sleep(this.sleepTime);
 
       if(this.stopped || this.paused) {
@@ -153,14 +152,14 @@ export class KruskalComponent implements OnInit {
         await this.drawService.changeEdgeStyle(this.edge, 'red');
         this.edge.style.color = 'red';
         this.edge.style.lineStyle = 'solid';
-        await this.drawService.draw();
+        await this.drawService.refresh();
         await this.steps.push(this.drawService.getKruskalArray());
         await this.sleep(this.sleepTime);
       } else {
         await this.drawService.changeEdgeStyle(this.edge, 'gray');
         this.edge.style.color = 'gray';
         this.edge.style.lineStyle = 'dashed';
-        await this.drawService.draw();
+        await this.drawService.refresh();
         await this.sleep(this.sleepTime);
       }
       this.after.push(this.edge);
@@ -185,7 +184,7 @@ export class KruskalComponent implements OnInit {
     this.solving = false;
     await this.drawService.reset();
     await this.sleep(this.sleepTime);
-    await this.drawService.draw();
+    // await this.drawService.draw();
   }
 
   async previous() {
@@ -200,14 +199,14 @@ export class KruskalComponent implements OnInit {
       let history = this.steps.pop();
       this.steps.push(history);
       await this.drawService.setKruskalArray(history);
-      await this.drawService.draw();
+      // await this.drawService.draw();
       await this.sleep(this.sleepTime);
     } else {
       this.before.push(this.edge);
       await this.drawService.changeEdgeStyle(this.edge, 'black');
       this.edge.style.color = 'black';
       this.edge.style.lineStyle = 'dashed';
-      await this.drawService.draw();
+      // await this.drawService.draw();
       await this.sleep(this.sleepTime);
       this.edge = null;
     }
@@ -225,7 +224,7 @@ export class KruskalComponent implements OnInit {
       this.edge.style.color = 'blue';
       this.edge.style.lineStyle = 'solid';
       await this.drawService.changeEdgeStyle(this.edge, 'blue');
-      await this.drawService.draw();
+      // await this.drawService.draw();
       await this.sleep(this.sleepTime);
     } else {
       let cyclic = await this.drawService.isKruskalCyclic(this.edge);
@@ -235,12 +234,12 @@ export class KruskalComponent implements OnInit {
         this.edge.style.color = 'red';
         this.edge.style.lineStyle = 'solid';  
         await this.steps.push(this.drawService.getKruskalArray());
-        await this.drawService.draw();
+        // await this.drawService.draw();
       } else {
         await this.drawService.changeEdgeStyle(this.edge, 'gray');
         this.edge.style.color = 'gray';
         this.edge.style.lineStyle = 'dashed';
-        await this.drawService.draw();
+        // await this.drawService.draw();
       }
       this.after.push(this.edge);
       this.edge = null;

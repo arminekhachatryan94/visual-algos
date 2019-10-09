@@ -86,11 +86,13 @@ export class KruskalService {
       let index = await this.findIndexOfVertice(id);
       if(index === this.clickedIndex) {
         this.vertices[index].color = 'black';
+        this.cy.nodes('#' + this.vertices[index].id.value).first().data('color', 'black');
         this.clickedIndex = null;
       }
       else if(this.clickedIndex === null) {
         this.clickedIndex = index;
         this.vertices[this.clickedIndex].color = 'green';
+        this.cy.nodes('#' + this.vertices[this.clickedIndex].id.value).first().data('color', 'green');
       } else {
         // check if edge already exists
         let edgeIndex = await this.findIndexOfEdge(this.vertices[this.clickedIndex].id.key, this.vertices[index].id.key);
@@ -108,12 +110,16 @@ export class KruskalService {
           this.removeEdge(edgeIndex);
 
         }
-        // this.vertices[this.clickedIndex].color = 'black';
+        this.vertices[this.clickedIndex].color = 'black';
+        this.cy.nodes('#' + this.vertices[this.clickedIndex].id.value).first().data('color', 'black');
         this.clickedIndex = null;
       }
       this.refresh();
-      // await this.draw();
     });
+  }
+
+  getEdges(): Edge[] {
+    return this.edges;
   }
 
   addVertice(vertice: Vertice) {
@@ -174,7 +180,10 @@ export class KruskalService {
     let v1 = await this.findIndexOfVertice(source);
     let v2 = await this.findIndexOfVertice(target);
     this.vertices[v1].color = 'red';
+    this.cy.nodes('#' + this.vertices[v1].id.value).first().data('color', 'red');
     this.vertices[v2].color = 'red';
+    console.log('selector');
+    this.cy.nodes('#' + this.vertices[v2].id.value).first().data('color', 'red');
   }
 
   async removeKruskalEdge(edge: Edge) {
@@ -188,7 +197,10 @@ export class KruskalService {
     let v1 = await this.findIndexOfVertice(edge.source.key);
     let v2 = await this.findIndexOfVertice(edge.target.key);
     this.vertices[v1].color = 'black';
+    this.cy.nodes('#' + this.vertices[v1].id.value).first().data('color', 'black');
     this.vertices[v2].color = 'black';
+    console.log('selector');
+    this.cy.nodes('#' + this.vertices[v2].id.value).first().data('color', 'black');
 
     this.kruskalEdges = this.kruskalEdges.splice(i, 1);
     return this.kruskalEdges;
@@ -268,9 +280,11 @@ export class KruskalService {
   reset() {
     for(let i = 0; i < this.vertices.length; i++) {
       this.vertices[i].color = 'black';
+      this.cy.nodes('#' + this.vertices[i].id.value).first().data('color', 'black');
     }
     for(let i = 0; i < this.edges.length; i++) {
       this.edges[i].resetStyle();
+      this.cy.edges('#e' + this.edges[i].source.value + this.edges[i].target.value).first().data('style', {color: 'black', lineStyle: 'dashed'});
     }
   }
 
@@ -288,18 +302,19 @@ export class KruskalService {
 
   async changeEdgeStyle(edge: Edge, color: string) {
     let indexEdge = await this.findIndexOfEdge(edge.source.key, edge.target.key);
-    let style = await {color: 'black', lineStyle: 'dashed'};
+    let style = {color: 'black', lineStyle: 'dashed'};
 
     if(color === 'blue') {
-      style = await {color: 'blue', lineStyle: 'solid'};
+      style = {color: 'blue', lineStyle: 'solid'};
     }
     if(color === 'red') {
-      style = await {color: 'red', lineStyle: 'solid'};
+      style = {color: 'red', lineStyle: 'solid'};
     }
     if(color === 'gray') {
-      style = await {color: 'gray', lineStyle: 'dashed'};
+      style = {color: 'gray', lineStyle: 'dashed'};
     }
 
-    await this.edges[indexEdge].setStyle(style);
+    this.cy.edges('#e' + edge.source.value + edge.target.value).first().data('style', style);
+    this.edges[indexEdge].setStyle(style);
   }
 }
