@@ -85,11 +85,25 @@ export class KruskalService {
 
   edgeClickEvent() {
     this.cy.on('click', 'edge', async event => {
-      if(this.clickedEdgeIndex !== null) {
-        this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'black', lineStyle: 'dashed'});
+      console.log(this.clickedEdgeIndex);
+      if(this.clickedIndex !== null) {
+        this.cy.nodes('#' + this.clickedIndex).data('color', 'black');
+        this.clickedIndex = null;
       }
-      this.clickedEdgeIndex = event.target.id();
-      this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'green', lineStyle: 'dashed'});
+      let index = event.target.id();
+      if(index === this.clickedEdgeIndex) {
+        this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'black', lineStyle: 'dashed'});
+        this.clickedEdgeIndex = null;
+      } else {
+        if(this.clickedEdgeIndex !== null) {
+          this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'black', lineStyle: 'dashed'});
+          this.clickedEdgeIndex = null;
+        }
+        if(this.clickedEdgeIndex === null) {
+          this.clickedEdgeIndex = event.target.id();
+          this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'green', lineStyle: 'dashed'});
+        }
+      }
     });
   }
 
@@ -99,7 +113,7 @@ export class KruskalService {
 
   addToWeight(keyCode) {
     console.log(keyCode);
-    let weight = this.cy.edges('#' + this.clickedEdgeIndex).data('weight');
+    let weight = this.cy.edges('#' + this.clickedEdgeIndex).first().data('weight');
     if(keyCode>=48 && keyCode<=57) {
       let num = keyCode - 48;
       if(weight === 1) {
@@ -114,8 +128,12 @@ export class KruskalService {
     }
   }
 
-  async verticeClickEvent() {
-    await this.cy.on('click', 'node', async event => {
+  verticeClickEvent() {
+    this.cy.on('click', 'node', async event => {
+      if(this.clickedEdgeIndex !== null) {
+        this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'black', lineStyle: 'dashed'});
+        this.clickedEdgeIndex = null;
+      }
       let id = event.target.id();
       let index = await this.findIndexOfVertice(id);
       if(index === this.clickedIndex) {
