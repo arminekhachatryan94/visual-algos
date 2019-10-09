@@ -52,12 +52,7 @@ export class KruskalComponent implements OnInit {
   ngOnInit() {
     this.drawService.draw();
     this.createVertices();
-    document.addEventListener('keydown', event => {
-      console.log(this.drawService.isEdgeSelected());
-      if(this.drawService.isEdgeSelected()) {
-        this.drawService.addToWeight(event.keyCode);
-      }
-    });
+    this.drawService.addKeyListener();
   }
 
   async incrementVertices() {
@@ -100,7 +95,6 @@ export class KruskalComponent implements OnInit {
 
   async getKruskal() {
     this.edges = this.drawService.getEdges();
-    console.log(this.edges);
     this.stopped = false;
     this.paused = false;
     this.solving = true;
@@ -117,7 +111,7 @@ export class KruskalComponent implements OnInit {
         }
       });
     }
-    this.drawService.refresh();
+    // this.drawService.refresh();
     await this.sleep(this.sleepTime);
     this.addEdgesToQueue();
     this.addEdgesToBeforeArray();
@@ -143,7 +137,7 @@ export class KruskalComponent implements OnInit {
       await this.drawService.changeEdgeStyle(this.edge, 'blue');
       this.edge.style.color = 'blue';
       this.edge.style.lineStyle = 'solid';
-      await this.drawService.refresh();
+      // await this.drawService.refresh();
       await this.sleep(this.sleepTime);
 
       if(this.stopped || this.paused) {
@@ -158,14 +152,14 @@ export class KruskalComponent implements OnInit {
         await this.drawService.changeEdgeStyle(this.edge, 'red');
         this.edge.style.color = 'red';
         this.edge.style.lineStyle = 'solid';
-        await this.drawService.refresh();
+        // await this.drawService.refresh();
         await this.steps.push(this.drawService.getKruskalArray());
         await this.sleep(this.sleepTime);
       } else {
         await this.drawService.changeEdgeStyle(this.edge, 'gray');
         this.edge.style.color = 'gray';
         this.edge.style.lineStyle = 'dashed';
-        await this.drawService.refresh();
+        // await this.drawService.refresh();
         await this.sleep(this.sleepTime);
       }
       this.after.push(this.edge);

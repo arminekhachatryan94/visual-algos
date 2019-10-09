@@ -85,7 +85,6 @@ export class KruskalService {
 
   edgeClickEvent() {
     this.cy.on('click', 'edge', async event => {
-      console.log(this.clickedEdgeIndex);
       if(this.clickedIndex !== null) {
         this.cy.nodes('#' + this.clickedIndex).data('color', 'black');
         this.clickedIndex = null;
@@ -112,9 +111,8 @@ export class KruskalService {
   }
 
   addToWeight(keyCode) {
-    console.log(keyCode);
     let weight = this.cy.edges('#' + this.clickedEdgeIndex).first().data('weight');
-    if(keyCode>=48 && keyCode<=57) {
+    if(keyCode >= 48 && keyCode <= 57) {
       let num = keyCode - 48;
       if(weight === 1) {
         this.cy.edges('#' + this.clickedEdgeIndex).data('weight', num);
@@ -125,6 +123,10 @@ export class KruskalService {
     else if(keyCode === 13) {
       this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'black', lineStyle: 'dashed'});
       this.clickedEdgeIndex = null;
+    } else if(keyCode === 8){
+      let e = this.cy.edges('#' + this.clickedEdgeIndex).first();
+      let n = (e.data('weight') - (e.data('weight')%10))/10;
+      e.data('weight', n);
     }
   }
 
@@ -166,12 +168,34 @@ export class KruskalService {
         this.cy.nodes('#' + this.vertices[this.clickedIndex].id.value).first().data('color', 'black');
         this.clickedIndex = null;
       }
-      this.refresh();
+      // this.refresh();
+    });
+  }
+
+  addKeyListener() {
+    document.addEventListener('keydown', event => {
+      if(this.isEdgeSelected()) {
+        this.addToWeight(event.keyCode);
+      }
     });
   }
 
   getEdges(): Edge[] {
-    return this.edges;
+    return this.cy.edges().map(edge => {
+      let e = new Edge(
+        edge.data('id'),
+        new Pair(
+          Number(edge.data('source')),
+          edge.data('source')
+        ),
+        new Pair(
+          Number(edge.data('target')),
+          edge.data('target')
+        ),
+        edge.data('weight')
+      );
+      return e;
+    });
   }
 
   addVertice(vertice: Vertice) {
@@ -234,7 +258,6 @@ export class KruskalService {
     this.vertices[v1].color = 'red';
     this.cy.nodes('#' + this.vertices[v1].id.value).first().data('color', 'red');
     this.vertices[v2].color = 'red';
-    console.log('selector');
     this.cy.nodes('#' + this.vertices[v2].id.value).first().data('color', 'red');
   }
 
@@ -251,7 +274,6 @@ export class KruskalService {
     this.vertices[v1].color = 'black';
     this.cy.nodes('#' + this.vertices[v1].id.value).first().data('color', 'black');
     this.vertices[v2].color = 'black';
-    console.log('selector');
     this.cy.nodes('#' + this.vertices[v2].id.value).first().data('color', 'black');
 
     this.kruskalEdges = this.kruskalEdges.splice(i, 1);
@@ -276,25 +298,6 @@ export class KruskalService {
     }
     return index;
   }
-
-  // edgeExists(sourceKey, targetKey) {
-  //   let ret = -1;
-  //     for(let i = 0; i < this.edges.length; i++) {
-  //       if(
-  //         (
-  //           sourceKey === this.edges[i].source.key
-  //           && targetKey === this.edges[i].target.key
-  //         ) || (
-  //           sourceKey === this.edges[i].target.key
-  //           && targetKey === this.edges[i].source.key
-  //         )
-  //       ) {
-  //         ret = i;
-  //         break;
-  //       }
-  //     }
-  //     return ret;
-  // }
 
   async findIndexOfVertice(key: number) {
     let index = -1;
@@ -367,6 +370,6 @@ export class KruskalService {
     }
 
     this.cy.edges('#e' + edge.source.value + edge.target.value).first().data('style', style);
-    this.edges[indexEdge].setStyle(style);
+    // this.edges[indexEdge].setStyle(style);
   }
 }
