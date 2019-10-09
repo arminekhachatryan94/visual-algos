@@ -20,6 +20,7 @@ export class KruskalService {
   sleepTime = 1000;
 
   clickedIndex: number;
+  clickedEdgeIndex: string;
 
   constructor() {
     this.vertices = [];
@@ -30,6 +31,7 @@ export class KruskalService {
     this.kruskalCyc = [];
     this.tapped = false;
     this.clickedIndex = null;
+    this.clickedEdgeIndex = null;
   }
 
   public draw() {
@@ -71,6 +73,7 @@ export class KruskalService {
       ]
     });
     this.verticeClickEvent();
+    this.edgeClickEvent();
   }
 
   async refresh() {
@@ -78,6 +81,37 @@ export class KruskalService {
       name: 'circle',
       rows: 5
     }).run();
+  }
+
+  edgeClickEvent() {
+    this.cy.on('click', 'edge', async event => {
+      if(this.clickedEdgeIndex !== null) {
+        this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'black', lineStyle: 'dashed'});
+      }
+      this.clickedEdgeIndex = event.target.id();
+      this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'green', lineStyle: 'dashed'});
+    });
+  }
+
+  isEdgeSelected() {
+    return this.clickedEdgeIndex !== null;
+  }
+
+  addToWeight(keyCode) {
+    console.log(keyCode);
+    let weight = this.cy.edges('#' + this.clickedEdgeIndex).data('weight');
+    if(keyCode>=48 && keyCode<=57) {
+      let num = keyCode - 48;
+      if(weight === 1) {
+        this.cy.edges('#' + this.clickedEdgeIndex).data('weight', num);
+      } else {
+        this.cy.edges('#' + this.clickedEdgeIndex).data('weight', (weight*10) + num);
+      }
+    }
+    else if(keyCode === 13) {
+      this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'black', lineStyle: 'dashed'});
+      this.clickedEdgeIndex = null;
+    }
   }
 
   async verticeClickEvent() {

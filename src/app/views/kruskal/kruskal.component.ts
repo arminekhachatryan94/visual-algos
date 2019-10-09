@@ -52,6 +52,12 @@ export class KruskalComponent implements OnInit {
   ngOnInit() {
     this.drawService.draw();
     this.createVertices();
+    document.addEventListener('keydown', event => {
+      console.log(this.drawService.isEdgeSelected());
+      if(this.drawService.isEdgeSelected()) {
+        this.drawService.addToWeight(event.keyCode);
+      }
+    });
   }
 
   async incrementVertices() {
