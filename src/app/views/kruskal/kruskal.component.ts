@@ -47,24 +47,26 @@ export class KruskalComponent implements OnInit {
     this.before = [];
     this.after = [];
     this.numVertices = 3;
-    this.createVertices();
   }
 
   ngOnInit() {
     this.drawService.draw();
+    this.createVertices();
   }
 
   async incrementVertices() {
-    await this.numVertices++;
-    await this.createVertices();
-    await this.drawService.draw();
+    let v = new Vertice(new Pair(this.numVertices, this.numVertices+''));
+    await this.drawService.addVertice(v);
+    this.numVertices++;
+    this.drawService.refresh();
+    // await this.drawService.draw();
     console.log(this.vertices.length);
   }
   
   async decrementVertices() {
     await this.numVertices--;
     this.drawService.removeLastVertice();
-    this.drawService.draw();
+    this.drawService.refresh();
     console.log(this.vertices.length);
   }
 
@@ -77,6 +79,7 @@ export class KruskalComponent implements OnInit {
       await this.drawService.addVertice(v);
       i++;
     }
+    this.drawService.refresh();
   }
 
   addEdgesToQueue(): void {

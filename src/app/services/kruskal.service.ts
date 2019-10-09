@@ -36,25 +36,8 @@ export class KruskalService {
     this.cy = cytoscape({
       container: document.getElementById('cy'),
       elements: {
-        nodes: this.vertices.map(function(vertice) {
-          return {
-            data: {
-              id: vertice.id.value,
-              color: vertice.color
-            }
-          }
-        }),
-        edges: this.edges.map(function(edge) {
-          return {
-            data: {
-              id: edge.id,
-              source: edge.source.value,
-              target: edge.target.value,
-              weight: edge.weight,
-              style: edge.style
-            }
-          }
-        })
+        nodes: [],
+        edges: []
       },
       layout: {
         name: 'circle',
@@ -88,11 +71,17 @@ export class KruskalService {
       ]
     });
     this.verticeClickEvent();
-    console.log(this.cy);
   }
 
-  verticeClickEvent() {
-    this.cy.on('click', 'node', async event => {
+  async refresh() {
+    this.cy.layout({
+      name: 'circle',
+      rows: 5
+    }).run();
+  }
+
+  async verticeClickEvent() {
+    await this.cy.on('click', 'node', async event => {
       let id = event.target.id();
       let index = await this.findIndexOfVertice(id);
       if(index === this.clickedIndex) {
@@ -106,26 +95,35 @@ export class KruskalService {
         // check if edge already exists
         let edgeIndex = await this.findIndexOfEdge(this.vertices[this.clickedIndex].id.key, this.vertices[index].id.key);
         if(edgeIndex === -1) {
-          let e = new Edge(
-            this.edges.length + '',
+          // add edge
+          let e = await new Edge(
+            'e' + this.vertices[this.clickedIndex].id.value + this.vertices[index].id.value,
             this.vertices[this.clickedIndex].id,
             this.vertices[index].id,
             1
           );
-          this.addEdge(e);
+          await this.addEdge(e);
         } else {
           // remove edge
-          this.edges.splice(edgeIndex, 1);
+          this.removeEdge(edgeIndex);
+
         }
-        this.vertices[this.clickedIndex].color = 'black';
+        // this.vertices[this.clickedIndex].color = 'black';
         this.clickedIndex = null;
       }
-      console.log(this.edges);
-      await this.draw();
+      this.refresh();
+      // await this.draw();
     });
   }
 
   addVertice(vertice: Vertice) {
+    this.cy.add({
+      group: 'nodes',
+      data: {
+        id: vertice.id.value,
+        color: vertice.color
+      }
+    });
     this.vertices.push(vertice);
     let list = new LinkedList<Vertice>();
     this.adj.push(list);
@@ -134,16 +132,32 @@ export class KruskalService {
   }
 
   removeLastVertice() {
-    this.vertices.pop();
+    let v = this.vertices.pop();
+    this.cy.remove('#' + v.id.value);
   }
   
   addEdge(edge: Edge) {
     this.edges.push(edge);
-    
+    this.cy.add({
+      group: 'edges',
+      data: {
+        id: edge.id,
+        source: edge.source.value,
+        target: edge.target.value,
+        weight: edge.weight,
+        style: edge.style
+      }
+    });
+
     let source = edge.source.key;
     let target = edge.target.key;
     this.adj[source].append(this.vertices[target]);
     this.adj[target].append(this.vertices[source]);
+  }
+  
+  removeEdge(index) {
+    let e = this.edges.splice(index, 1)[0];
+    this.cy.remove('#e' + e.source.value + e.target.value);
   }
 
   async addKruskalEdge(edge: Edge) {
@@ -178,7 +192,6 @@ export class KruskalService {
 
     this.kruskalEdges = this.kruskalEdges.splice(i, 1);
     return this.kruskalEdges;
-    // console.log(this.kruskalEdges);
   }
 
   async findIndexOfEdge(sourceKey, targetKey) {
@@ -245,7 +258,6 @@ export class KruskalService {
   }
 
   async isKruskalCyclic(edge: Edge){
-    // console.log(this.kruskalCyc);
     let s = await this.findIndexInKruskalArray(edge.source.key);
     let t = await this.findIndexInKruskalArray(edge.target.key);
 
