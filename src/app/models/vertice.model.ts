@@ -8,5 +8,4 @@ export class Vertice {
         this.id = id;
         this.color = 'black';
     }
-
 }
