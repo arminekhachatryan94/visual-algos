@@ -107,22 +107,29 @@ export class KruskalService {
   }
 
   addToWeight(keyCode) {
-    let weight = this.cy.edges('#' + this.clickedEdgeIndex).first().data('weight');
+    let weight = this.cy.edges('#' + this.clickedEdgeIndex).first();
+    console.log(keyCode);
     if(keyCode >= 48 && keyCode <= 57) {
-      let num = keyCode - 48;
-      if(weight === 1) {
-        this.cy.edges('#' + this.clickedEdgeIndex).data('weight', num);
+      let num = Number(keyCode) - 48;
+      if(weight === '') {
+        weight.data('weight', num);
       } else {
-        this.cy.edges('#' + this.clickedEdgeIndex).data('weight', (weight*10) + num);
+        weight.data('weight', weight.data('weight') + num);
       }
     }
     else if(keyCode === 13) {
-      this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'black', lineStyle: 'dashed'});
+      weight.data('style', {color: 'black', lineStyle: 'dashed'});
       this.clickedEdgeIndex = null;
+    } else if(keyCode === 189) {
+      if(weight.data('weight') === '0' || weight.data('weight') === '') {
+        weight.data('weight', '-');
+      }
     } else if(keyCode === 8){
-      let e = this.cy.edges('#' + this.clickedEdgeIndex).first();
-      let n = (e.data('weight') - (e.data('weight')%10))/10;
-      e.data('weight', n);
+      weight.data('weight', weight.data('weight').substring(0, weight.data('weight').length-1));
+    } else if(keyCode === 190) {
+      if(!weight.data('weight').includes('.')) {
+        weight.data('weight', weight.data('weight') + '.');
+      }
     }
   }
 
@@ -152,7 +159,7 @@ export class KruskalService {
             'e' + this.clickedVerticeIndex + index,
             new Pair(this.clickedVerticeIndex, this.clickedVerticeIndex + ''),
             new Pair(index, index + ''),
-            1
+            ''
           );
           await this.addEdge(e);
         } else {
@@ -296,11 +303,16 @@ export class KruskalService {
     let vertices = this.getVertices();
     for(let i = 0; i < vertices.length; i++) {
       this.cy.nodes('#' + vertices[i].id.value).first().data('color', 'black');
+      let k = this.cy.nodes('#' + vertices[i].id.value).first();
     }
     let edges = this.getEdges();
     for(let i = 0; i < edges.length; i++) {
       this.cy.edges('#e' + edges[i].source.value + edges[i].target.value).first().data('style', {color: 'black', lineStyle: 'dashed'});
     }
+    while(this.kruskalEdges.length > 0) {
+      this.kruskalEdges.pop();
+    }
+    console.log(this.kruskalEdges.length)
   }
 
   getKruskalArray() {

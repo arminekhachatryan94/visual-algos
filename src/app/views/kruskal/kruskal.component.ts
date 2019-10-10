@@ -101,13 +101,13 @@ export class KruskalComponent implements OnInit {
     if(this.treeType.type === 'min') {
       this.queue = await new PriorityQueue({
         comparator: function(a: Edge, b: Edge) {
-          return a.weight - b.weight;
+          return Number(a.weight) - Number(b.weight);
         }
       });
     } else {
       this.queue = await new PriorityQueue({
         comparator: function(a: Edge, b: Edge) {
-          return b.weight - a.weight;
+          return Number(b.weight) - Number(a.weight);
         }
       });
     }

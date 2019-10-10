@@ -4,13 +4,13 @@ export class Edge {
     id: string;
     source: Pair;
     target: Pair;
-    weight: number;
+    weight: string;
     style: {
         color: string,
         lineStyle: string
     };
 
-    constructor(id: string, source: Pair, target: Pair, weight: number) {
+    constructor(id: string, source: Pair, target: Pair, weight: string) {
         this.id = id;
         this.source = source,
         this.target = target;
