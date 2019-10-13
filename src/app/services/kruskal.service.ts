@@ -109,7 +109,7 @@ export class KruskalService {
   addToWeight(keyCode) {
     let edge = this.cy.edges('#' + this.clickedEdgeIndex).first();
     let weight = edge.data('weight');
-    if(keyCode >= 48 && keyCode <= 57) {
+    if(keyCode >= 48 && keyCode <= 57) { // 0 - 9
       let num = Number(keyCode) - 48;
       if(weight === '') {
         edge.data('weight', num + '');
@@ -117,24 +117,33 @@ export class KruskalService {
         edge.data('weight', weight + ('' + num));
       }
     }
-    else if(keyCode === 13) {
+    else if(keyCode === 13) { // enter
       edge.data('style', {color: 'black', lineStyle: 'dashed'});
       this.clickedEdgeIndex = null;
-    } else if(keyCode === 189) {
+    } else if(keyCode === 189) { // -
       if(weight === '0' || weight === '') {
         edge.data('weight', '-');
       }
-    } else if(keyCode === 8 && weight.length){
-      edge.data('weight', weight.substring(0, weight.length-1));
-    } else if(keyCode === 190) {
+    } else if(keyCode === 8 && weight.length){ // delete
+      if(weight === '-0.') {
+        edge.data('weight', '-');
+      } else if(weight === '0.') {
+        edge.data('weight', '');
+      } else {
+        edge.data('weight', weight.substring(0, weight.length-1));
+      }
+    } else if(keyCode === 190) { // .
       if(!weight.includes('.')) {
+        console.log(weight === '');
+        console.log(weight.length);
+        let w = '';
         if(weight.length === 0 ||
           (weight.length === 1 &&
           weight === '-')
         ) {
-          edge.data('weight', weight + '0');
+          w += '0';
         }
-        edge.data('weight', weight + '.');
+        edge.data('weight', weight + w + '.');
       }
     }
   }
