@@ -106,13 +106,15 @@ export class KruskalService {
     return this.clickedEdgeIndex !== null;
   }
 
-  addToWeight(keyCode) {
+  addWeight(keyCode) {
     let edge = this.cy.edges('#' + this.clickedEdgeIndex).first();
     let weight = edge.data('weight');
     if(keyCode >= 48 && keyCode <= 57) { // 0 - 9
       let num = Number(keyCode) - 48;
-      if(weight === '') {
+      if(weight === '' || weight === '0') {
         edge.data('weight', num + '');
+      } else if(weight === '-0') {
+        edge.data('weight', '-' + num);
       } else {
         edge.data('weight', weight + ('' + num));
       }
@@ -191,7 +193,7 @@ export class KruskalService {
   addKeyListener() {
     document.addEventListener('keydown', event => {
       if(this.isEdgeSelected()) {
-        this.addToWeight(event.keyCode);
+        this.addWeight(event.keyCode);
       }
     });
   }
