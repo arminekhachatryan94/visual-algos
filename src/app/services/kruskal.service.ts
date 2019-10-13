@@ -134,8 +134,6 @@ export class KruskalService {
       }
     } else if(keyCode === 190) { // .
       if(!weight.includes('.')) {
-        console.log(weight === '');
-        console.log(weight.length);
         let w = '';
         if(weight.length === 0 ||
           (weight.length === 1 &&
@@ -286,8 +284,14 @@ export class KruskalService {
       }
     }
 
-    this.cy.nodes('#' + edge.source.key).first().data('color', 'black');
-    this.cy.nodes('#' + edge.target.key).first().data('color', 'black');
+    let source = await this.findIndexInKruskalArray(edge.source.key);
+    if(this.kruskalCyc[source].length === 1) {
+      this.cy.nodes('#' + edge.source.key).first().data('color', 'black');
+    }
+    let target = await this.findIndexInKruskalArray(edge.target.key);
+    if(this.kruskalCyc[target].length === 1) {
+      this.cy.nodes('#' + edge.target.key).first().data('color', 'black');
+    }
 
     this.kruskalEdges = this.kruskalEdges.splice(i, 1);
     return this.kruskalEdges;
