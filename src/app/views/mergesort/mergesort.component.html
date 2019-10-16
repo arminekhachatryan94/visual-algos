@@ -27,7 +27,7 @@
   </div>
   <div class="col-9">
     <div class="myTree"></div>
-    <div *ngIf="beforeArray.length" class="text-center display-parent">
+    <div *ngIf="beforeArray.length" [style.visibility]="displayBefore ? 'visible' : 'hidden'" class="text-center display-parent">
       <div *ngFor="let n of beforeArray" class="text-center display-parent">
         <a *ngFor="let el of n.value" class="integer">
           {{ el }}
@@ -39,7 +39,7 @@
         {{ el }}
       </a>
     </div>
-    <div *ngIf="afterArray.length" class="text-center display-parent">
+    <div *ngIf="afterArray.length" [style.visibility]="displayAfter ? 'visible' : 'hidden'" class="text-center display-parent">
       <div *ngFor="let n of afterArray" class="text-center display-parent">
         <a *ngFor="let el of n.value" class="integer">
           {{ el }}

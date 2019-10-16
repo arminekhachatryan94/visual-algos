@@ -29,6 +29,8 @@ export class MergesortComponent implements OnInit {
 
   treeData : Node;
 
+  displayBefore: boolean;
+  displayAfter: boolean;
   beforeArray: Node[];
   afterArray: Node[];
   mergedArray: number[];
@@ -47,6 +49,8 @@ export class MergesortComponent implements OnInit {
     this.userText = "";
     this.input_error = "";
     this.disable_solve = false;
+    this.displayBefore = false;
+    this.displayAfter = false;
     this.mergedArray = [];
     this.beforeArray = [];
     this.afterArray = [];
@@ -200,20 +204,20 @@ export class MergesortComponent implements OnInit {
     this.drawService.setRoot(this.treeData);
     this.drawService.draw();
     
-    // this.treeMergeArr[depth].nativeElement.innerHTML += "merged: "+JSON.stringify(merged);
-
     await this.sleep(this.mergeSleepTime);
 
     return merged; 
   }
 
   async merge(leftNode, rightNode) {
-    console.log('queue', this.queue1);
     this.mergedArray = [];
+    this.displayBefore = false;
+    this.displayAfter = false;
     let result = [];
     let indexLeft = 0;
     let indexRight = 0;
 
+    // get left part of array
     for(let n = 0; n < this.queue1.length; n++) {
       if(this.queue1[n].id === leftNode.id) {
         break;
@@ -223,17 +227,16 @@ export class MergesortComponent implements OnInit {
       }
     }
 
+    // get right part of array
     for(let n = this.queue1.length-1; n>= 0; n--) {
       if(this.queue1[n].id === rightNode.id) {
         break;
       }
       if(this.queue1[n].id !== rightNode.id) {
-        this.afterArray.push(this.queue1[n]);
+        this.afterArray.unshift(this.queue1[n]);
       }
     }
-
-    await this.sleep(this.mergeSleepTime);
-
+  
     while (leftNode.value && leftNode.value.length && rightNode.value && rightNode.value.length) {
       if(this.ordering == 'ASC') {
         if(parseFloat(leftNode.value[0]) < parseFloat(rightNode.value[0])) {
@@ -330,8 +333,14 @@ export class MergesortComponent implements OnInit {
     }
     await this.sleep(this.mergeSleepTime);
 
+    this.displayBefore = true;
+    this.displayAfter = true;
+
+    await this.sleep(this.mergeSleepTime);
+
     this.mergedArray = [];
     this.beforeArray = [];
+    this.afterArray = [];
 
     await this.sleep(this.mergeSleepTime);
     

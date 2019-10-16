@@ -1,9 +1,13 @@
-.error {
-  color: red;
+
+#before {
+  visibility: hidden;
+}
+#after {
+  visibility: hidden;
 }
 
-.myTree{
-
+.error {
+  color: red;
 }
 
 .node {
