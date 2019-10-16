@@ -14,29 +14,37 @@
         <option value="DESC">DESC</option>
       </select>
     </div>
+    <div>
+      <label>
+        <input type="radio" value="breadth" name="solutionType" [checked]="solutionType === 'breadth'" [(ngModel)]="solutionType">
+        Breadth
+      </label>
+      <label>
+        <input type="radio" value="depth" name="solutionType" [checked]="solutionType === 'depth'" [(ngModel)]="solutionType">
+        Depth
+      </label>
+    </div>
   </div>
   <div class="col-9">
     <div class="myTree"></div>
-    <div *ngIf="mergedArray.length" class="text-center display-parent">
-      <a *ngFor="let el of mergedArray; let i = index" class="integer">{{ el }}</a>
+    <div *ngIf="beforeArray.length" class="text-center display-parent">
+      <div *ngFor="let n of beforeArray" class="text-center display-parent">
+        <a *ngFor="let el of n.value" class="integer">
+          {{ el }}
+        </a>
+      </div>
     </div>
-  </div>
-  <!-- <h2>The mergesort algorithm will sort the left most leaves first</h2> -->
-  <!-- <div class="row">
-    <div class="col-6">
-      <div *ngFor="let el of height_array; let i = index">
-        Depth {{el}}:
-        <span #treeBreak></span>
-        <br/>
+    <div *ngIf="mergedArray.length" class="text-center display-parent">
+      <a *ngFor="let el of mergedArray" class="integer">
+        {{ el }}
+      </a>
+    </div>
+    <div *ngIf="afterArray.length" class="text-center display-parent">
+      <div *ngFor="let n of afterArray" class="text-center display-parent">
+        <a *ngFor="let el of n.value" class="integer">
+          {{ el }}
+        </a>
       </div>
     </div>
   </div>
-  <div class="col-6">
-    <div *ngFor="let el of height_array; let i = index">
-      Depth {{el}}:
-      <span #treeMerge></span>
-      <br/>
-    </div>
-  </div> -->
-  <!-- <div class="myTree"></div> -->
 </div>

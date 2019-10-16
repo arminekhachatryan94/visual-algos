@@ -7,7 +7,7 @@ import {
   ElementRef 
 } from '@angular/core';
 
-import { Node } from '../../interfaces/Node.interface';
+import { Node } from '../../models/Node.model';
 import { MergesortService } from 'src/app/services/mergesort.service';
 
 @Component({
@@ -24,9 +24,13 @@ export class MergesortComponent implements OnInit {
   input_error: String;
   ordering: String;
   disable_solve: Boolean;
+  solutionType: String;
+  num_nodes: number;
 
   treeData : Node;
 
+  beforeArray: Node[];
+  afterArray: Node[];
   mergedArray: number[];
   queue1: Node[];
   maxDepth: number;
@@ -44,11 +48,15 @@ export class MergesortComponent implements OnInit {
     this.input_error = "";
     this.disable_solve = false;
     this.mergedArray = [];
+    this.beforeArray = [];
+    this.afterArray = [];
+    this.solutionType = 'breadth';
   }
 
   ngOnInit() {
     this.ordering = 'ASC';
     this.int_array = [];
+    this.num_nodes = 0;
   }
 
   ngAfterContentInit(){
@@ -83,22 +91,14 @@ export class MergesortComponent implements OnInit {
     arr.forEach(value => {
       if(!this.isNumeric(value)) {
         this.input_error = "Error in input.";
-        this.treeData = {
-          depth: 0,
-          parent: -1,
-          value: undefined
-        };
+        this.treeData = new Node(0, 0, [], null, null, null);
         this.sleep(this.mergeSleepTime);
         this.drawService.setRoot(this.treeData);
         this.drawService.draw();
         return false;
       }
     });
-    this.treeData = {
-      depth: 0,
-      parent: -1,
-      value: arr
-    };
+    this.treeData = new Node(0, 0, arr, null, null, null);
     this.drawService.setRoot(this.treeData);
     this.drawService.draw();
     return true;
@@ -122,17 +122,18 @@ export class MergesortComponent implements OnInit {
   async sortArray() {
     this.disable_solve = true;
     if(!this.input_error.length && this.int_array.length) {
-      // depth
-      await this.depthMergeSort(this.int_array, 0,1, this.treeData);
-
-      // breadth
-      // this.queue1 = [];
-      // this.maxDepth = 0;
-      // this.queue1.push(this.treeData);
-      // await this.breadthSplit();
-      // console.log('tree', this.treeData);
-      // await this.breadthMerge();
-
+      if(this.solutionType === 'breadth') {
+        // breadth
+        this.queue1 = [];
+        this.maxDepth = 0;
+        this.queue1.push(this.treeData);
+        this.num_nodes++;
+        await this.breadthSplit();
+        await this.breadthMerge();
+      } else {
+        // depth
+        await this.depthMergeSort(this.int_array, 0,1, this.treeData);
+      }
     }
     this.disable_solve = false;
   }
@@ -155,7 +156,6 @@ export class MergesortComponent implements OnInit {
   async depthMergeSort (arr, index, depth, parent) {
     if (arr.length < 2) {
       await this.sleep(this.mergeSleepTime);
-      // this.treeBreakArr[depth].nativeElement.innerHTML += "node: "+JSON.stringify(arr) + " ";
       return await arr;
     }
     
@@ -167,17 +167,10 @@ export class MergesortComponent implements OnInit {
 
     await this.sleep(this.mergeSleepTime);
 
-    // this.treeBreakArr[depth].nativeElement.innerHTML += "left: "+JSON.stringify(subLeft)+"right: "+JSON.stringify(subRight)+" ";
-    parent.left = {
-      depth: depth,
-      parent: depth-1,
-      value: subLeft
-    };
-    parent.right = {
-      depth: depth,
-      parent: depth-1,
-      value: subRight
-    }
+    parent.left = new Node(this.num_nodes, depth, subLeft, parent, null, null);
+    this.num_nodes++;
+    parent.right = new Node(this.num_nodes, depth, subRight, parent, null, null);
+    this.num_nodes++;
     
     this.drawService.removeAll();
     this.drawService.setRoot(this.treeData);
@@ -215,20 +208,40 @@ export class MergesortComponent implements OnInit {
   }
 
   async merge(leftNode, rightNode) {
+    console.log('queue', this.queue1);
     this.mergedArray = [];
     let result = [];
     let indexLeft = 0;
     let indexRight = 0;
 
+    for(let n = 0; n < this.queue1.length; n++) {
+      if(this.queue1[n].id === leftNode.id) {
+        break;
+      }
+      if(this.queue1[n].id !== leftNode.id) {
+        this.beforeArray.push(this.queue1[n]);
+      }
+    }
+
+    for(let n = this.queue1.length-1; n>= 0; n--) {
+      if(this.queue1[n].id === rightNode.id) {
+        break;
+      }
+      if(this.queue1[n].id !== rightNode.id) {
+        this.afterArray.push(this.queue1[n]);
+      }
+    }
+
+    await this.sleep(this.mergeSleepTime);
+
     while (leftNode.value && leftNode.value.length && rightNode.value && rightNode.value.length) {
-      console.log("before", leftNode.value, rightNode.value);
       if(this.ordering == 'ASC') {
         if(parseFloat(leftNode.value[0]) < parseFloat(rightNode.value[0])) {
           let node = leftNode.value.shift();
 
           result.push(node);
           this.mergedArray.push(node);
-          
+
           await this.sleep(this.mergeSleepTime);
           this.drawService.removeAll();
           this.drawService.setRoot(this.treeData);
@@ -282,7 +295,6 @@ export class MergesortComponent implements OnInit {
           this.drawService.draw();          
         }
       }
-      console.log("after", leftNode.value, rightNode.value);
     }
     while(leftNode.value.length) {
       let node = leftNode.value.shift();
@@ -316,11 +328,39 @@ export class MergesortComponent implements OnInit {
       this.drawService.setRoot(this.treeData);
       this.drawService.draw();
     }
+    await this.sleep(this.mergeSleepTime);
+
+    this.mergedArray = [];
+    this.beforeArray = [];
 
     await this.sleep(this.mergeSleepTime);
-    this.mergedArray = [];
     
-    return result.concat(leftNode.value.slice(indexLeft)).concat(rightNode.value.slice(indexRight));
+    let ret = result.concat(leftNode.value.slice(indexLeft)).concat(rightNode.value.slice(indexRight));
+
+    let leftIndex = this.getIndexOfNode(leftNode.id);
+    if(leftIndex !== -1) {
+      this.queue1.splice(leftIndex, 2, new Node(
+        leftNode.parent.id,
+        leftNode.parent.depth,
+        ret,
+        leftNode.parent,
+        null,
+        null
+      ));
+    }
+
+    return ret;
+  }
+
+  getIndexOfNode(id: number) {
+    let index = -1;
+    for(let q = 0; q < this.queue1.length; q++) {
+      if(this.queue1[q].id === id) {
+        index = q;
+        break;
+      }
+    }
+    return index;
   }
 
   async breadthSplit() {
@@ -334,17 +374,25 @@ export class MergesortComponent implements OnInit {
 
         var subRight = node.value.slice(mid);
 
-        let leftNode = {
-          depth: node.depth+1,
-          parent: node.depth,
-          value: subLeft
-        };
+        let leftNode = new Node(
+          this.num_nodes,
+          node.depth+1,
+          subLeft,
+          node,
+          null,
+          null
+        );
+        this.num_nodes++;
         
-        let rightNode = {
-          depth: node.depth+1,
-          parent: node.depth,
-          value: subRight
-        };
+        let rightNode = new Node(
+          this.num_nodes,
+          node.depth+1,
+          subRight,
+          node,
+          null,
+          null
+        );
+        this.num_nodes++;
 
         if(this.maxDepth < node.depth + 1) {
           this.maxDepth = node.depth+1;
@@ -368,8 +416,6 @@ export class MergesortComponent implements OnInit {
   }
 
   async breadthMerge() {
-    console.log("depth", this.maxDepth);
-    // console.log(this.queue1, this.maxDepth);
     for(let depth = this.maxDepth-1; depth >= 0; depth--) {
       await this.breadthTraverse(this.treeData, depth);
       await this.sleep(this.mergeSleepTime);
@@ -380,14 +426,11 @@ export class MergesortComponent implements OnInit {
   }
 
   async breadthTraverse(tree, depth) {
-    // console.log(depth, tree);
     if(tree.left && tree.right) {
       if(tree.depth === depth) {
         let nodeLeft = tree.left;
         let nodeRight = tree.right;
-        console.log("merging....");
         this.sleep(this.mergeSleepTime);
-        console.log("....merged");
         let merged = await this.merge(nodeLeft, nodeRight);
         tree.value = merged;
         tree.left = null;
