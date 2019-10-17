@@ -1,7 +1,9 @@
+import { Element } from './element.model';
+
 export class Node {
     id: number;
     depth: number;
-    value: number[];
+    value: Element[];
     parent: Node;
     left: Node;
     right: Node;
@@ -9,7 +11,7 @@ export class Node {
     constructor(
         id: number,
         depth: number,
-        val: number[],
+        val: Element[],
         parent: Node,
         left: Node,
         right: Node

@@ -8,7 +8,7 @@ import {
 } from 'd3-hierarchy';
 
 import { Injectable } from '@angular/core';
-import { Node } from '../interfaces/Node.interface';
+import { Node } from '../models/Node.model';
 import * as d3 from 'd3';
 
 // import 'rxjs/Rx';
@@ -51,7 +51,9 @@ export class MergesortService {
                 parent
                     .insert('p')
                     .classed('integer', true)
-                    .text(e);
+                    .style('background-color', e.backgroundColor)
+                    .style('border-color', e.border)
+                    .text(e.value);
                 i++;
             });
         } else {

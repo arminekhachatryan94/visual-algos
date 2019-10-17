@@ -1,20 +1,16 @@
 import { 
   Component, 
-  OnInit, 
-  ViewChildren, 
-  QueryList, 
-  ChangeDetectionStrategy, 
-  ElementRef 
+  OnInit
 } from '@angular/core';
 
 import { Node } from '../../models/Node.model';
 import { MergesortService } from 'src/app/services/mergesort.service';
+import { Element } from 'src/app/models/element.model';
 
 @Component({
   selector: 'app-mergesort',
   templateUrl: './mergesort.component.html',
   styleUrls: ['./mergesort.component.css'],
-  changeDetection: ChangeDetectionStrategy.Default
 })
 
 export class MergesortComponent implements OnInit {
@@ -33,15 +29,9 @@ export class MergesortComponent implements OnInit {
   displayAfter: boolean;
   beforeArray: Node[];
   afterArray: Node[];
-  mergedArray: number[];
+  mergedArray: Element[];
   queue1: Node[];
   maxDepth: number;
-
-  @ViewChildren("treeBreak") treeBreakRef : QueryList<ElementRef>;
-  @ViewChildren("treeMerge") treeMergeRef : QueryList<ElementRef>;
-
-  treeBreakArr = [];
-  treeMergeArr = [];
 
   mergeSleepTime = 1000;
 
@@ -102,25 +92,14 @@ export class MergesortComponent implements OnInit {
         return false;
       }
     });
-    this.treeData = new Node(0, 0, arr, null, null, null);
+    let elements = [];
+    for(let i = 0; i < arr.length; i++) {
+      elements.push(new Element(arr[i], 'blue'));
+    }
+    this.treeData = new Node(0, 0, elements, null, null, null);
     this.drawService.setRoot(this.treeData);
     this.drawService.draw();
     return true;
-  }
-
-  ngAfterViewInit() {
-    this.treeBreakRef.changes.subscribe(() => {
-      this.treeBreakArr = [];
-      this.treeBreakRef.toArray().forEach(el => {
-        this.treeBreakArr.push(el);
-      });
-    });
-    this.treeMergeRef.changes.subscribe(() => {
-      this.treeMergeArr = [];
-      this.treeMergeRef.toArray().forEach(el => {
-        this.treeMergeArr.push(el);
-      });
-    });
   }
 
   async sortArray() {
@@ -136,7 +115,7 @@ export class MergesortComponent implements OnInit {
         await this.breadthMerge();
       } else {
         // depth
-        await this.depthMergeSort(this.int_array, 0,1, this.treeData);
+        await this.depthMergeSort(this.int_array, 0, 1, this.treeData);
       }
     }
     this.disable_solve = false;
@@ -239,7 +218,7 @@ export class MergesortComponent implements OnInit {
   
     while (leftNode.value && leftNode.value.length && rightNode.value && rightNode.value.length) {
       if(this.ordering == 'ASC') {
-        if(parseFloat(leftNode.value[0]) < parseFloat(rightNode.value[0])) {
+        if(parseFloat(leftNode.value[0].value) < parseFloat(rightNode.value[0].value)) {
           let node = leftNode.value.shift();
 
           result.push(node);
@@ -266,7 +245,7 @@ export class MergesortComponent implements OnInit {
           this.drawService.draw();
         }
       } else {
-        if (parseFloat(leftNode.value[0]) > parseFloat(rightNode.value[0])) {
+        if (parseFloat(leftNode.value[0].value) > parseFloat(rightNode.value[0].value)) {
           let node = leftNode.value.shift();
 
           await this.sleep(this.mergeSleepTime);
