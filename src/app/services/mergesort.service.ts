@@ -51,7 +51,7 @@ export class MergesortService {
                 parent
                     .insert('p')
                     .classed('integer', true)
-                    .style('background-color', e.backgroundColor)
+                    .style('background-color', e.background)
                     .style('border-color', e.border)
                     .text(e.value);
                 i++;

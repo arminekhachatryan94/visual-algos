@@ -94,7 +94,7 @@ export class MergesortComponent implements OnInit {
     });
     let elements = [];
     for(let i = 0; i < arr.length; i++) {
-      elements.push(new Element(arr[i], 'blue'));
+      elements.push(new Element(arr[i], 'yellow'));
     }
     this.treeData = new Node(0, 0, elements, null, null, null);
     this.drawService.setRoot(this.treeData);
@@ -164,7 +164,7 @@ export class MergesortComponent implements OnInit {
     }).catch(console.log);
 
     await this.sleep(this.mergeSleepTime);
-    
+
     await this.depthMergeSort(subRight, index + subLeft.length,depth+1, parent.right).then((res) => {
       subRight = res;
     }).catch(console.log);
@@ -188,6 +188,12 @@ export class MergesortComponent implements OnInit {
     return merged; 
   }
 
+  async changeColorOfElementsInNode(node: Node, color: string) {
+    for(let n = 0; n < node.value.length; n++) {
+      await node.value[n].changeColor(color);
+    }
+  }
+
   async merge(leftNode, rightNode) {
     this.mergedArray = [];
     this.displayBefore = false;
@@ -195,6 +201,11 @@ export class MergesortComponent implements OnInit {
     let result = [];
     let indexLeft = 0;
     let indexRight = 0;
+
+    await this.changeColorOfElementsInNode(leftNode, 'red');
+    await this.changeColorOfElementsInNode(rightNode, 'blue');
+
+    await this.sleep(this.mergeSleepTime);
 
     // get left part of array
     for(let n = 0; n < this.queue1.length; n++) {
@@ -219,25 +230,27 @@ export class MergesortComponent implements OnInit {
     while (leftNode.value && leftNode.value.length && rightNode.value && rightNode.value.length) {
       if(this.ordering == 'ASC') {
         if(parseFloat(leftNode.value[0].value) < parseFloat(rightNode.value[0].value)) {
-          let node = leftNode.value.shift();
+          let node = await leftNode.value.shift();
+          await this.sleep(this.mergeSleepTime);
 
-          result.push(node);
-          this.mergedArray.push(node);
+          await result.push(node);
+          await this.mergedArray.push(node);
 
           await this.sleep(this.mergeSleepTime);
           this.drawService.removeAll();
           this.drawService.setRoot(this.treeData);
           this.drawService.draw();
         } else {
-          let node = rightNode.value.shift();
+          let node = await rightNode.value.shift();
 
           await this.sleep(this.mergeSleepTime);
           this.drawService.removeAll();
           this.drawService.setRoot(this.treeData);
           this.drawService.draw();
+          await this.sleep(this.mergeSleepTime);
 
-          result.push(node);
-          this.mergedArray.push(node);
+          await result.push(node);
+          await this.mergedArray.push(node);
 
           await this.sleep(this.mergeSleepTime);
           this.drawService.removeAll();
@@ -246,48 +259,51 @@ export class MergesortComponent implements OnInit {
         }
       } else {
         if (parseFloat(leftNode.value[0].value) > parseFloat(rightNode.value[0].value)) {
-          let node = leftNode.value.shift();
+          let node = await leftNode.value.shift();
 
           await this.sleep(this.mergeSleepTime);
           this.drawService.removeAll();
           this.drawService.setRoot(this.treeData);
           this.drawService.draw();
-    
-          result.push(node);
-          this.mergedArray.push(node);
+          await this.sleep(this.mergeSleepTime);
+
+          await result.push(node);
+          await this.mergedArray.push(node);
 
           await this.sleep(this.mergeSleepTime);
           this.drawService.removeAll();
           this.drawService.setRoot(this.treeData);
           this.drawService.draw();
         } else {
-          let node = rightNode.value.shift();
+          let node = await rightNode.value.shift();
 
           await this.sleep(this.mergeSleepTime);
           this.drawService.removeAll();
           this.drawService.setRoot(this.treeData);
           this.drawService.draw();
-    
-          result.push(node);
-          this.mergedArray.push(node);
+          await this.sleep(this.mergeSleepTime);
+
+          await result.push(node);
+          await this.mergedArray.push(node);
 
           await this.sleep(this.mergeSleepTime);
           this.drawService.removeAll();
           this.drawService.setRoot(this.treeData);
-          this.drawService.draw();          
+          this.drawService.draw();
         }
       }
     }
     while(leftNode.value.length) {
-      let node = leftNode.value.shift();
+      let node = await leftNode.value.shift();
 
       await this.sleep(this.mergeSleepTime);
       this.drawService.removeAll();
       this.drawService.setRoot(this.treeData);
       this.drawService.draw();
+      await this.sleep(this.mergeSleepTime);
 
-      result.push(node);
-      this.mergedArray.push(node);
+      await result.push(node);
+      await this.mergedArray.push(node);
 
       await this.sleep(this.mergeSleepTime);
       this.drawService.removeAll();
@@ -295,14 +311,15 @@ export class MergesortComponent implements OnInit {
       this.drawService.draw();
     }
     while(rightNode.value.length) {
-      let node = rightNode.value.shift();
+      let node = await rightNode.value.shift();
 
       await this.sleep(this.mergeSleepTime);
       this.drawService.removeAll();
       this.drawService.setRoot(this.treeData);
       this.drawService.draw();
+      await this.sleep(this.mergeSleepTime);
 
-      result.push(node);
+      await result.push(node);
       this.mergedArray.push(node);
 
       await this.sleep(this.mergeSleepTime);
@@ -323,11 +340,11 @@ export class MergesortComponent implements OnInit {
 
     await this.sleep(this.mergeSleepTime);
     
-    let ret = result.concat(leftNode.value.slice(indexLeft)).concat(rightNode.value.slice(indexRight));
+    let ret = await result.concat(leftNode.value.slice(indexLeft)).concat(rightNode.value.slice(indexRight));
 
-    let leftIndex = this.getIndexOfNode(leftNode.id);
+    let leftIndex = await this.getIndexOfNode(leftNode.id);
     if(leftIndex !== -1) {
-      this.queue1.splice(leftIndex, 2, new Node(
+      await this.queue1.splice(leftIndex, 2, new Node(
         leftNode.parent.id,
         leftNode.parent.depth,
         ret,
@@ -371,7 +388,7 @@ export class MergesortComponent implements OnInit {
           null
         );
         this.num_nodes++;
-        
+
         let rightNode = new Node(
           this.num_nodes,
           node.depth+1,
@@ -418,15 +435,27 @@ export class MergesortComponent implements OnInit {
       if(tree.depth === depth) {
         let nodeLeft = tree.left;
         let nodeRight = tree.right;
+
         this.sleep(this.mergeSleepTime);
+
         let merged = await this.merge(nodeLeft, nodeRight);
-        tree.value = merged;
+
+        this.sleep(this.mergeSleepTime);
+
+        merged.forEach(el => {
+          el.changeColor('yellow');
+        });
+
+        tree.value = merged;    
         tree.left = null;
         tree.right = null;
 
       } else {
         let nodeLeft = tree.left;
         let nodeRight = tree.right;
+
+        this.sleep(this.mergeSleepTime);
+
         await this.breadthTraverse(nodeLeft, depth);
         await this.breadthTraverse(nodeRight, depth);
       }
