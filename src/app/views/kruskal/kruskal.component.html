@@ -9,6 +9,9 @@
         <button (click)="incrementVertices()" [disabled]="numVertices >= 20">+</button>
       </div>
       <div>
+        <button (click)="generateRandomEdges()">Generate Random Edges</button>
+      </div>
+      <div>
         <input [(ngModel)]="treeType.type" type="radio" value="min" name="treeType"> Min
         <input [(ngModel)]="treeType.type" type="radio" value="max" name="treeType"> Max
       </div>

@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 import cytoscape from 'cytoscape';
 import { Edge } from 'src/app/models/edge.model';
 import { Vertice } from 'src/app/models/vertice.model';
-import { LinkedList } from 'linked-list-typescript';
+// import { LinkedList } from 'linked-list-typescript';
 import { Pair } from '../models/pair.model';
 
 @Injectable()
 export class KruskalService {
   cy: cytoscape;
   kruskalEdges: Edge[];
-  adj: LinkedList<Vertice>[];
+  // adj: LinkedList<Vertice>[];
   kruskalCyc: Number[][];
   visited: boolean[];
   tapped: boolean;
@@ -22,7 +22,7 @@ export class KruskalService {
 
   constructor() {
     this.kruskalEdges = [];
-    this.adj = [];
+    // this.adj = [];
     this.visited = [];
     this.kruskalCyc = [];
     this.tapped = false;
@@ -210,6 +210,10 @@ export class KruskalService {
     });
   }
 
+  removeAllEdges() {
+    this.cy.remove(this.cy.edges());
+  }
+
   getEdges(): Edge[] {
     return this.cy.edges().map(edge => {
       let e = new Edge(
@@ -236,8 +240,8 @@ export class KruskalService {
         color: vertice.color
       }
     });
-    let list = new LinkedList<Vertice>();
-    this.adj.push(list);
+    // let list = new LinkedList<Vertice>();
+    // this.adj.push(list);
     this.visited.push(false);
     this.kruskalCyc.push([vertice.id.key]);
   }
@@ -323,9 +327,11 @@ export class KruskalService {
 
   reset() {
     let vertices = this.getVertices();
+    this.kruskalCyc = [];
     for(let i = 0; i < vertices.length; i++) {
       this.cy.nodes('#' + vertices[i].id.value).first().data('color', 'black');
-      let k = this.cy.nodes('#' + vertices[i].id.value).first();
+      this.cy.nodes('#' + vertices[i].id.value).first();
+      this.kruskalCyc.push([vertices[i].id.key]);
     }
     let edges = this.getEdges();
     for(let i = 0; i < edges.length; i++) {

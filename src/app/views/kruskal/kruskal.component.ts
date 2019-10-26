@@ -59,14 +59,18 @@ export class KruskalComponent implements OnInit {
   async incrementVertices() {
     let v = new Vertice(new Pair(this.numVertices, this.numVertices+''));
     await this.drawService.addVertice(v);
+    this.vertices = this.drawService.getVertices();
     this.numVertices++;
     this.drawService.refresh();
+    console.log(this.vertices);
   }
   
   async decrementVertices() {
     await this.numVertices--;
-    this.drawService.removeLastVertice();
+    await this.drawService.removeLastVertice();
+    this.vertices = this.drawService.getVertices();
     this.drawService.refresh();
+    console.log(this.vertices);
   }
 
   async createVertices() {
@@ -180,6 +184,8 @@ export class KruskalComponent implements OnInit {
     this.paused = true;
     this.solving = false;
     await this.drawService.reset();
+    this.steps = [];
+    this.steps.push(this.drawService.getKruskalArray());
     await this.sleep(this.sleepTime);
   }
 
@@ -242,6 +248,26 @@ export class KruskalComponent implements OnInit {
       this.isNext = false;
     }
     this.nextSolving = false;
+  }
+
+  generateRandomEdges() {
+    this.drawService.removeAllEdges();
+    let vertices = [...this.vertices];
+    while(vertices.length > 0) {
+      let currentV = vertices[vertices.length-1];
+      for(let i = 0; i < vertices.length-1; i++) {
+        if(Math.floor(Math.random()*2)) {
+          let e = new Edge(
+            'e' + currentV.id.key + '-' + vertices[i].id.key,
+            currentV.id,
+            vertices[i].id,
+            (Math.floor(Math.random()*100)-50) + ''
+          );
+          this.drawService.addEdge(e);
+        }
+      }
+      vertices.pop();
+    }
   }
 
   sleep(ms) {
