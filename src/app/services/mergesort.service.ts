@@ -11,8 +11,6 @@ import { Injectable } from '@angular/core';
 import { Node } from '../models/Node.model';
 import * as d3 from 'd3';
 
-// import 'rxjs/Rx';
-
 @Injectable()
 export class MergesortService {
     private margin: any = { top: 20, right: 120, bottom: 20, left: 120 };
@@ -53,6 +51,7 @@ export class MergesortService {
                     .classed('integer', true)
                     .style('background-color', e.background)
                     .style('border-color', e.border)
+                    .style('visibility', e.visibility ? 'visible' : 'hidden')
                     .text(e.value);
                 i++;
             });

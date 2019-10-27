@@ -9,6 +9,7 @@ export class Element {
     value: number;
     background: string;
     border: string;
+    visibility: boolean;
 
     constructor(
         value: number,
@@ -27,9 +28,10 @@ export class Element {
             this.background = yellowBackground;
             this.border = yellowBorder;
         }
+        this.visibility = true;
     }
 
-    async changeColor(color: string) {
+    changeColor(color: string) {
         if(color === 'blue') {
             this.background = blueBackground;
             this.border = blueBorder;
@@ -40,5 +42,9 @@ export class Element {
             this.background = yellowBackground;
             this.border = yellowBorder;
         }
+    }
+
+    changeVisibility(visibility: boolean) {
+        this.visibility = visibility;
     }
 }

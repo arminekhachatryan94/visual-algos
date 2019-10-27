@@ -199,8 +199,6 @@ export class MergesortComponent implements OnInit {
     this.displayBefore = false;
     this.displayAfter = false;
     let result = [];
-    let indexLeft = 0;
-    let indexRight = 0;
 
     await this.changeColorOfElementsInNode(leftNode, 'red');
     await this.changeColorOfElementsInNode(rightNode, 'blue');
@@ -227,74 +225,40 @@ export class MergesortComponent implements OnInit {
       }
     }
   
-    while (leftNode.value && leftNode.value.length && rightNode.value && rightNode.value.length) {
+    let leftI = 0, rightI = 0;
+    while (leftI < leftNode.value.length && rightI < rightNode.value.length) {
+      let node;
       if(this.ordering == 'ASC') {
-        if(parseFloat(leftNode.value[0].value) < parseFloat(rightNode.value[0].value)) {
-          let node = await leftNode.value.shift();
-          await this.sleep(this.mergeSleepTime);
-
-          await result.push(node);
-          await this.mergedArray.push(node);
-
-          await this.sleep(this.mergeSleepTime);
-          this.drawService.removeAll();
-          this.drawService.setRoot(this.treeData);
-          this.drawService.draw();
+        if(parseFloat(leftNode.value[leftI].value) < parseFloat(rightNode.value[rightI].value)) {
+          node = await leftNode.value[leftI];
+          leftI++;
         } else {
-          let node = await rightNode.value.shift();
-
-          await this.sleep(this.mergeSleepTime);
-          this.drawService.removeAll();
-          this.drawService.setRoot(this.treeData);
-          this.drawService.draw();
-          await this.sleep(this.mergeSleepTime);
-
-          await result.push(node);
-          await this.mergedArray.push(node);
-
-          await this.sleep(this.mergeSleepTime);
-          this.drawService.removeAll();
-          this.drawService.setRoot(this.treeData);
-          this.drawService.draw();
+          node = await rightNode.value[rightI];
+          rightI++;
         }
       } else {
-        if (parseFloat(leftNode.value[0].value) > parseFloat(rightNode.value[0].value)) {
-          let node = await leftNode.value.shift();
-
-          await this.sleep(this.mergeSleepTime);
-          this.drawService.removeAll();
-          this.drawService.setRoot(this.treeData);
-          this.drawService.draw();
-          await this.sleep(this.mergeSleepTime);
-
-          await result.push(node);
-          await this.mergedArray.push(node);
-
-          await this.sleep(this.mergeSleepTime);
-          this.drawService.removeAll();
-          this.drawService.setRoot(this.treeData);
-          this.drawService.draw();
+        if (parseFloat(leftNode.value[leftI].value) > parseFloat(rightNode.value[rightI].value)) {
+          node = await leftNode.value[leftI];
+          leftI++;
         } else {
-          let node = await rightNode.value.shift();
-
-          await this.sleep(this.mergeSleepTime);
-          this.drawService.removeAll();
-          this.drawService.setRoot(this.treeData);
-          this.drawService.draw();
-          await this.sleep(this.mergeSleepTime);
-
-          await result.push(node);
-          await this.mergedArray.push(node);
-
-          await this.sleep(this.mergeSleepTime);
-          this.drawService.removeAll();
-          this.drawService.setRoot(this.treeData);
-          this.drawService.draw();
+          node = await rightNode.value[rightI];
+          rightI++;
         }
       }
+      node.changeVisibility(false);
+      await this.sleep(this.mergeSleepTime);
+
+      await result.push(node);
+      await this.mergedArray.push(node);
+
+      await this.sleep(this.mergeSleepTime);
+      this.drawService.removeAll();
+      this.drawService.setRoot(this.treeData);
+      this.drawService.draw();
     }
-    while(leftNode.value.length) {
-      let node = await leftNode.value.shift();
+    while(leftI < leftNode.value.length) {
+      let node = await leftNode.value[leftI];
+      node.changeVisibility(false);
 
       await this.sleep(this.mergeSleepTime);
       this.drawService.removeAll();
@@ -309,9 +273,12 @@ export class MergesortComponent implements OnInit {
       this.drawService.removeAll();
       this.drawService.setRoot(this.treeData);
       this.drawService.draw();
+
+      leftI++;
     }
-    while(rightNode.value.length) {
-      let node = await rightNode.value.shift();
+    while(rightI < rightNode.value.length) {
+      let node = await rightNode.value[rightI];
+      node.changeVisibility(false);
 
       await this.sleep(this.mergeSleepTime);
       this.drawService.removeAll();
@@ -320,12 +287,14 @@ export class MergesortComponent implements OnInit {
       await this.sleep(this.mergeSleepTime);
 
       await result.push(node);
-      this.mergedArray.push(node);
+      await this.mergedArray.push(node);
 
       await this.sleep(this.mergeSleepTime);
       this.drawService.removeAll();
       this.drawService.setRoot(this.treeData);
       this.drawService.draw();
+
+      rightI++;
     }
     await this.sleep(this.mergeSleepTime);
 
@@ -340,21 +309,19 @@ export class MergesortComponent implements OnInit {
 
     await this.sleep(this.mergeSleepTime);
     
-    let ret = await result.concat(leftNode.value.slice(indexLeft)).concat(rightNode.value.slice(indexRight));
-
     let leftIndex = await this.getIndexOfNode(leftNode.id);
     if(leftIndex !== -1) {
       await this.queue1.splice(leftIndex, 2, new Node(
         leftNode.parent.id,
         leftNode.parent.depth,
-        ret,
+        result,
         leftNode.parent,
         null,
         null
       ));
     }
 
-    return ret;
+    return result;
   }
 
   getIndexOfNode(id: number) {
@@ -444,6 +411,7 @@ export class MergesortComponent implements OnInit {
 
         merged.forEach(el => {
           el.changeColor('yellow');
+          el.changeVisibility(true);
         });
 
         tree.value = merged;    
