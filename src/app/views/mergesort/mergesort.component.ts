@@ -211,7 +211,7 @@ export class MergesortComponent implements OnInit {
         break;
       }
       if(this.queue1[n].id !== leftNode.id) {
-        this.beforeArray.push(this.queue1[n]);
+        await this.beforeArray.push(this.queue1[n]);
       }
     }
 
@@ -221,7 +221,7 @@ export class MergesortComponent implements OnInit {
         break;
       }
       if(this.queue1[n].id !== rightNode.id) {
-        this.afterArray.unshift(this.queue1[n]);
+        await this.afterArray.unshift(this.queue1[n]);
       }
     }
   
@@ -252,47 +252,47 @@ export class MergesortComponent implements OnInit {
       await this.mergedArray.push(node);
 
       await this.sleep(this.mergeSleepTime);
-      this.drawService.removeAll();
-      this.drawService.setRoot(this.treeData);
-      this.drawService.draw();
+      await this.drawService.removeAll();
+      await this.drawService.setRoot(this.treeData);
+      await this.drawService.draw();
     }
     while(leftI < leftNode.value.length) {
       let node = await leftNode.value[leftI];
-      node.changeVisibility(false);
+      await node.changeVisibility(false);
 
       await this.sleep(this.mergeSleepTime);
-      this.drawService.removeAll();
-      this.drawService.setRoot(this.treeData);
-      this.drawService.draw();
+      await this.drawService.removeAll();
+      await this.drawService.setRoot(this.treeData);
+      await this.drawService.draw();
       await this.sleep(this.mergeSleepTime);
 
       await result.push(node);
       await this.mergedArray.push(node);
 
       await this.sleep(this.mergeSleepTime);
-      this.drawService.removeAll();
-      this.drawService.setRoot(this.treeData);
-      this.drawService.draw();
+      await this.drawService.removeAll();
+      await this.drawService.setRoot(this.treeData);
+      await this.drawService.draw();
 
       leftI++;
     }
     while(rightI < rightNode.value.length) {
       let node = await rightNode.value[rightI];
-      node.changeVisibility(false);
+      await node.changeVisibility(false);
 
       await this.sleep(this.mergeSleepTime);
-      this.drawService.removeAll();
-      this.drawService.setRoot(this.treeData);
-      this.drawService.draw();
+      await this.drawService.removeAll();
+      await this.drawService.setRoot(this.treeData);
+      await this.drawService.draw();
       await this.sleep(this.mergeSleepTime);
 
       await result.push(node);
       await this.mergedArray.push(node);
 
       await this.sleep(this.mergeSleepTime);
-      this.drawService.removeAll();
-      this.drawService.setRoot(this.treeData);
-      this.drawService.draw();
+      await this.drawService.removeAll();
+      await this.drawService.setRoot(this.treeData);
+      await this.drawService.draw();
 
       rightI++;
     }
@@ -428,6 +428,17 @@ export class MergesortComponent implements OnInit {
         await this.breadthTraverse(nodeRight, depth);
       }
     }
+  }
+
+  generateRandomInput() {
+    let input = [];
+    let length = Math.floor(Math.random()*8+2);
+    for(let l = 0; l < length; l++) {
+      let num = Math.floor(Math.random()*200-100);
+      input.push(num);
+    }
+    this.userText = input.join(" ");
+    this.convertStringToArray();
   }
 
   sleep(ms) {
