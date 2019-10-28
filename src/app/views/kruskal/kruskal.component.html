@@ -2,27 +2,44 @@
   <div>Kruskal's Spanning Tree</div>
   <div class="row col">
     <div id="cy" class="col-8"></div>
-    <div class="col-4">
+    <div class="col-4 text-center">
       <div>
-        <button (click)="decrementVertices()" [disabled]="numVertices <= 3">-</button>
-        <div class="display-inline">v = {{ numVertices }}</div>
-        <button (click)="incrementVertices()" [disabled]="numVertices >= 20">+</button>
+        <div>Number of vertices</div>
+        <button (click)="decrementVertices()" [disabled]="numVertices <= 3" class="btn btn-danger margin-lr-5"><b>-</b></button>
+        <div class="display-inline margin-lr-5">v = {{ numVertices }}</div>
+        <button (click)="incrementVertices()" [disabled]="numVertices >= 20" class="btn btn-success margin-lr-5"><b>+</b></button>
       </div>
       <div>
-        <button (click)="generateRandomEdges()">Generate Random Edges</button>
+        <button (click)="generateRandomEdges()" class="btn btn-primary">Generate Random Edges</button>
       </div>
       <div>
         <input [(ngModel)]="treeType.type" type="radio" value="min" name="treeType"> Min
         <input [(ngModel)]="treeType.type" type="radio" value="max" name="treeType"> Max
       </div>
       <div>
-        <button (click)="getKruskal()" [disabled]="solving">Solve</button>
-        <button (click)="reset()">Reset</button>
-        <button (click)="pauseContinueKruskal()" *ngIf="!stop && solving">{{this.paused ? 'Continue' : 'Pause'}}</button>
+        <button (click)="getKruskal()" [disabled]="solving" class="btn btn-success margin-lr-5">Solve</button>
+        <button (click)="pauseContinueKruskal()" *ngIf="!stop && solving" class="btn btn-success margin-lr-5">{{this.paused ? 'Run Algorithm' : 'Pause Algorithm'}}</button>
+        <button (click)="reset()" class="btn btn-danger margin-lr-5">Reset</button>
       </div>
       <div>
-        <button (click)="previous()" *ngIf="isPrevious" [disabled]="previousSolving">Previous</button>
-        <button (click)="next()" *ngIf="isNext" [disabled]="nextSolving">Next</button>
+        <button (click)="previous()" *ngIf="isPrevious" [disabled]="previousSolving" class="btn btn-warning margin-lr-5">Previous</button>
+        <button (click)="next()" *ngIf="isNext" [disabled]="nextSolving" class="btn btn-success margin-lr-5">Next</button>
+      </div>
+      <div *ngIf="edge !== null">
+        <div>Current Edge:</div>
+        <div class="current-edge">
+          <div><b>Weight:</b> {{ edge.weight}}</div>
+          <div><b>V{{ edge.source.key }}</b> to <b>V{{ edge.target.key}}</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="before.length">
+    <div>Queue:</div>
+    <div class="queue">
+      <div *ngFor="let b of before.reverse()" class="queue-element">
+        <div><b>Weight:</b> {{ b.weight }}</div>
+        <div><b>V{{ b.source.key }}</b> to <b>V{{ b.target.key }}</b></div>
       </div>
     </div>
   </div>

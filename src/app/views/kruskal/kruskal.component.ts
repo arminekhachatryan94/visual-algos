@@ -62,7 +62,6 @@ export class KruskalComponent implements OnInit {
     this.vertices = this.drawService.getVertices();
     this.numVertices++;
     this.drawService.refresh();
-    console.log(this.vertices);
   }
   
   async decrementVertices() {
@@ -70,7 +69,6 @@ export class KruskalComponent implements OnInit {
     await this.drawService.removeLastVertice();
     this.vertices = this.drawService.getVertices();
     this.drawService.refresh();
-    console.log(this.vertices);
   }
 
   async createVertices() {

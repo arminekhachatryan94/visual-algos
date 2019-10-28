@@ -13,3 +13,49 @@
 .display-inline {
   display: inline;
 }
+
+.current-edge {
+  background-color: rgb(255, 223, 80);
+  border: 1px solid rgb(211, 193, 36);
+  display: inline-block;
+  padding: 2px;
+  font-size: 14px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.queue .queue-element {
+  margin-left: 5px;
+  margin-right: 5px;
+  background-color: coral;
+  border: 1px solid rgb(211, 83, 36);
+  display: inline-block;
+  padding: 2px;
+  font-size: 14px;
+  font-family: 'Courier New', Courier, monospace;
+}
+/* 
+.btn-plus {
+  background-color: rgb(67, 197, 67);
+  border: 1.5px solid green;
+  color: white;
+}
+
+.btn-minus {
+  background-color: rgb(255, 79, 79);
+  border: 1.5px solid red;
+  color: white;
+} */
+
+.btn-warning {
+  background-color: rgb(255, 186, 57);
+  border: 1.5px solid orange;
+  color: white;
+}
+.btn-warning:hover {
+  background-color: rgb(255, 179, 38);
+}
+
+.margin-lr-5 {
+  margin-left: 5px;
+  margin-right: 5px;
+}
