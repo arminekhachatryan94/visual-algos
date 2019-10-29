@@ -316,10 +316,6 @@ export class MergesortComponent implements OnInit {
     this.changeVisibilityOfArray(this.beforeArray, true);
     this.changeVisibilityOfArray(this.afterArray, true);
 
-    await this.drawService.removeAll();
-    await this.drawService.setRoot(this.treeData);
-    await this.drawService.draw();
-
     this.mergedArray = [];
     this.beforeArray = [];
     this.afterArray = [];
