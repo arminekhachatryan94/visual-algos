@@ -11,6 +11,7 @@ import { KruskalComponent } from './views/kruskal/kruskal.component';
 import { HomeComponent } from './views/home/home.component';
 import { MergesortService } from './services/mergesort.service';
 import { KruskalService } from './services/kruskal.service';
+import { SteinerComponent } from './views/steiner/steiner.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { KruskalService } from './services/kruskal.service';
     HuffmancodeComponent,
     KruskalComponent,
     HomeComponent,
+    SteinerComponent,
   ],
   imports: [
     FormsModule,
