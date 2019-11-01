@@ -33,9 +33,10 @@ export class InversionComponent implements OnInit {
   queue1: Node[];
   maxDepth: number;
 
-  inversions: number;
+  inversions: string;
 
   mergeSleepTime = 2000;
+  speed: number;
 
   constructor(private d3Service: D3Service) {
     this.userText = "";
@@ -47,7 +48,8 @@ export class InversionComponent implements OnInit {
     this.beforeArray = [];
     this.afterArray = [];
     this.solutionType = 'breadth';
-    this.inversions = 0;
+    this.inversions = '';
+    this.speed = 1;
   }
 
   ngOnInit() {
@@ -105,10 +107,10 @@ export class InversionComponent implements OnInit {
   }
 
   async sortArray() {
-    this.inversions = 0;
+    this.inversions = '';
     this.disable_solve = true;
     if(!this.input_error.length && this.int_array.length) {
-      if(this.solutionType === 'breadth') {
+      // if(this.solutionType === 'breadth') {
         // breadth
         this.queue1 = [];
         this.maxDepth = 0;
@@ -116,10 +118,10 @@ export class InversionComponent implements OnInit {
         this.num_nodes++;
         await this.breadthSplit();
         await this.breadthMerge();
-      } else {
+      // } else {
         // depth
-        await this.depthMergeSort(this.int_array, 0, 1, this.treeData);
-      }
+        // await this.depthMergeSort(this.int_array, 0, 1, this.treeData);
+      // }
     }
     this.disable_solve = false;
   }
@@ -139,57 +141,57 @@ export class InversionComponent implements OnInit {
     }
   }
 
-  async depthMergeSort (arr, index, depth, parent) {
-    if (arr.length < 2) {
-      await this.sleep(this.mergeSleepTime);
-      return await arr;
-    }
+  // async depthMergeSort (arr, index, depth, parent) {
+  //   if (arr.length < 2) {
+  //     await this.sleep(this.mergeSleepTime);
+  //     return await arr;
+  //   }
     
-    var mid = Math.floor(arr.length / 2);
+  //   var mid = Math.floor(arr.length / 2);
     
-    var subLeft = arr.slice(0, mid);
+  //   var subLeft = arr.slice(0, mid);
 
-    var subRight = arr.slice(mid);
+  //   var subRight = arr.slice(mid);
 
-    await this.sleep(this.mergeSleepTime);
+  //   await this.sleep(this.mergeSleepTime);
 
-    parent.left = new Node(this.num_nodes, depth, subLeft, parent, null, null);
-    this.num_nodes++;
-    parent.right = new Node(this.num_nodes, depth, subRight, parent, null, null);
-    this.num_nodes++;
+  //   parent.left = new Node(this.num_nodes, depth, subLeft, parent, null, null);
+  //   this.num_nodes++;
+  //   parent.right = new Node(this.num_nodes, depth, subRight, parent, null, null);
+  //   this.num_nodes++;
     
-    this.d3Service.removeAll();
-    this.d3Service.setRoot(this.treeData);
-    this.d3Service.draw();
+  //   this.d3Service.removeAll();
+  //   this.d3Service.setRoot(this.treeData);
+  //   this.d3Service.draw();
     
-    await this.depthMergeSort(subLeft, index, depth+1, parent.left).then((res) => {
-      subLeft = res;
-    }).catch(console.log);
+  //   await this.depthMergeSort(subLeft, index, depth+1, parent.left).then((res) => {
+  //     subLeft = res;
+  //   }).catch(console.log);
 
-    await this.sleep(this.mergeSleepTime);
+  //   await this.sleep(this.mergeSleepTime);
 
-    await this.depthMergeSort(subRight, index + subLeft.length,depth+1, parent.right).then((res) => {
-      subRight = res;
-    }).catch(console.log);
+  //   await this.depthMergeSort(subRight, index + subLeft.length,depth+1, parent.right).then((res) => {
+  //     subRight = res;
+  //   }).catch(console.log);
 
-    await this.sleep(this.mergeSleepTime);
+  //   await this.sleep(this.mergeSleepTime);
     
-    var merged = await this.merge(parent.left, parent.right);
+  //   var merged = await this.merge(parent.left, parent.right);
     
-    parent.left = null;
-    parent.right = null;
-    parent.value = merged;
+  //   parent.left = null;
+  //   parent.right = null;
+  //   parent.value = merged;
     
-    await this.sleep(this.mergeSleepTime);
+  //   await this.sleep(this.mergeSleepTime);
 
-    this.d3Service.removeAll();
-    this.d3Service.setRoot(this.treeData);
-    this.d3Service.draw();
+  //   this.d3Service.removeAll();
+  //   this.d3Service.setRoot(this.treeData);
+  //   this.d3Service.draw();
     
-    await this.sleep(this.mergeSleepTime);
+  //   await this.sleep(this.mergeSleepTime);
 
-    return merged; 
-  }
+  //   return merged; 
+  // }
 
   async changeColorOfElementsInNode(node: Node, color: string) {
     for(let n = 0; n < node.value.length; n++) {
@@ -233,19 +235,42 @@ export class InversionComponent implements OnInit {
         await this.afterArray.unshift(this.queue1[n]);
       }
     }
+
+    await this.sleep(this.mergeSleepTime);
+
+    // inversions
+    if(leftNode.inversions !== '' || rightNode.inversions !== '') {
+      let tempLeft = leftNode.inversions !== '' ? leftNode.inversions : '0';
+      let tempRight = rightNode.inversions !== '' ? rightNode.inversions : '0';
+      this.inversions = tempLeft;
+      leftNode.setInversions('');
+      await this.sleep(this.mergeSleepTime);
+      this.inversions += ' + ';
+      await this.sleep(this.mergeSleepTime);
+      this.inversions += tempRight;
+      rightNode.setInversions('');
+      await this.sleep(this.mergeSleepTime);
+      this.inversions = parseInt(tempLeft) + parseInt(tempRight) + '';
+      await this.sleep(this.mergeSleepTime);
+    } else {
+      this.inversions = '0';
+      await this.sleep(this.mergeSleepTime);
+    }
   
     let leftI = 0, rightI = 0;
     while (leftI < leftNode.value.length && rightI < rightNode.value.length) {
       await this.sleep(this.mergeSleepTime);
 
       let node;
+      let tempInversions = null, totalInversions = null;
       if(this.ordering == 'ASC') {
         if(parseFloat(leftNode.value[leftI].value) < parseFloat(rightNode.value[rightI].value)) {
           node = await leftNode.value[leftI];
           leftI++;
         } else {
           node = await rightNode.value[rightI];
-          this.inversions += (leftNode.value.length - leftI);
+          tempInversions = leftNode.value.length - leftI;
+          totalInversions = tempInversions + parseInt(this.inversions);
           rightI++;
         }
       } else {
@@ -254,7 +279,8 @@ export class InversionComponent implements OnInit {
           leftI++;
         } else {
           node = await rightNode.value[rightI];
-          this.inversions += (leftNode.value.length - leftI);
+          tempInversions = leftNode.value.length - leftI;
+          totalInversions = tempInversions + parseInt(this.inversions);
           rightI++;
         }
       }
@@ -266,6 +292,16 @@ export class InversionComponent implements OnInit {
 
       await result.push(node);
       await this.mergedArray.push(node);
+      
+      if(tempInversions !== null || totalInversions !== null) {
+        await this.sleep(this.mergeSleepTime);
+        this.inversions += ' + ';
+        await this.sleep(this.mergeSleepTime);
+        this.inversions += tempInversions;
+        await this.sleep(this.mergeSleepTime);
+        this.inversions = totalInversions + '';
+        await this.sleep(this.mergeSleepTime);
+      }
     }
     while(leftI < leftNode.value.length) {
       await this.sleep(this.mergeSleepTime);
@@ -321,14 +357,15 @@ export class InversionComponent implements OnInit {
 
     let leftIndex = await this.getIndexOfNode(leftNode.id);
     if(leftIndex !== -1) {
-      this.queue1.splice(leftIndex, 2, new Node(
+      let m = new Node(
         leftNode.parent.id,
         leftNode.parent.depth,
         result,
         leftNode.parent,
         null,
         null
-      ));
+      );
+      this.queue1.splice(leftIndex, 2, m);
     }
 
     return result;
@@ -427,7 +464,10 @@ export class InversionComponent implements OnInit {
           el.changeVisibility(true);
         });
 
-        tree.value = merged;    
+        tree.value = merged;
+        tree.setInversions(this.inversions);
+        this.inversions = '';
+        await this.sleep(this.mergeSleepTime);
         tree.left = null;
         tree.right = null;
 
@@ -454,10 +494,12 @@ export class InversionComponent implements OnInit {
 
   slower() {
     this.mergeSleepTime *= 2;
+    this.speed /= 2;
   }
 
   faster() {
     this.mergeSleepTime /= 2;
+    this.speed *= 2;
   }
 
   sleep(ms) {

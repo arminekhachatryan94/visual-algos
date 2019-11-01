@@ -44,7 +44,11 @@ export class D3Service {
                 .insert('div')
                 .classed('text-center display-parent', true);
 
-            let i = 0;
+            parent
+                .insert('div')
+                .classed('text-center', true)
+                .text(data.inversions);
+
             data.value.forEach((e) => {
                 parent
                     .insert('p')
@@ -53,7 +57,6 @@ export class D3Service {
                     .style('border-color', e.border)
                     .style('visibility', e.visibility ? 'visible' : 'hidden')
                     .text(e.value);
-                i++;
             });
         } else {
             this.drawRecursion(data.left);

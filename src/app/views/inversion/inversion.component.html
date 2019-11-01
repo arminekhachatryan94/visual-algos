@@ -11,7 +11,7 @@
         <button class="btn btn-primary inline-block" (click)="slower()">Slower (&#xF7;2)</button>
         <button class="btn btn-success inline-block" (click)="sortArray()" [disabled]="!int_array.length || input_error.length || disable_solve">Solve</button>
         <button class="btn btn-danger inline-block" (click)="faster()">Faster (&#215;2)</button>
-        <div>Speed: &#215;{{ mergeSleepTime/2000 }}</div>
+        <div>Speed: &#215;{{ speed }}</div>
       </div>
     </div>
     <div class="col-6 text-left">
@@ -24,7 +24,6 @@
       </div>
       <div>
         <button (click)="generateRandomInput()">Generate Random Input</button>
-        <div>Inversions: {{ inversions }}</div>
       </div>
     <!-- <div>
       <label>
@@ -41,6 +40,7 @@
     <div class="myTree"></div>
     <div *ngIf="beforeArray.length" [style.visibility]="displayBefore ? 'visible' : 'hidden'" class="text-center display-parent">
       <div *ngFor="let n of beforeArray" class="text-center display-parent">
+        <div *ngIf="n.value.length">{{ n.inversions }}</div>
         <a *ngFor="let el of n.value" class="integer"
           [style.background-color]="el.background"
           [style.border-color]="el.border">
@@ -48,7 +48,8 @@
         </a>
       </div>
     </div>
-    <div *ngIf="mergedArray.length" class="text-center display-parent">
+    <div class="text-center display-parent">
+      <div>{{ inversions }}</div>
       <a *ngFor="let el of mergedArray" class="integer"
         [style.background-color]="el.background"
         [style.border-color]="el.border">
@@ -57,6 +58,7 @@
     </div>
     <div *ngIf="afterArray.length" [style.visibility]="displayAfter ? 'visible' : 'hidden'" class="text-center display-parent">
       <div *ngFor="let n of afterArray" class="text-center display-parent">
+        <div *ngIf="n.value.length">{{ n.inversions }}</div>
         <a *ngFor="let el of n.value" class="integer"
           [style.background-color]="el.background"
           [style.border-color]="el.border">
