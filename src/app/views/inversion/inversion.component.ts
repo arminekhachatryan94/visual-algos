@@ -8,12 +8,12 @@ import { D3Service } from 'src/app/services/d3.service';
 import { Element } from 'src/app/models/element.model';
 
 @Component({
-  selector: 'app-mergesort',
-  templateUrl: './mergesort.component.html',
-  styleUrls: ['./mergesort.component.css'],
+  selector: 'app-inversion',
+  templateUrl: './inversion.component.html',
+  styleUrls: ['./inversion.component.css'],
 })
 
-export class MergesortComponent implements OnInit {
+export class InversionComponent implements OnInit {
   int_array = [];
   height_array = [];
   userText;

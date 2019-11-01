@@ -7,6 +7,7 @@ export class Node {
     parent: Node;
     left: Node;
     right: Node;
+    inversion: number;
 
     constructor(
         id: number,
@@ -22,5 +23,10 @@ export class Node {
         this.parent = parent;
         this.left = left;
         this.right = right;
+        this.inversion = 0;
+    }
+
+    public setInversion(inversion: number) {
+        this.inversion = inversion;
     }
 }
