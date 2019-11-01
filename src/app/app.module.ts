@@ -9,8 +9,8 @@ import { MergesortComponent } from './views/mergesort/mergesort.component';
 import { HuffmancodeComponent } from './views/huffmancode/huffmancode.component';
 import { KruskalComponent } from './views/kruskal/kruskal.component';
 import { HomeComponent } from './views/home/home.component';
-import { MergesortService } from './services/mergesort.service';
-import { KruskalService } from './services/kruskal.service';
+import { D3Service } from './services/d3.service';
+import { CytoService } from './services/cyto.service';
 import { SteinerComponent } from './views/steiner/steiner.component';
 
 @NgModule({
@@ -30,8 +30,8 @@ import { SteinerComponent } from './views/steiner/steiner.component';
     AppRoutingModule
   ],
   providers: [
-    MergesortService,
-    KruskalService
+    D3Service,
+    CytoService
   ],
   bootstrap: [AppComponent]
 })

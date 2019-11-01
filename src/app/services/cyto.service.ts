@@ -7,7 +7,7 @@ import { Vertice } from 'src/app/models/vertice.model';
 import { Pair } from '../models/pair.model';
 
 @Injectable()
-export class KruskalService {
+export class CytoService {
   cy: cytoscape;
   kruskalEdges: Edge[];
   // adj: LinkedList<Vertice>[];

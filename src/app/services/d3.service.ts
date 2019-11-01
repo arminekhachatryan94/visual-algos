@@ -12,7 +12,7 @@ import { Node } from '../models/Node.model';
 import * as d3 from 'd3';
 
 @Injectable()
-export class MergesortService {
+export class D3Service {
     private margin: any = { top: 20, right: 120, bottom: 20, left: 120 };
     private width: number;
     private height: number;

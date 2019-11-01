@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { KruskalService } from 'src/app/services/kruskal.service';
+import { CytoService } from 'src/app/services/cyto.service';
 import { Edge } from 'src/app/models/edge.model';
 import { Pair } from 'src/app/models/pair.model';
 import { Vertice } from 'src/app/models/vertice.model';
@@ -11,7 +11,7 @@ import PriorityQueue from 'ts-priority-queue';
   styleUrls: ['./kruskal.component.css']
 })
 export class KruskalComponent implements OnInit {
-  drawService: KruskalService;
+  cytoService: CytoService;
   numVertices: number;
   vertices: Vertice[];
   edges: Edge[];
@@ -36,8 +36,8 @@ export class KruskalComponent implements OnInit {
 
   sleepTime = 1000;
 
-  constructor(drawService: KruskalService) {
-    this.drawService = drawService;
+  constructor(cytoService: CytoService) {
+    this.cytoService = cytoService;
     this.vertices = [];
     this.edges = [];
     this.treeType = {
@@ -50,25 +50,25 @@ export class KruskalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.drawService.draw();
+    this.cytoService.draw();
     this.createVertices();
-    this.drawService.addKeyListener();
-    this.steps.push(this.drawService.getKruskalArray());
+    this.cytoService.addKeyListener();
+    this.steps.push(this.cytoService.getKruskalArray());
   }
 
   async incrementVertices() {
     let v = new Vertice(new Pair(this.numVertices, this.numVertices+''));
-    await this.drawService.addVertice(v);
-    this.vertices = this.drawService.getVertices();
+    await this.cytoService.addVertice(v);
+    this.vertices = this.cytoService.getVertices();
     this.numVertices++;
-    this.drawService.refresh();
+    this.cytoService.refresh();
   }
   
   async decrementVertices() {
     await this.numVertices--;
-    await this.drawService.removeLastVertice();
-    this.vertices = this.drawService.getVertices();
-    this.drawService.refresh();
+    await this.cytoService.removeLastVertice();
+    this.vertices = this.cytoService.getVertices();
+    this.cytoService.refresh();
   }
 
   async createVertices() {
@@ -77,17 +77,17 @@ export class KruskalComponent implements OnInit {
     while(i < this.numVertices) {
       let v = new Vertice(new Pair(i, i+''));
       this.vertices.push(v);
-      await this.drawService.addVertice(v);
+      await this.cytoService.addVertice(v);
       i++;
     }
-    this.drawService.refresh();
+    this.cytoService.refresh();
   }
 
   addEdgesToQueue(): void {
     this.edges.forEach(edge => {
       this.queue.queue(edge);
     });
-    this.steps.push(this.drawService.getKruskalArray());
+    this.steps.push(this.cytoService.getKruskalArray());
   }
 
   addEdgesToBeforeArray() {
@@ -97,7 +97,7 @@ export class KruskalComponent implements OnInit {
   }
 
   async getKruskal() {
-    this.edges = this.drawService.getEdges();
+    this.edges = this.cytoService.getEdges();
     this.stopped = false;
     this.paused = false;
     this.solving = true;
@@ -136,7 +136,7 @@ export class KruskalComponent implements OnInit {
         this.edge = this.before.pop();
       }
       this.isPrevious = true;
-      await this.drawService.changeEdgeStyle(this.edge, 'blue');
+      await this.cytoService.changeEdgeStyle(this.edge, 'blue');
       this.edge.style.color = 'blue';
       this.edge.style.lineStyle = 'solid';
       await this.sleep(this.sleepTime);
@@ -147,16 +147,16 @@ export class KruskalComponent implements OnInit {
         return;
       }
 
-      let cyclic = await this.drawService.isKruskalCyclic(this.edge);
+      let cyclic = await this.cytoService.isKruskalCyclic(this.edge);
       if(!cyclic) {
-        await this.drawService.addKruskalEdge(this.edge);
-        await this.drawService.changeEdgeStyle(this.edge, 'red');
+        await this.cytoService.addKruskalEdge(this.edge);
+        await this.cytoService.changeEdgeStyle(this.edge, 'red');
         this.edge.style.color = 'red';
         this.edge.style.lineStyle = 'solid';
-        await this.steps.push(this.drawService.getKruskalArray());
+        await this.steps.push(this.cytoService.getKruskalArray());
         await this.sleep(this.sleepTime);
       } else {
-        await this.drawService.changeEdgeStyle(this.edge, 'gray');
+        await this.cytoService.changeEdgeStyle(this.edge, 'gray');
         this.edge.style.color = 'gray';
         this.edge.style.lineStyle = 'dashed';
         await this.sleep(this.sleepTime);
@@ -181,9 +181,9 @@ export class KruskalComponent implements OnInit {
     this.stopped = true;
     this.paused = true;
     this.solving = false;
-    await this.drawService.reset();
+    await this.cytoService.reset();
     this.steps = [];
-    this.steps.push(this.drawService.getKruskalArray());
+    this.steps.push(this.cytoService.getKruskalArray());
     await this.sleep(this.sleepTime);
   }
 
@@ -193,17 +193,17 @@ export class KruskalComponent implements OnInit {
       this.edge = this.after.pop();
       this.edge.style.color = 'blue';
       this.edge.style.lineStyle = 'solid';
-      await this.drawService.changeEdgeStyle(this.edge, 'blue');
-      await this.drawService.removeKruskalEdge(this.edge);
+      await this.cytoService.changeEdgeStyle(this.edge, 'blue');
+      await this.cytoService.removeKruskalEdge(this.edge);
       this.steps.pop();
       let history = this.steps.pop();
       this.steps.push(history);
       console.log(this.steps);
-      await this.drawService.setKruskalArray(history);
+      await this.cytoService.setKruskalArray(history);
       await this.sleep(this.sleepTime);
     } else {
       this.before.push(this.edge);
-      await this.drawService.changeEdgeStyle(this.edge, 'black');
+      await this.cytoService.changeEdgeStyle(this.edge, 'black');
       this.edge.style.color = 'black';
       this.edge.style.lineStyle = 'dashed';
       await this.sleep(this.sleepTime);
@@ -222,18 +222,18 @@ export class KruskalComponent implements OnInit {
       this.edge = this.before.pop();
       this.edge.style.color = 'blue';
       this.edge.style.lineStyle = 'solid';
-      await this.drawService.changeEdgeStyle(this.edge, 'blue');
+      await this.cytoService.changeEdgeStyle(this.edge, 'blue');
       await this.sleep(this.sleepTime);
     } else {
-      let cyclic = await this.drawService.isKruskalCyclic(this.edge);
+      let cyclic = await this.cytoService.isKruskalCyclic(this.edge);
       if(!cyclic) {
-        await this.drawService.addKruskalEdge(this.edge);
-        await this.drawService.changeEdgeStyle(this.edge, 'red');
+        await this.cytoService.addKruskalEdge(this.edge);
+        await this.cytoService.changeEdgeStyle(this.edge, 'red');
         this.edge.style.color = 'red';
         this.edge.style.lineStyle = 'solid';  
-        await this.steps.push(this.drawService.getKruskalArray());
+        await this.steps.push(this.cytoService.getKruskalArray());
       } else {
-        await this.drawService.changeEdgeStyle(this.edge, 'gray');
+        await this.cytoService.changeEdgeStyle(this.edge, 'gray');
         this.edge.style.color = 'gray';
         this.edge.style.lineStyle = 'dashed';
       }
@@ -249,7 +249,7 @@ export class KruskalComponent implements OnInit {
   }
 
   generateRandomEdges() {
-    this.drawService.removeAllEdges();
+    this.cytoService.removeAllEdges();
     let vertices = [...this.vertices];
     while(vertices.length > 0) {
       let currentV = vertices[vertices.length-1];
@@ -261,7 +261,7 @@ export class KruskalComponent implements OnInit {
             vertices[i].id,
             (Math.floor(Math.random()*100)-50) + ''
           );
-          this.drawService.addEdge(e);
+          this.cytoService.addEdge(e);
         }
       }
       vertices.pop();
