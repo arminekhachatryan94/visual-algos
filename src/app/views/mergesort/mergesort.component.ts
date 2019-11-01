@@ -35,7 +35,7 @@ export class MergesortComponent implements OnInit {
 
   inversions: number;
 
-  mergeSleepTime = 1000;
+  mergeSleepTime = 2000;
 
   constructor(private drawService: MergesortService) {
     this.userText = "";
@@ -89,7 +89,6 @@ export class MergesortComponent implements OnInit {
       if(!this.isNumeric(value)) {
         this.input_error = "Error in input.";
         this.treeData = new Node(0, 0, [], null, null, null);
-        this.sleep(this.mergeSleepTime);
         this.drawService.setRoot(this.treeData);
         this.drawService.draw();
         return false;
@@ -322,7 +321,7 @@ export class MergesortComponent implements OnInit {
 
     let leftIndex = await this.getIndexOfNode(leftNode.id);
     if(leftIndex !== -1) {
-      await this.queue1.splice(leftIndex, 2, new Node(
+      this.queue1.splice(leftIndex, 2, new Node(
         leftNode.parent.id,
         leftNode.parent.depth,
         result,
@@ -409,7 +408,6 @@ export class MergesortComponent implements OnInit {
   async breadthMerge() {
     for(let depth = this.maxDepth-1; depth >= 0; depth--) {
       await this.breadthTraverse(this.treeData, depth);
-      await this.sleep(this.mergeSleepTime);
       this.drawService.removeAll();
       this.drawService.setRoot(this.treeData);
       this.drawService.draw();
@@ -422,11 +420,7 @@ export class MergesortComponent implements OnInit {
         let nodeLeft = tree.left;
         let nodeRight = tree.right;
 
-        this.sleep(this.mergeSleepTime);
-
         let merged = await this.merge(nodeLeft, nodeRight);
-
-        this.sleep(this.mergeSleepTime);
 
         merged.forEach(el => {
           el.changeColor('yellow');
@@ -440,8 +434,6 @@ export class MergesortComponent implements OnInit {
       } else {
         let nodeLeft = tree.left;
         let nodeRight = tree.right;
-
-        this.sleep(this.mergeSleepTime);
 
         await this.breadthTraverse(nodeLeft, depth);
         await this.breadthTraverse(nodeRight, depth);
@@ -458,6 +450,14 @@ export class MergesortComponent implements OnInit {
     }
     this.userText = input.join(" ");
     this.convertStringToArray();
+  }
+
+  slower() {
+    this.mergeSleepTime *= 2;
+  }
+
+  faster() {
+    this.mergeSleepTime /= 2;
   }
 
   sleep(ms) {

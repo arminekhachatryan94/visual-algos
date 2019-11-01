@@ -1,20 +1,32 @@
 <div>
   <div class="h4">Merge Sort</div>
-  <div class="col-3">
-    <div>
-      <div>Enter integers separated by spaces to sort:</div>
-      <input type="text" [(ngModel)]="userText" (keydown)="clearInputError()" (ngModelChange)="convertStringToArray()">
-      <button class="btn btn-primary" (click)="sortArray()" [disabled]="!int_array.length || input_error.length || disable_solve">Solve</button>
-      <div *ngIf="input_error.length" class="error">{{ input_error }}</div>
+  <div class="row">
+    <div class="col-6 text-right">
+      <div class="text-center">
+        <div>Enter integers separated by spaces to sort:</div>
+        <input type="text" [(ngModel)]="userText" (keydown)="clearInputError()" (ngModelChange)="convertStringToArray()">
+        <div *ngIf="input_error.length" class="error">{{ input_error }}</div>
+      </div>
+      <div class="text-center">
+        <button class="btn btn-primary inline-block" (click)="slower()">Slower (&#xF7;2)</button>
+        <button class="btn btn-success inline-block" (click)="sortArray()" [disabled]="!int_array.length || input_error.length || disable_solve">Solve</button>
+        <button class="btn btn-danger inline-block" (click)="faster()">Faster (&#215;2)</button>
+        <div>Speed: &#215;{{ mergeSleepTime/2000 }}</div>
+      </div>
     </div>
-    <div>
-      Select Order:
-      <select [(ngModel)]="ordering">
-        <option value="ASC" selected>ASC</option>
-        <option value="DESC">DESC</option>
-      </select>
-    </div>
-    <div>
+    <div class="col-6 text-left">
+      <div>
+        Select Order:
+        <select [(ngModel)]="ordering">
+          <option value="ASC" selected>ASC</option>
+          <option value="DESC">DESC</option>
+        </select>
+      </div>
+      <div>
+        <button (click)="generateRandomInput()">Generate Random Input</button>
+        <div>Inversions: {{ inversions }}</div>
+      </div>
+    <!-- <div>
       <label>
         <input type="radio" value="breadth" name="solutionType" [checked]="solutionType === 'breadth'" [(ngModel)]="solutionType">
         Breadth
@@ -23,13 +35,9 @@
         <input type="radio" value="depth" name="solutionType" [checked]="solutionType === 'depth'" [(ngModel)]="solutionType">
         Depth
       </label>
-    </div>
-    <div>
-      <button (click)="generateRandomInput()">Generate Random Input</button>
-      <div>Inversions: {{ inversions }}</div>
-    </div>
+    </div> -->
   </div>
-  <div class="col-9">
+  <div>
     <div class="myTree"></div>
     <div *ngIf="beforeArray.length" [style.visibility]="displayBefore ? 'visible' : 'hidden'" class="text-center display-parent">
       <div *ngFor="let n of beforeArray" class="text-center display-parent">
