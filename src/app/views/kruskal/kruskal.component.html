@@ -17,13 +17,21 @@
         <input [(ngModel)]="treeType.type" type="radio" value="max" name="treeType"> Max
       </div>
       <div>
-        <button (click)="getKruskal()" [disabled]="solving" class="btn btn-success margin-lr-5">Solve</button>
-        <button (click)="pauseContinueKruskal()" *ngIf="!stop && solving" class="btn btn-success margin-lr-5">{{this.paused ? 'Run Algorithm' : 'Pause Algorithm'}}</button>
-        <button (click)="reset()" class="btn btn-danger margin-lr-5">Reset</button>
-      </div>
+          <button (click)="slower()" class="btn btn-primary inline-block">Slower (&#xF7;2)</button>
+          <button (click)="getKruskal()" [disabled]="solving" class="btn btn-success margin-lr-5 inline-block">Solve</button>
+          <button (click)="pauseContinueKruskal()" *ngIf="!stop && solving" class="btn btn-success margin-lr-5 inline-block">{{this.paused ? 'Run Algorithm' : 'Pause Algorithm'}}</button>
+          <button (click)="faster()" class="btn btn-danger inline-block">Faster (&#215;2)</button>
+          <div>Speed: &#215;{{ speed }}</div>
+        </div>
       <div>
         <button (click)="previous()" *ngIf="isPrevious" [disabled]="previousSolving" class="btn btn-warning margin-lr-5">Previous</button>
         <button (click)="next()" *ngIf="isNext" [disabled]="nextSolving" class="btn btn-success margin-lr-5">Next</button>
+      </div>
+      <div>
+        <button (click)="reset()" class="btn btn-danger margin-lr-5">Reset</button>
+      </div>
+      <div>
+        <button>Slower</button>
       </div>
       <div *ngIf="edge !== null">
         <div>Current Edge:</div>

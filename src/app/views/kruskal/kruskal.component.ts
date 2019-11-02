@@ -34,6 +34,8 @@ export class KruskalComponent implements OnInit {
 
   steps = [];
 
+  speed: number;
+
   sleepTime = 1000;
 
   constructor(cytoService: CytoService) {
@@ -47,6 +49,7 @@ export class KruskalComponent implements OnInit {
     this.before = [];
     this.after = [];
     this.numVertices = 3;
+    this.speed = 1;
   }
 
   ngOnInit() {
@@ -270,6 +273,16 @@ export class KruskalComponent implements OnInit {
       }
       vertices.pop();
     }
+  }
+
+  slower() {
+    this.speed /= 2;
+    this.sleepTime *= 2;
+  }
+
+  faster() {
+    this.speed *= 2;
+    this.sleepTime /= 2;
   }
 
   sleep(ms) {
