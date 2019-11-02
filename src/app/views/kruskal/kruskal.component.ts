@@ -34,9 +34,8 @@ export class KruskalComponent implements OnInit {
 
   steps = [];
 
-  speed: number;
-
   sleepTime = 1000;
+  speed: number;
 
   constructor(cytoService: CytoService) {
     this.cytoService = cytoService;
@@ -266,7 +265,7 @@ export class KruskalComponent implements OnInit {
             'e' + currentV.id.key + '-' + vertices[i].id.key,
             currentV.id,
             vertices[i].id,
-            (Math.floor(Math.random()*100)-50) + ''
+            (Math.floor(Math.random()*99)+1) + ''
           );
           this.cytoService.addEdge(e);
         }
