@@ -50,7 +50,7 @@ export class KruskalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.cytoService.draw();
+    this.cytoService.draw('cy');
     this.createVertices();
     this.cytoService.addKeyListener();
     this.steps.push(this.cytoService.getKruskalArray());
@@ -154,15 +154,14 @@ export class KruskalComponent implements OnInit {
         this.edge.style.color = 'red';
         this.edge.style.lineStyle = 'solid';
         await this.steps.push(this.cytoService.getKruskalArray());
-        await this.sleep(this.sleepTime);
       } else {
         await this.cytoService.changeEdgeStyle(this.edge, 'gray');
         this.edge.style.color = 'gray';
         this.edge.style.lineStyle = 'dashed';
-        await this.sleep(this.sleepTime);
       }
       this.after.push(this.edge);
       this.edge = null;
+      await this.sleep(this.sleepTime);
     }
     this.solving = false;
     this.stopped = true;
@@ -185,6 +184,11 @@ export class KruskalComponent implements OnInit {
     this.steps = [];
     this.steps.push(this.cytoService.getKruskalArray());
     await this.sleep(this.sleepTime);
+    this.before = [];
+    this.after = [];
+    this.edge = null;
+    this.isNext = false;
+    this.isPrevious = false;
   }
 
   async previous() {

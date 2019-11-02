@@ -30,9 +30,9 @@ export class CytoService {
     this.clickedEdgeIndex = null;
   }
 
-  public draw() {
+  public draw(id: string) {
     this.cy = cytoscape({
-      container: document.getElementById('cy'),
+      container: document.getElementById(id),
       elements: {
         nodes: [],
         edges: []
