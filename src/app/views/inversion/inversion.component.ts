@@ -15,13 +15,14 @@ import { Element } from 'src/app/models/element.model';
 
 export class InversionComponent implements OnInit {
   int_array = [];
-  height_array = [];
+  // height_array = [];
   userText;
   input_error: String;
   ordering: String;
-  disable_solve: Boolean;
-  solutionType: String;
+  // solutionType: String;
   num_nodes: number;
+  paused: boolean;
+  solving: boolean;
 
   treeData : Node;
 
@@ -41,15 +42,16 @@ export class InversionComponent implements OnInit {
   constructor(private d3Service: D3Service) {
     this.userText = "";
     this.input_error = "";
-    this.disable_solve = false;
     this.displayBefore = false;
     this.displayAfter = false;
     this.mergedArray = [];
     this.beforeArray = [];
     this.afterArray = [];
-    this.solutionType = 'breadth';
+    // this.solutionType = 'breadth';
     this.inversions = '';
     this.speed = 1;
+    this.paused = true;
+    this.solving = false;
   }
 
   ngOnInit() {
@@ -106,91 +108,25 @@ export class InversionComponent implements OnInit {
     return true;
   }
 
-  async sortArray() {
-    this.inversions = '';
-    this.disable_solve = true;
-    if(!this.input_error.length && this.int_array.length) {
-      // if(this.solutionType === 'breadth') {
-        // breadth
-        this.queue1 = [];
-        this.maxDepth = 0;
-        this.queue1.push(this.treeData);
-        this.num_nodes++;
-        await this.breadthSplit();
-        await this.breadthMerge();
-      // } else {
-        // depth
-        // await this.depthMergeSort(this.int_array, 0, 1, this.treeData);
-      // }
-    }
-    this.disable_solve = false;
-  }
-
-  async depthTraverse(tree, depth) {
-    if( depth > 0) {
-      if(tree.left) {
-        var left = this.treeData.left;
-        await this.depthTraverse(left,depth-1);
-      }
-      if(tree.right) {
-        var right = this.treeData.right;
-        await this.depthTraverse(right,depth-1);
-      }
-    } else{
-      return await tree.left && tree.right;
-    }
-  }
-
-  // async depthMergeSort (arr, index, depth, parent) {
-  //   if (arr.length < 2) {
-  //     await this.sleep(this.mergeSleepTime);
-  //     return await arr;
+  // async sortArray() {
+  //   this.solving = true;
+  //   this.paused = !this.paused;
+  //   this.inversions = '';
+  //   if(!this.input_error.length && this.int_array.length) {
+  //     // if(this.solutionType === 'breadth') {
+  //       // breadth
+  //       this.queue1 = [];
+  //       this.maxDepth = 0;
+  //       this.queue1.push(this.treeData);
+  //       this.num_nodes++;
+  //       await this.breadthSplit();
+  //       await this.breadthMerge();
+  //     // } else {
+  //       // depth
+  //       // await this.depthMergeSort(this.int_array, 0, 1, this.treeData);
+  //     // }
+  //   this.paused = false;
   //   }
-    
-  //   var mid = Math.floor(arr.length / 2);
-    
-  //   var subLeft = arr.slice(0, mid);
-
-  //   var subRight = arr.slice(mid);
-
-  //   await this.sleep(this.mergeSleepTime);
-
-  //   parent.left = new Node(this.num_nodes, depth, subLeft, parent, null, null);
-  //   this.num_nodes++;
-  //   parent.right = new Node(this.num_nodes, depth, subRight, parent, null, null);
-  //   this.num_nodes++;
-    
-  //   this.d3Service.removeAll();
-  //   this.d3Service.setRoot(this.treeData);
-  //   this.d3Service.draw();
-    
-  //   await this.depthMergeSort(subLeft, index, depth+1, parent.left).then((res) => {
-  //     subLeft = res;
-  //   }).catch(console.log);
-
-  //   await this.sleep(this.mergeSleepTime);
-
-  //   await this.depthMergeSort(subRight, index + subLeft.length,depth+1, parent.right).then((res) => {
-  //     subRight = res;
-  //   }).catch(console.log);
-
-  //   await this.sleep(this.mergeSleepTime);
-    
-  //   var merged = await this.merge(parent.left, parent.right);
-    
-  //   parent.left = null;
-  //   parent.right = null;
-  //   parent.value = merged;
-    
-  //   await this.sleep(this.mergeSleepTime);
-
-  //   this.d3Service.removeAll();
-  //   this.d3Service.setRoot(this.treeData);
-  //   this.d3Service.draw();
-    
-  //   await this.sleep(this.mergeSleepTime);
-
-  //   return merged; 
   // }
 
   async changeColorOfElementsInNode(node: Node, color: string) {
@@ -390,8 +326,29 @@ export class InversionComponent implements OnInit {
     }
   }
 
+  async algorithm() {
+    if(!this.solving) {
+      this.solving = true;
+      this.queue1 = [];
+      this.maxDepth = 0;
+      this.queue1.push(this.treeData);
+      this.num_nodes++;
+    }
+    this.paused = !this.paused;
+    if(!this.paused) {
+      console.log('running');
+      await this.breadthSplit();
+      await this.breadthMerge();
+      this.paused = true;
+    }
+  }
+
   async breadthSplit() {
     while(this.queue1.length < this.int_array.length) {
+      if(this.paused) {
+        break;
+      }
+
       let node = this.queue1.shift();
 
       if(node.value.length > 1) {
@@ -444,6 +401,9 @@ export class InversionComponent implements OnInit {
 
   async breadthMerge() {
     for(let depth = this.maxDepth-1; depth >= 0; depth--) {
+      if(this.paused) {
+        break;
+      }
       await this.breadthTraverse(this.treeData, depth);
       this.d3Service.removeAll();
       this.d3Service.setRoot(this.treeData);
