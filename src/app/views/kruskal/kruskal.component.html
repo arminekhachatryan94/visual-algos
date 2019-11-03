@@ -31,24 +31,26 @@
         <button (click)="reset()" class="btn btn-danger margin-lr-5">Reset</button>
       </div>
       <div *ngIf="messages.length">{{ messages[messages.length-1] }} : {{ messages.length }}</div>
-      <div *ngIf="edge !== null">
-        <div>Current Edge:</div>
-        <div class="current-edge">
-          <div><b>Weight:</b> {{ edge.weight}}</div>
-          <div><b>V{{ edge.source.key }}</b> to <b>V{{ edge.target.key}}</b></div>
-        </div>
-      </div>
     </div>
   </div>
-  <div *ngIf="before.length">
-    <div>Queue:</div>
-    <div class="queue">
-      <div class="inline-block">&#8594;</div>
-      <div *ngFor="let b of before" class="queue-element">
-        <div><b>Weight:</b> {{ b.weight }}</div>
-        <div><b>V{{ b.source.key }}</b> to <b>V{{ b.target.key }}</b></div>
+  <div class="row" *ngIf="solving">
+    <div class="col-8">
+      <div>Queue:</div>
+      <div class="queue">
+        <div class="inline-block">&#8594;</div>
+        <div *ngFor="let b of before" class="queue-element">
+          <div><b>Weight:</b> {{ b.weight }}</div>
+          <div><b>V<sub>{{ b.source.key }}</sub></b> to <b>V<sub>{{ b.target.key }}</sub></b></div>
+        </div>
+        <div class="inline-block">&#8594;</div>
       </div>
-      <div class="inline-block">&#8594;</div>
+    </div>
+    <div class="col-4">
+      <div>Current Edge:</div>
+      <div *ngIf="edge !== null" class="current-edge">
+        <div><b>Weight:</b> {{ edge.weight }}</div>
+        <div><b>V<sub>{{ edge.source.key }}</sub></b> to <b>V<sub>{{ edge.target.key }}</sub></b></div>
+      </div>
     </div>
   </div>
 </div>
