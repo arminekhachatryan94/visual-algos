@@ -10,7 +10,6 @@ import { Pair } from '../models/pair.model';
 export class CytoService {
   cy: cytoscape;
   kruskalEdges: Edge[];
-  // adj: LinkedList<Vertice>[];
   kruskalCyc: Number[][];
   visited: boolean[];
   tapped: boolean;
@@ -22,7 +21,6 @@ export class CytoService {
 
   constructor() {
     this.kruskalEdges = [];
-    // this.adj = [];
     this.visited = [];
     this.kruskalCyc = [];
     this.tapped = false;
@@ -240,8 +238,6 @@ export class CytoService {
         color: vertice.color
       }
     });
-    // let list = new LinkedList<Vertice>();
-    // this.adj.push(list);
     this.visited.push(false);
     this.kruskalCyc.push([vertice.id.key]);
   }

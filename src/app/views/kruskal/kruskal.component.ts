@@ -216,17 +216,17 @@ export class KruskalComponent implements OnInit {
   async previous() {
     this.previousSolving = true;
     if(this.edge === null) {
-      this.messages.pop();
-      this.edge = this.after.pop();
-      this.edge.style.color = 'blue';
-      this.edge.style.lineStyle = 'solid';
-      await this.cytoService.changeEdgeStyle(this.edge, 'blue');
-      await this.cytoService.removeKruskalEdge(this.edge);
       this.steps.pop();
       let history = this.steps.pop();
       this.steps.push(history);
       console.log(this.steps);
+      this.messages.pop();
+      this.edge = this.after.pop();
+      this.edge.style.color = 'blue';
+      this.edge.style.lineStyle = 'solid';
       await this.cytoService.setKruskalArray(history);
+      await this.cytoService.changeEdgeStyle(this.edge, 'blue');
+      await this.cytoService.removeKruskalEdge(this.edge);
       await this.sleep(this.sleepTime);
     } else {
       this.messages.pop();
