@@ -30,6 +30,7 @@
       <div>
         <button (click)="reset()" class="btn btn-danger margin-lr-5">Reset</button>
       </div>
+      <div *ngIf="messages.length">{{ messages[messages.length-1] }} : {{ messages.length }}</div>
       <div *ngIf="edge !== null">
         <div>Current Edge:</div>
         <div class="current-edge">
@@ -42,10 +43,12 @@
   <div *ngIf="before.length">
     <div>Queue:</div>
     <div class="queue">
-      <div *ngFor="let b of before.reverse()" class="queue-element">
+      <div class="inline-block">&#8594;</div>
+      <div *ngFor="let b of before" class="queue-element">
         <div><b>Weight:</b> {{ b.weight }}</div>
         <div><b>V{{ b.source.key }}</b> to <b>V{{ b.target.key }}</b></div>
       </div>
+      <div class="inline-block">&#8594;</div>
     </div>
   </div>
 </div>

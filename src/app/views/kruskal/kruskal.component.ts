@@ -37,6 +37,8 @@ export class KruskalComponent implements OnInit {
   sleepTime = 1000;
   speed: number;
 
+  messages: string[];
+
   constructor(cytoService: CytoService) {
     this.cytoService = cytoService;
     this.vertices = [];
@@ -49,6 +51,7 @@ export class KruskalComponent implements OnInit {
     this.after = [];
     this.numVertices = 3;
     this.speed = 1;
+    this.messages = [];
   }
 
   ngOnInit() {
@@ -103,6 +106,7 @@ export class KruskalComponent implements OnInit {
     this.stopped = false;
     this.paused = false;
     this.solving = true;
+    this.messages.push('Sort edges in ' + (this.treeType.type === 'asc' ? 'ascending' : 'descending') + ' order.');
     if(this.treeType.type === 'min') {
       this.queue = await new PriorityQueue({
         comparator: function(a: Edge, b: Edge) {
@@ -138,6 +142,12 @@ export class KruskalComponent implements OnInit {
         this.edge = this.before.pop();
       }
       this.isPrevious = true;
+      this.messages.push(
+        'Pop the last edge from the queue, and ' +
+        'Check if adding edge V' + this.edge.source.key +
+        ' to V' + this.edge.target.key + ' with weight '
+        + this.edge.weight + ' will create a cycle in the graph.'
+      );
       await this.cytoService.changeEdgeStyle(this.edge, 'blue');
       this.edge.style.color = 'blue';
       this.edge.style.lineStyle = 'solid';
@@ -156,10 +166,20 @@ export class KruskalComponent implements OnInit {
         this.edge.style.color = 'red';
         this.edge.style.lineStyle = 'solid';
         await this.steps.push(this.cytoService.getKruskalArray());
+        this.messages.push(
+          'Add edge V' + this.edge.source.key +
+          ' to V' + this.edge.target.key + ' with weight '
+          + this.edge.weight + ' to the graph because it does not create a cycle.'
+        );
       } else {
         await this.cytoService.changeEdgeStyle(this.edge, 'gray');
         this.edge.style.color = 'gray';
         this.edge.style.lineStyle = 'dashed';
+        this.messages.push(
+          'Do not add edge V' + this.edge.source.key +
+          ' to V' + this.edge.target.key + ' with weight '
+          + this.edge.weight + ' to the graph because it will create a cycle.'
+        );
       }
       this.after.push(this.edge);
       this.edge = null;
@@ -196,6 +216,7 @@ export class KruskalComponent implements OnInit {
   async previous() {
     this.previousSolving = true;
     if(this.edge === null) {
+      this.messages.pop();
       this.edge = this.after.pop();
       this.edge.style.color = 'blue';
       this.edge.style.lineStyle = 'solid';
@@ -208,6 +229,7 @@ export class KruskalComponent implements OnInit {
       await this.cytoService.setKruskalArray(history);
       await this.sleep(this.sleepTime);
     } else {
+      this.messages.pop();
       this.before.push(this.edge);
       await this.cytoService.changeEdgeStyle(this.edge, 'black');
       this.edge.style.color = 'black';
@@ -229,6 +251,12 @@ export class KruskalComponent implements OnInit {
       this.edge.style.color = 'blue';
       this.edge.style.lineStyle = 'solid';
       await this.cytoService.changeEdgeStyle(this.edge, 'blue');
+      this.messages.push(
+        'Pop the last edge from the queue, and '
+        + 'check if adding edge V' + this.edge.source.key +
+        ' to V' + this.edge.target.key + ' with weight '
+        + this.edge.weight + ' will create a cycle in the graph.'
+      );
       await this.sleep(this.sleepTime);
     } else {
       let cyclic = await this.cytoService.isKruskalCyclic(this.edge);
@@ -238,10 +266,20 @@ export class KruskalComponent implements OnInit {
         this.edge.style.color = 'red';
         this.edge.style.lineStyle = 'solid';  
         await this.steps.push(this.cytoService.getKruskalArray());
+        this.messages.push(
+          'Add edge V' + this.edge.source.key +
+          ' to V' + this.edge.target.key + ' with weight '
+          + this.edge.weight + ' to the graph because it does not create a cycle.'
+        );
       } else {
         await this.cytoService.changeEdgeStyle(this.edge, 'gray');
         this.edge.style.color = 'gray';
         this.edge.style.lineStyle = 'dashed';
+        this.messages.push(
+          'Do not add edge V' + this.edge.source.key +
+          ' to V' + this.edge.target.key + ' with weight '
+          + this.edge.weight + ' to the graph because it will create a cycle.'
+        );
       }
       this.after.push(this.edge);
       this.edge = null;
