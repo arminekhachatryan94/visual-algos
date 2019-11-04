@@ -1,13 +1,28 @@
 <div>
   <div>Steiner Tree</div>
-  <div class="row text-center">
-    <div class="col-6">
-      <p>Current Graph</p>
-      <div id="current"></div>
+  <!-- graphs -->
+  <div>
+    <div class="row text-center">
+      <div class="col-6" style="border: 1px solid red">
+        <div>Current Graph</div>
+        <div id="current" class="text-left"></div>
+      </div>
+      <div *ngIf="solving" class="col-6" style="border: 1px solid red">
+        <div>Optimal Graph</div>
+        <div id="optimal" class="text-left"></div>
+      </div>
     </div>
-    <div class="col-6">
-      <p>Optimal Graph</p>
-      <div id="optimal"></div>
+  </div>
+  <!-- customize -->
+  <div>
+    <!-- update num vertices -->
+    <div class="inline-block">
+      <button class="btn btn-danger" (click)="decrementVertices()">-</button>
+      V = {{ numVertices }}
+      <button class="btn btn-success" (click)="incrementVertices()">+</button>
+    </div>
+    <div>
+      <button (click)="algorithm()">Run Algorithm</button>
     </div>
   </div>
 </div>

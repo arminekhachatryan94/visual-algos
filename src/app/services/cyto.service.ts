@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import cytoscape from 'cytoscape';
 import { Edge } from 'src/app/models/edge.model';
 import { Vertice } from 'src/app/models/vertice.model';
-// import { LinkedList } from 'linked-list-typescript';
 import { Pair } from '../models/pair.model';
 
 @Injectable()
@@ -36,8 +35,7 @@ export class CytoService {
         edges: []
       },
       layout: {
-        name: 'circle',
-        rows: 5
+        name: 'circle'
       },
       directed: false,
       style: [

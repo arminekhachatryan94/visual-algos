@@ -68,7 +68,7 @@ export class KruskalComponent implements OnInit {
     this.numVertices++;
     this.cytoService.refresh();
   }
-  
+
   async decrementVertices() {
     await this.numVertices--;
     await this.cytoService.removeLastVertice();
