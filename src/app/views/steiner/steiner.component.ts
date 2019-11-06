@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CytoService } from '../../services/cyto.service';
 import { Vertice } from '../../models/vertice.model';
 import { Pair } from '../../models/pair.model';
-
 import Combinatorics from 'js-combinatorics';
 
 @Component({
@@ -97,11 +96,15 @@ export class SteinerComponent implements OnInit {
         additionalVertices.push(vertices[v]);
       }
     }
-    
-    let combos = Combinatorics.power(additionalVertices);
-    combos.forEach(function(a){ console.log(a) });
 
-    // console.log(subVertices);
-    // console.log(additionalVertices);
+    this.subsets = [];
+    let combos = Combinatorics.power(additionalVertices);
+    combos.forEach((combo) => {
+      this.subsets.push(combo.concat(subVertices))
+    });
+
+    this.subsets.sort(function(a, b) {
+      return a.length - b.length;
+    });
   }
 }
