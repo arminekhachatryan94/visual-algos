@@ -3,15 +3,19 @@
   <!-- graphs -->
   <div>
     <div class="row text-center">
-      <div class="col-6" style="border: 1px solid red">
+      <div class="col-6">
         <div>Current Graph</div>
         <div id="current" class="text-left"></div>
       </div>
-      <div *ngIf="solving" class="col-6" style="border: 1px solid red">
-        <div>Optimal Graph</div>
+      <div class="col-6">
+        <div *ngIf="solving">Optimal Graph</div>
         <div id="optimal" class="text-left"></div>
       </div>
     </div>
+  </div>
+  <div class="row">
+    <p>Subset of Vertices:</p>
+    {{ subsets }}
   </div>
   <!-- customize -->
   <div>
@@ -22,7 +26,8 @@
       <button class="btn btn-success" (click)="incrementVertices()">+</button>
     </div>
     <div>
-      <button (click)="algorithm()">Run Algorithm</button>
+      <button *ngIf="!selectingSubs" (click)="selectSubVertices()">Select SubVertices</button>
+      <button *ngIf="selectingSubs" (click)="algorithm()">Run Algorithm</button>
     </div>
   </div>
 </div>

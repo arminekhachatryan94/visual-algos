@@ -3,6 +3,8 @@ import { CytoService } from '../../services/cyto.service';
 import { Vertice } from '../../models/vertice.model';
 import { Pair } from '../../models/pair.model';
 
+import Combinatorics from 'js-combinatorics';
+
 @Component({
   selector: 'app-steiner',
   templateUrl: './steiner.component.html',
@@ -14,18 +16,18 @@ export class SteinerComponent implements OnInit {
 
   numVertices: number;
   vertices: Vertice[];
+  subsets: Vertice[][];
 
   solving: boolean;
+  selectingSubs: boolean;
 
-  constructor(
-    currentService: CytoService,
-    optimalService: CytoService
-  ) {
-    this.currentService = currentService;
-    this.optimalService = optimalService;
+  constructor() {
+    this.currentService = new CytoService;
+    this.optimalService = new CytoService;
     this.vertices = [];
     this.numVertices = 3;
-    this.solving = false;
+    this.solving = true;
+    this.selectingSubs = false;
   }
 
   async ngOnInit() {
@@ -33,6 +35,7 @@ export class SteinerComponent implements OnInit {
     await this.createVertices();
     await this.addVerticesToGraph(this.currentService);
     await this.currentService.addKeyListener();
+    await this.optimalService.draw('optimal').then(f => {this.solving = false;});
   }
 
   async incrementVertices() {
@@ -63,19 +66,42 @@ export class SteinerComponent implements OnInit {
   async addVerticesToGraph(service: CytoService) {
     let i = 0;
     while(i < this.numVertices) {
-      let v = this.vertices[i];
-      await service.addVertice(v);
+      await service.addVertice(this.vertices[i]);
       i++;
     }
-    service.refresh();
+    await service.refresh();
+  }
+
+  selectSubVertices() {
+    this.selectingSubs = true;
+    this.currentService.updateSelectSub(true);
   }
 
   async algorithm() {
-    console.log('solve algo');
     this.solving = true;
-    console.log(this.optimalService.getVertices());
     await this.addVerticesToGraph(this.optimalService);
-    console.log('here');
-    await this.optimalService.draw('optimal');
+    await this.optimalService.refresh();
+
+    this.setSubsets();
+  }
+
+  setSubsets() {
+    let subIds = this.currentService.getSubVerticeIds();
+    let vertices = this.currentService.getVertices();
+    let subVertices = [];
+    let additionalVertices = [];
+    for(let v = 0; v < vertices.length; v++) {
+      if(subIds.includes(vertices[v].id.value)) {
+        subVertices.push(vertices[v]);
+      } else {
+        additionalVertices.push(vertices[v]);
+      }
+    }
+    
+    let combos = Combinatorics.power(additionalVertices);
+    combos.forEach(function(a){ console.log(a) });
+
+    // console.log(subVertices);
+    // console.log(additionalVertices);
   }
 }
