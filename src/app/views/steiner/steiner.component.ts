@@ -71,6 +71,10 @@ export class SteinerComponent implements OnInit {
     await service.refresh();
   }
 
+  generateRandomEdges() {
+    this.currentService.generateRandomEdges();
+  }
+
   selectSubVertices() {
     this.selectingSubs = true;
     this.currentService.updateSelectSub(true);

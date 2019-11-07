@@ -299,23 +299,7 @@ export class KruskalComponent implements OnInit {
   }
 
   generateRandomEdges() {
-    this.cytoService.removeAllEdges();
-    let vertices = [...this.vertices];
-    while(vertices.length > 0) {
-      let currentV = vertices[vertices.length-1];
-      for(let i = 0; i < vertices.length-1; i++) {
-        if(Math.floor(Math.random()*2)) {
-          let e = new Edge(
-            'e' + currentV.id.key + '-' + vertices[i].id.key,
-            currentV.id,
-            vertices[i].id,
-            (Math.floor(Math.random()*99)+1) + ''
-          );
-          this.cytoService.addEdge(e);
-        }
-      }
-      vertices.pop();
-    }
+    this.cytoService.generateRandomEdges();
   }
 
   slower() {
