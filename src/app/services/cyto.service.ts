@@ -260,6 +260,10 @@ export class CytoService {
     this.cy.remove(this.cy.edges());
   }
 
+  removeAllVertices() {
+    this.cy.remove(this.cy.nodes());
+  }
+
   getEdges(): Edge[] {
     return this.cy.edges().map(edge => {
       let e = new Edge(

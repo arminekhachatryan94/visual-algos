@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CytoService } from '../../services/cyto.service';
 import { Vertice } from '../../models/vertice.model';
+import { Edge } from '../../models/edge.model';
 import { Pair } from '../../models/pair.model';
 import Combinatorics from 'js-combinatorics';
 
@@ -63,6 +64,7 @@ export class SteinerComponent implements OnInit {
   }
 
   async addVerticesToGraph(service: CytoService) {
+    service.removeAllVertices();
     let i = 0;
     while(i < this.numVertices) {
       await service.addVertice(this.vertices[i]);
@@ -83,9 +85,20 @@ export class SteinerComponent implements OnInit {
   async algorithm() {
     this.solving = true;
     await this.addVerticesToGraph(this.optimalService);
+    await this.addEdgesToGraph(
+      this.optimalService,
+      this.currentService.getEdges()
+    );
     await this.optimalService.refresh();
 
     this.setSubsets();
+  }
+
+  async addEdgesToGraph(service: CytoService, edges: Edge[]) {
+    service.removeAllEdges();
+    edges.forEach(edge => {
+      service.addEdge(edge);
+    });
   }
 
   setSubsets() {
@@ -110,5 +123,7 @@ export class SteinerComponent implements OnInit {
     this.subsets.sort(function(a, b) {
       return a.length - b.length;
     });
+
+    console.log(this.subsets);
   }
 }
