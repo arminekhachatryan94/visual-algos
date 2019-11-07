@@ -323,7 +323,7 @@ export class CytoService {
       this.cy.nodes('#' + edge.target.key).first().data('color', 'black');
     }
 
-    this.kruskalEdges = this.kruskalEdges.splice(i, 1);
+    this.kruskalEdges.splice(i, 1);
     return this.kruskalEdges;
   }
 
@@ -372,6 +372,14 @@ export class CytoService {
 
   setKruskalArray(kruskalCyc) {
     this.kruskalCyc = [...kruskalCyc];
+  }
+
+  getSumOfEdgeWeights() {
+    let sum = 0;
+    for(let k = 0; k < this.kruskalEdges.length; k++) {
+      sum += Number(this.kruskalEdges[k].weight);
+    }
+    return sum;
   }
 
   sleep(ms) {

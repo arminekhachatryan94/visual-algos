@@ -38,6 +38,7 @@ export class KruskalComponent implements OnInit {
   speed: number;
 
   messages: string[];
+  weightSum: number;
 
   constructor(cytoService: CytoService) {
     this.cytoService = cytoService;
@@ -52,6 +53,7 @@ export class KruskalComponent implements OnInit {
     this.numVertices = 3;
     this.speed = 1;
     this.messages = [];
+    this.weightSum = 0;
   }
 
   ngOnInit() {
@@ -182,6 +184,7 @@ export class KruskalComponent implements OnInit {
         );
       }
       this.after.push(this.edge);
+      this.weightSum = this.cytoService.getSumOfEdgeWeights();
       this.edge = null;
       await this.sleep(this.sleepTime);
     }
@@ -214,12 +217,12 @@ export class KruskalComponent implements OnInit {
   }
 
   async previous() {
+    this.weightSum = null;
     this.previousSolving = true;
     if(this.edge === null) {
       this.steps.pop();
       let history = this.steps.pop();
       this.steps.push(history);
-      console.log(this.steps);
       this.messages.pop();
       this.edge = this.after.pop();
       this.edge.style.color = 'blue';
@@ -227,6 +230,7 @@ export class KruskalComponent implements OnInit {
       await this.cytoService.setKruskalArray(history);
       await this.cytoService.changeEdgeStyle(this.edge, 'blue');
       await this.cytoService.removeKruskalEdge(this.edge);
+      this.weightSum = this.cytoService.getSumOfEdgeWeights();
       await this.sleep(this.sleepTime);
     } else {
       this.messages.pop();
@@ -234,6 +238,7 @@ export class KruskalComponent implements OnInit {
       await this.cytoService.changeEdgeStyle(this.edge, 'black');
       this.edge.style.color = 'black';
       this.edge.style.lineStyle = 'dashed';
+      this.weightSum = this.cytoService.getSumOfEdgeWeights();
       await this.sleep(this.sleepTime);
       this.edge = null;
     }
@@ -281,6 +286,7 @@ export class KruskalComponent implements OnInit {
           + this.edge.weight + ' to the graph because it will create a cycle.'
         );
       }
+      this.weightSum = this.cytoService.getSumOfEdgeWeights();
       this.after.push(this.edge);
       this.edge = null;
       await this.sleep(this.sleepTime);
