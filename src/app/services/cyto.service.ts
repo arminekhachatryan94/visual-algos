@@ -58,6 +58,8 @@ export class CytoService {
           selector: 'edge',
           style: {
             'label': 'data(weight)',
+            'text-margin-x': -15,
+            'text-margin-y': 15,
             'line-color': 'data(style.color)',
             'line-style': 'data(style.lineStyle)',
             'width': '2px',
