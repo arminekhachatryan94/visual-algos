@@ -108,8 +108,10 @@ export class SteinerComponent implements OnInit {
     let additionalVertices = [];
     for(let v = 0; v < vertices.length; v++) {
       if(subIds.includes(vertices[v].id.value)) {
+        vertices[v].changeColor('red');
         subVertices.push(vertices[v]);
       } else {
+        vertices[v].changeColor('blue');
         additionalVertices.push(vertices[v]);
       }
     }
@@ -117,7 +119,10 @@ export class SteinerComponent implements OnInit {
     this.subsets = [];
     let combos = Combinatorics.power(additionalVertices);
     combos.forEach((combo) => {
-      this.subsets.push(combo.concat(subVertices))
+      let c = combo.concat(subVertices);
+      if(c.length !== 0) {
+        this.subsets.push(c)
+      }
     });
 
     this.subsets.sort(function(a, b) {

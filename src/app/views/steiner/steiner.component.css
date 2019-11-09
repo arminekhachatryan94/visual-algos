@@ -8,3 +8,13 @@
     height: 300px;
     display: inline-block;
 }
+
+.vertice {
+    padding: 3px;
+    display: inline-block;
+    color: white;
+    border-radius: 50%;
+    margin: 2px 2px 2px 2px;
+    width: 30px;
+    text-align: center;
+}

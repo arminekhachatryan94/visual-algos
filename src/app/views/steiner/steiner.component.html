@@ -17,11 +17,14 @@
     <p>Subset of Vertices:</p>
     <div *ngFor="let subset of subsets">
       &#123;
-      <div *ngFor="let v of subset" class="inline-block">{{ v.id.key }},</div>
+      <div *ngFor="let v of subset; let i = index" class="inline-block">
+        <div [style.background-color]="v.color" class="vertice inline-block">{{ v.id.key }}</div>
+        <div *ngIf="i !== subset.length-1" class="inline-block">,</div>
+      </div>
       &#125;
     </div>
   </div>
-  <!-- customize -->
+  <!-- customize graph -->
   <div>
     <!-- update num vertices -->
     <div class="inline-block">
