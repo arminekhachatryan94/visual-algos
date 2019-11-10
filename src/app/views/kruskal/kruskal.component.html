@@ -38,12 +38,12 @@
     <div class="col-8">
       <div>Queue:</div>
       <div class="queue">
-        <div class="inline-block">&#8594;</div>
+        <div *ngIf="before.length" class="inline-block">&#8594;</div>
         <div *ngFor="let b of before" class="queue-element">
           <div><b>Weight:</b> {{ b.weight }}</div>
           <div><b>V<sub>{{ b.source.key }}</sub></b> to <b>V<sub>{{ b.target.key }}</sub></b></div>
         </div>
-        <div class="inline-block">&#8594;</div>
+        <div *ngIf="before.length" class="inline-block">&#8594;</div>
       </div>
     </div>
     <div class="col-4">
