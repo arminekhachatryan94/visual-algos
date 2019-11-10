@@ -317,6 +317,7 @@ export class CytoService {
   }
 
   async addKruskalEdge(edge: Edge, changeColor = true) {
+    edge.style = {color: 'red', lineStyle: 'solid'};
     this.kruskalEdges.push(edge);
 
     let source = edge.source.key;
@@ -399,12 +400,20 @@ export class CytoService {
     this.kruskalCyc = [...kruskalCyc];
   }
 
+  getKruskalEdges() {
+    return this.kruskalEdges;
+  }
+
   getSumOfEdgeWeights() {
     let sum = 0;
     for(let k = 0; k < this.kruskalEdges.length; k++) {
       sum += Number(this.kruskalEdges[k].weight);
     }
     return sum;
+  }
+
+  checkVerticesConnected() {
+    ;
   }
 
   getEdgesBetweenSubset(subsetIds: number[]): Edge[] {

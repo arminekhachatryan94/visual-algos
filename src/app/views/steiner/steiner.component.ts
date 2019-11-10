@@ -23,6 +23,7 @@ export class SteinerComponent implements OnInit {
   selectingSubs: boolean;
 
   weightSum: number;
+  optimalWeightSum: number;
 
   sleepTime: number;
 
@@ -35,6 +36,7 @@ export class SteinerComponent implements OnInit {
     this.selectingSubs = false;
     this.sleepTime = 4000;
     this.weightSum = null;
+    this.optimalWeightSum = null;
   }
 
   async ngOnInit() {
@@ -100,11 +102,12 @@ export class SteinerComponent implements OnInit {
 
     this.setSubsets();
     let biggestSubset = this.subsets[this.subsets.length-1];
-    console.log('hi');
 
-    for(let i = 0; i < this.subsets.length; i++) {
+    await this.currentService.sleep(this.sleepTime);
+
+    while(this.subsets.length > 0) {
       this.currentService.reset();
-      let subset = this.subsets[i].map(function(v) {
+      let subset = this.subsets[0].map(function(v) {
         return v.id.key;
       });
       this.updateVerticeColorsInGraph(
@@ -112,12 +115,32 @@ export class SteinerComponent implements OnInit {
         biggestSubset,
         subset
       );
-      console.log(subset);
       let edges = await this.currentService.getEdgesBetweenSubset(subset);
       await this.createKruskalTree(edges);
       await this.currentService.refresh();
 
       this.weightSum = this.currentService.getSumOfEdgeWeights();
+      if(this.optimalWeightSum === null ||
+        this.weightSum < this.optimalWeightSum
+      ) {
+        await this.optimalService.reset();
+        await this.updateVerticeColorsInGraph(
+          this.optimalService,
+          biggestSubset,
+          subset
+        );
+        let kruskalEdges = this.currentService.getKruskalEdges();
+        console.log(kruskalEdges);
+        await this.updateEdgeColorsInGraph(
+          this.optimalService,
+          kruskalEdges
+        );
+        await this.optimalService.refresh();
+
+        this.optimalWeightSum = this.weightSum;
+        // console.log(this.optimalWeightSum);
+      }
+      this.subsets.shift();
 
       await this.currentService.sleep(this.sleepTime);
     }
@@ -130,15 +153,24 @@ export class SteinerComponent implements OnInit {
     });
   }
 
-  updateVerticeColorsInGraph(
+  async updateVerticeColorsInGraph(
     service: CytoService,
     biggestSet: Vertice[],
     set: number[]
   ) {
     for(let s = 0; s < biggestSet.length; s++) {
       if(biggestSet[s].color === 'red' || set.includes(biggestSet[s].id.key)) {
-        service.changeVerticeStyle(biggestSet[s], biggestSet[s].color);
+        await service.changeVerticeStyle(biggestSet[s], biggestSet[s].color);
       }
+    }
+  }
+
+  async updateEdgeColorsInGraph(
+    service: CytoService,
+    edges: Edge[]
+  ) {
+    for(let e = 0; e < edges.length; e++) {
+      await service.changeEdgeStyle(edges[e], edges[e].style.color);
     }
   }
 
