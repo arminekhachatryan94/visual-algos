@@ -6,6 +6,7 @@ import { Pair } from '../../models/pair.model';
 import Combinatorics from 'js-combinatorics';
 import PriorityQueue from 'ts-priority-queue';
 import { Graph } from '../../models/graph.model';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-steiner',
@@ -35,7 +36,7 @@ export class SteinerComponent implements OnInit {
 
   exampleGraphs: Graph[];
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.currentService = new CytoService;
     this.optimalService = new CytoService;
     this.vertices = [];
@@ -58,23 +59,19 @@ export class SteinerComponent implements OnInit {
     await this.currentService.addKeyListener();
     await this.optimalService.draw('optimal').then(f => {this.solving = false;});
     this.createExampleGraphs();
-    console.log(this.exampleGraphs);
   }
 
   createExampleGraphs() {
-    let graph1 = new Graph();
-    for(let i = 0; i < 6; i++) {
-      graph1.addVertice(new Vertice(new Pair(i, i + '')));
-    }
-    graph1.addEdge(new Edge('e0-1', new Pair(0, '0'), new Pair(1, '1'), '1'));
-    graph1.addEdge(new Edge('e0-2', new Pair(0, '0'), new Pair(2, '2'), '1'));
-    graph1.addEdge(new Edge('e0-5', new Pair(0, '0'), new Pair(5, '5'), '1'));
-    graph1.addEdge(new Edge('e1-5', new Pair(1, '1'), new Pair(5, '5'), '2'));
-    graph1.addEdge(new Edge('e1-2', new Pair(1, '1'), new Pair(2, '2'), '2'));
-    graph1.addEdge(new Edge('e5-2', new Pair(5, '5'), new Pair(2, '2'), '2'));
-    graph1.addEdge(new Edge('e5-4', new Pair(5, '5'), new Pair(4, '4'), '4'));
-    graph1.addEdge(new Edge('e4-3', new Pair(4, '4'), new Pair(3, '3'), '1'));
-    graph1.addEdge(new Edge('e3-2', new Pair(3, '3'), new Pair(2, '2'), '13'));
+    let graph1 = new Graph(6);
+    graph1.addEdge(0, 1, 1);
+    graph1.addEdge(0, 2, 1);
+    graph1.addEdge(0, 5, 1);
+    graph1.addEdge(1, 5, 2);
+    graph1.addEdge(1, 2, 2);
+    graph1.addEdge(5, 2, 2);
+    graph1.addEdge(5, 4, 4);
+    graph1.addEdge(4, 3, 1);
+    graph1.addEdge(3, 2, 1);
     this.exampleGraphs.push(graph1);
   }
 
