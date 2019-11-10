@@ -4,6 +4,7 @@ import { Vertice } from '../../models/vertice.model';
 import { Edge } from '../../models/edge.model';
 import { Pair } from '../../models/pair.model';
 import Combinatorics from 'js-combinatorics';
+import PriorityQueue from 'ts-priority-queue';
 
 @Component({
   selector: 'app-steiner',
@@ -21,6 +22,10 @@ export class SteinerComponent implements OnInit {
   solving: boolean;
   selectingSubs: boolean;
 
+  weightSum: number;
+
+  sleepTime: number;
+
   constructor() {
     this.currentService = new CytoService;
     this.optimalService = new CytoService;
@@ -28,6 +33,8 @@ export class SteinerComponent implements OnInit {
     this.numVertices = 3;
     this.solving = true;
     this.selectingSubs = false;
+    this.sleepTime = 4000;
+    this.weightSum = null;
   }
 
   async ngOnInit() {
@@ -92,6 +99,28 @@ export class SteinerComponent implements OnInit {
     await this.optimalService.refresh();
 
     this.setSubsets();
+    let biggestSubset = this.subsets[this.subsets.length-1];
+    console.log('hi');
+
+    for(let i = 0; i < this.subsets.length; i++) {
+      this.currentService.reset();
+      let subset = this.subsets[i].map(function(v) {
+        return v.id.key;
+      });
+      this.updateVerticeColorsInGraph(
+        this.currentService,
+        biggestSubset,
+        subset
+      );
+      console.log(subset);
+      let edges = await this.currentService.getEdgesBetweenSubset(subset);
+      await this.createKruskalTree(edges);
+      await this.currentService.refresh();
+
+      this.weightSum = this.currentService.getSumOfEdgeWeights();
+
+      await this.currentService.sleep(this.sleepTime);
+    }
   }
 
   async addEdgesToGraph(service: CytoService, edges: Edge[]) {
@@ -99,6 +128,40 @@ export class SteinerComponent implements OnInit {
     edges.forEach(edge => {
       service.addEdge(edge);
     });
+  }
+
+  updateVerticeColorsInGraph(
+    service: CytoService,
+    biggestSet: Vertice[],
+    set: number[]
+  ) {
+    for(let s = 0; s < biggestSet.length; s++) {
+      if(biggestSet[s].color === 'red' || set.includes(biggestSet[s].id.key)) {
+        service.changeVerticeStyle(biggestSet[s], biggestSet[s].color);
+      }
+    }
+  }
+
+  async createKruskalTree(edges: Edge[]) {
+    let queue = new PriorityQueue({
+      comparator: function(a: Edge, b: Edge) {
+        return Number(a.weight) - Number(b.weight);
+      }
+    });
+
+    edges.forEach(e => {
+      queue.queue(e);
+    });
+
+    while(queue.length > 0) {
+      let e = queue.dequeue();
+
+      let cyclic = await this.currentService.isKruskalCyclic(e);
+      if(!cyclic) {
+        await this.currentService.addKruskalEdge(e, false);
+        await this.currentService.changeEdgeStyle(e, 'red');
+      }
+    }
   }
 
   setSubsets() {
@@ -128,7 +191,5 @@ export class SteinerComponent implements OnInit {
     this.subsets.sort(function(a, b) {
       return a.length - b.length;
     });
-
-    console.log(this.subsets);
   }
 }

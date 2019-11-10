@@ -14,8 +14,6 @@ export class CytoService {
   subVerticeIds: string[];
   tapped: boolean;
 
-  sleepTime = 1000;
-
   clickedVerticeIndex: number;
   clickedEdgeIndex: string;
 
@@ -318,7 +316,7 @@ export class CytoService {
     this.cy.remove('#' + index);
   }
 
-  async addKruskalEdge(edge: Edge) {
+  async addKruskalEdge(edge: Edge, changeColor = true) {
     this.kruskalEdges.push(edge);
 
     let source = edge.source.key;
@@ -328,8 +326,10 @@ export class CytoService {
     this.kruskalCyc[s] = (this.kruskalCyc[s]).concat(this.kruskalCyc[t]);
     this.kruskalCyc.splice(t, 1);
     
-    this.cy.nodes('#' + source).first().data('color', 'red');
-    this.cy.nodes('#' + target).first().data('color', 'red');
+    if(changeColor) {
+      this.cy.nodes('#' + source).first().data('color', 'red');
+      this.cy.nodes('#' + target).first().data('color', 'red');
+    }
   }
 
   async removeKruskalEdge(edge: Edge) {
@@ -380,7 +380,6 @@ export class CytoService {
     this.kruskalCyc = [];
     for(let i = 0; i < vertices.length; i++) {
       this.cy.nodes('#' + vertices[i].id.value).first().data('color', 'black');
-      this.cy.nodes('#' + vertices[i].id.value).first();
       this.kruskalCyc.push([vertices[i].id.key]);
     }
     let edges = this.getEdges();
@@ -408,8 +407,23 @@ export class CytoService {
     return sum;
   }
 
+  getEdgesBetweenSubset(subsetIds: number[]): Edge[] {
+    let subEdges = [];
+    let edges = this.getEdges();
+    edges.forEach(e => {
+      if(subsetIds.includes(e.source.key) && subsetIds.includes(e.target.key)) {
+        subEdges.push(e);
+      }
+    });
+    return subEdges;
+  }
+
   sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  async changeVerticeStyle(vertice: Vertice, color: string) {
+    this.cy.nodes('#' + vertice.id.key).first().data('color', color);
   }
 
   async changeEdgeStyle(edge: Edge, color: string) {
