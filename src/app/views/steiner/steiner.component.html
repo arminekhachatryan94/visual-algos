@@ -37,6 +37,7 @@
     </div>
     <div>
       <button *ngIf="!selectingSubs" (click)="generateRandomEdges()" class="btn btn-primary">Generate Random Edges</button>
+      <button *ngIf="!selectingSubs" (click)="useExampleGraph()" class="btn btn-info">Example Graph</button>
       <button *ngIf="!selectingSubs" (click)="selectSubVertices()" class="btn btn-success">Select SubVertices</button>
     </div>
     <div *ngIf="selectingSubs">

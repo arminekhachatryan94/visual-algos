@@ -74,6 +74,18 @@ export class SteinerComponent implements OnInit {
     this.exampleGraphs.push(graph1);
   }
 
+  async useExampleGraph() {
+    await this.currentService.reset();
+    let len = this.exampleGraphs.length;
+    let g = this.exampleGraphs[Math.floor(Math.random()*len)];
+    this.numVertices = g.vertices.length;
+    await this.createVertices();
+    await this.addVerticesToGraph(this.currentService);
+    for(let i = 0; i < g.edges.length; i++) {
+      await this.currentService.addEdge(g.edges[i]);
+    }
+  }
+
   async incrementVertices() {
     let v = new Vertice(new Pair(this.numVertices, this.numVertices+''));
     await this.currentService.addVertice(v);
