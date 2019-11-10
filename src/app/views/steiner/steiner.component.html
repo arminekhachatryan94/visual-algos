@@ -14,8 +14,8 @@
     </div>
   </div>
   <div>
-    <div>Total weight of tree: {{ weightSum }}</div>
-    <p>Subset of Vertices:</p>
+    <div *ngIf="weightSum !== null">Total weight of tree: {{ weightSum }}</div>
+    <p *ngIf="subsets.length">Subset of Vertices:</p>
     <div *ngFor="let subset of subsets">
       &#123;
       <div *ngFor="let v of subset; let i = index" class="inline-block">
@@ -32,11 +32,16 @@
       <button class="btn btn-danger" (click)="decrementVertices()">-</button>
       V = {{ numVertices }}
       <button class="btn btn-success" (click)="incrementVertices()">+</button>
+      <div *ngIf="!solving && selectingSubs" class="inline-block">Choose a set of vertices by clicking on them. The subset of vertices will be the color red.</div>
     </div>
     <div>
-      <button *ngIf="!selectingSubs" (click)="selectSubVertices()">Select SubVertices</button>
-      <button *ngIf="selectingSubs" (click)="algorithm()">{{ paused ? 'Run Algorithm' : 'Pause Algorithm' }}</button>
-      <button *ngIf="!selectingSubs" (click)="generateRandomEdges()">Generate Random Edges</button>
+      <button *ngIf="!selectingSubs" (click)="generateRandomEdges()" class="btn btn-primary">Generate Random Edges</button>
+      <button *ngIf="!selectingSubs" (click)="selectSubVertices()" class="btn btn-success">Select SubVertices</button>
+    </div>
+    <div *ngIf="selectingSubs">
+      <button (click)="slower()" class="btn btn-primary inline-block">Slower (&#xF7;2)</button>
+      <button [disabled]="!selectingSubs" (click)="algorithm()" class="btn" [ngClass]="{'btn-success': paused, 'btn-warning': !paused}">{{ paused ? 'Run Algorithm' : 'Pause Algorithm' }}</button>
+      <button (click)="faster()" class="btn btn-danger inline-block">Faster (&#215;2)</button>
     </div>
   </div>
 </div>

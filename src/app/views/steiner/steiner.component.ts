@@ -30,6 +30,7 @@ export class SteinerComponent implements OnInit {
   biggestSubset: Vertice[];
 
   sleepTime: number;
+  speed: number;
 
   constructor() {
     this.currentService = new CytoService;
@@ -37,8 +38,10 @@ export class SteinerComponent implements OnInit {
     this.vertices = [];
     this.numVertices = 6;
     this.solving = true;
+    this.subsets = [];
     this.selectingSubs = false;
-    this.sleepTime = 4000;
+    this.sleepTime = 2000;
+    this.speed = 1;
     this.weightSum = null;
     this.optimalWeightSum = null;
     this.paused = true;
@@ -87,6 +90,16 @@ export class SteinerComponent implements OnInit {
     await this.currentService.removeLastVertice();
     this.vertices = await this.currentService.getVertices();
     await this.currentService.refresh();
+  }
+
+  faster() {
+    this.sleepTime /= 2;
+    this.speed *= 2;
+  }
+
+  slower() {
+    this.sleepTime *= 2;
+    this.speed /= 2;
   }
 
   async createVertices() {
