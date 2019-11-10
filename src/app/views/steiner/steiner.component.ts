@@ -142,6 +142,7 @@ export class SteinerComponent implements OnInit {
 
   editGraph() {
     this.selectingSubs = false;
+    this.currentService.updateSelectSub(false);
   }
 
   async reset() {
