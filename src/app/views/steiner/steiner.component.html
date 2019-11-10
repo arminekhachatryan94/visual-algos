@@ -1,5 +1,4 @@
 <div>
-  <div>Steiner Tree</div>
   <!-- graphs -->
   <div>
     <div class="row text-center">
@@ -32,7 +31,9 @@
       <button class="btn btn-danger" (click)="decrementVertices()">-</button>
       V = {{ numVertices }}
       <button class="btn btn-success" (click)="incrementVertices()">+</button>
-      <div *ngIf="!solving && selectingSubs" class="inline-block">Choose a set of vertices by clicking on them. The subset of vertices will be the color red.</div>
+      <div *ngIf="!solving && selectingSubs" class="inline-block">
+        Choose a set of vertices by clicking on them.
+        The subset of vertices will be colored red.</div>
     </div>
     <div>
       <button *ngIf="!selectingSubs" (click)="generateRandomEdges()" class="btn btn-primary">Generate Random Edges</button>

@@ -5,6 +5,7 @@ import { Edge } from '../../models/edge.model';
 import { Pair } from '../../models/pair.model';
 import Combinatorics from 'js-combinatorics';
 import PriorityQueue from 'ts-priority-queue';
+import { Graph } from '../../models/graph.model';
 
 @Component({
   selector: 'app-steiner',
@@ -32,11 +33,13 @@ export class SteinerComponent implements OnInit {
   sleepTime: number;
   speed: number;
 
+  exampleGraphs: Graph[];
+
   constructor() {
     this.currentService = new CytoService;
     this.optimalService = new CytoService;
     this.vertices = [];
-    this.numVertices = 6;
+    this.numVertices = 3;
     this.solving = true;
     this.subsets = [];
     this.selectingSubs = false;
@@ -45,6 +48,7 @@ export class SteinerComponent implements OnInit {
     this.weightSum = null;
     this.optimalWeightSum = null;
     this.paused = true;
+    this.exampleGraphs = [];
   }
 
   async ngOnInit() {
@@ -53,28 +57,25 @@ export class SteinerComponent implements OnInit {
     await this.addVerticesToGraph(this.currentService);
     await this.currentService.addKeyListener();
     await this.optimalService.draw('optimal').then(f => {this.solving = false;});
-    this.exampleGraph();
+    this.createExampleGraphs();
+    console.log(this.exampleGraphs);
   }
 
-  exampleGraph() {
-    let e = new Edge('e0-1', new Pair(0, '0'), new Pair(1, '1'), '1');
-    this.currentService.addEdge(e);
-    e = new Edge('e0-2', new Pair(0, '0'), new Pair(2, '2'), '1');
-    this.currentService.addEdge(e);
-    e = new Edge('e0-5', new Pair(0, '0'), new Pair(5, '5'), '1');
-    this.currentService.addEdge(e);
-    e = new Edge('e1-5', new Pair(1, '1'), new Pair(5, '5'), '2');
-    this.currentService.addEdge(e);
-    e = new Edge('e1-2', new Pair(1, '1'), new Pair(2, '2'), '2');
-    this.currentService.addEdge(e);
-    e = new Edge('e5-2', new Pair(5, '5'), new Pair(2, '2'), '2');
-    this.currentService.addEdge(e);
-    e = new Edge('e5-4', new Pair(5, '5'), new Pair(4, '4'), '4');
-    this.currentService.addEdge(e);
-    e = new Edge('e4-3', new Pair(4, '4'), new Pair(3, '3'), '1');
-    this.currentService.addEdge(e);
-    e = new Edge('e3-2', new Pair(3, '3'), new Pair(2, '2'), '13');
-    this.currentService.addEdge(e);
+  createExampleGraphs() {
+    let graph1 = new Graph();
+    for(let i = 0; i < 6; i++) {
+      graph1.addVertice(new Vertice(new Pair(i, i + '')));
+    }
+    graph1.addEdge(new Edge('e0-1', new Pair(0, '0'), new Pair(1, '1'), '1'));
+    graph1.addEdge(new Edge('e0-2', new Pair(0, '0'), new Pair(2, '2'), '1'));
+    graph1.addEdge(new Edge('e0-5', new Pair(0, '0'), new Pair(5, '5'), '1'));
+    graph1.addEdge(new Edge('e1-5', new Pair(1, '1'), new Pair(5, '5'), '2'));
+    graph1.addEdge(new Edge('e1-2', new Pair(1, '1'), new Pair(2, '2'), '2'));
+    graph1.addEdge(new Edge('e5-2', new Pair(5, '5'), new Pair(2, '2'), '2'));
+    graph1.addEdge(new Edge('e5-4', new Pair(5, '5'), new Pair(4, '4'), '4'));
+    graph1.addEdge(new Edge('e4-3', new Pair(4, '4'), new Pair(3, '3'), '1'));
+    graph1.addEdge(new Edge('e3-2', new Pair(3, '3'), new Pair(2, '2'), '13'));
+    this.exampleGraphs.push(graph1);
   }
 
   async incrementVertices() {
