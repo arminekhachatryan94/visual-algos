@@ -122,7 +122,7 @@ export class KruskalComponent implements OnInit {
         }
       });
     }
-    await this.sleep(this.sleepTime);
+    await this.cytoService.sleep(this.sleepTime);
     this.addEdgesToQueue();
     this.addEdgesToBeforeArray();
     this.isNext = true;
@@ -153,7 +153,7 @@ export class KruskalComponent implements OnInit {
       await this.cytoService.changeEdgeStyle(this.edge, 'blue');
       this.edge.style.color = 'blue';
       this.edge.style.lineStyle = 'solid';
-      await this.sleep(this.sleepTime);
+      await this.cytoService.sleep(this.sleepTime);
 
       if(this.stopped || this.paused) {
         this.solving = true;
@@ -186,7 +186,7 @@ export class KruskalComponent implements OnInit {
       this.after.push(this.edge);
       this.weightSum = this.cytoService.getSumOfEdgeWeights();
       this.edge = null;
-      await this.sleep(this.sleepTime);
+      await this.cytoService.sleep(this.sleepTime);
     }
     this.solving = false;
     this.stopped = true;
@@ -208,7 +208,7 @@ export class KruskalComponent implements OnInit {
     await this.cytoService.reset();
     this.steps = [];
     this.steps.push(this.cytoService.getKruskalArray());
-    await this.sleep(this.sleepTime);
+    await this.cytoService.sleep(this.sleepTime);
     this.before = [];
     this.after = [];
     this.edge = null;
@@ -231,7 +231,7 @@ export class KruskalComponent implements OnInit {
       await this.cytoService.changeEdgeStyle(this.edge, 'blue');
       await this.cytoService.removeKruskalEdge(this.edge);
       this.weightSum = this.cytoService.getSumOfEdgeWeights();
-      await this.sleep(this.sleepTime);
+      await this.cytoService.sleep(this.sleepTime);
     } else {
       this.messages.pop();
       this.before.push(this.edge);
@@ -239,7 +239,7 @@ export class KruskalComponent implements OnInit {
       this.edge.style.color = 'black';
       this.edge.style.lineStyle = 'dashed';
       this.weightSum = this.cytoService.getSumOfEdgeWeights();
-      await this.sleep(this.sleepTime);
+      await this.cytoService.sleep(this.sleepTime);
       this.edge = null;
     }
     this.isNext = true;
@@ -262,7 +262,7 @@ export class KruskalComponent implements OnInit {
         ' to V' + this.edge.target.key + ' with weight '
         + this.edge.weight + ' will create a cycle in the graph.'
       );
-      await this.sleep(this.sleepTime);
+      await this.cytoService.sleep(this.sleepTime);
     } else {
       let cyclic = await this.cytoService.isKruskalCyclic(this.edge);
       if(!cyclic) {
@@ -289,7 +289,7 @@ export class KruskalComponent implements OnInit {
       this.weightSum = this.cytoService.getSumOfEdgeWeights();
       this.after.push(this.edge);
       this.edge = null;
-      await this.sleep(this.sleepTime);
+      await this.cytoService.sleep(this.sleepTime);
     }
     this.isPrevious = true;
     if(!this.before.length && this.edge === null) {
