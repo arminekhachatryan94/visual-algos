@@ -20,10 +20,14 @@ export class SteinerComponent implements OnInit {
   subsets: Vertice[][];
 
   solving: boolean;
+  paused: boolean;
   selectingSubs: boolean;
 
   weightSum: number;
   optimalWeightSum: number;
+
+  smallestSubset: Vertice[];
+  biggestSubset: Vertice[];
 
   sleepTime: number;
 
@@ -31,12 +35,13 @@ export class SteinerComponent implements OnInit {
     this.currentService = new CytoService;
     this.optimalService = new CytoService;
     this.vertices = [];
-    this.numVertices = 3;
+    this.numVertices = 6;
     this.solving = true;
     this.selectingSubs = false;
     this.sleepTime = 4000;
     this.weightSum = null;
     this.optimalWeightSum = null;
+    this.paused = true;
   }
 
   async ngOnInit() {
@@ -45,6 +50,28 @@ export class SteinerComponent implements OnInit {
     await this.addVerticesToGraph(this.currentService);
     await this.currentService.addKeyListener();
     await this.optimalService.draw('optimal').then(f => {this.solving = false;});
+    this.exampleGraph();
+  }
+
+  exampleGraph() {
+    let e = new Edge('e0-1', new Pair(0, '0'), new Pair(1, '1'), '1');
+    this.currentService.addEdge(e);
+    e = new Edge('e0-2', new Pair(0, '0'), new Pair(2, '2'), '1');
+    this.currentService.addEdge(e);
+    e = new Edge('e0-5', new Pair(0, '0'), new Pair(5, '5'), '1');
+    this.currentService.addEdge(e);
+    e = new Edge('e1-5', new Pair(1, '1'), new Pair(5, '5'), '2');
+    this.currentService.addEdge(e);
+    e = new Edge('e1-2', new Pair(1, '1'), new Pair(2, '2'), '2');
+    this.currentService.addEdge(e);
+    e = new Edge('e5-2', new Pair(5, '5'), new Pair(2, '2'), '2');
+    this.currentService.addEdge(e);
+    e = new Edge('e5-4', new Pair(5, '5'), new Pair(4, '4'), '4');
+    this.currentService.addEdge(e);
+    e = new Edge('e4-3', new Pair(4, '4'), new Pair(3, '3'), '1');
+    this.currentService.addEdge(e);
+    e = new Edge('e3-2', new Pair(3, '3'), new Pair(2, '2'), '13');
+    this.currentService.addEdge(e);
   }
 
   async incrementVertices() {
@@ -92,41 +119,52 @@ export class SteinerComponent implements OnInit {
   }
 
   async algorithm() {
-    this.solving = true;
-    await this.addVerticesToGraph(this.optimalService);
-    await this.addEdgesToGraph(
-      this.optimalService,
-      this.currentService.getEdges()
-    );
-    await this.optimalService.refresh();
+    this.paused = !this.paused;
+    if(!this.solving) {
+      this.solving = true;
+      await this.addVerticesToGraph(this.optimalService);
+      await this.addEdgesToGraph(
+        this.optimalService,
+        this.currentService.getEdges()
+      );
+      await this.optimalService.refresh();
 
-    this.setSubsets();
-    let biggestSubset = this.subsets[this.subsets.length-1];
+      this.setSubsets();
+      this.smallestSubset = this.subsets[0];
+      this.biggestSubset = this.subsets[this.subsets.length-1];
 
-    await this.currentService.sleep(this.sleepTime);
+      await this.currentService.sleep(this.sleepTime);
+    }
 
     while(this.subsets.length > 0) {
+      if(this.paused) {
+        return;
+      }
       this.currentService.reset();
       let subset = this.subsets[0].map(function(v) {
         return v.id.key;
       });
       this.updateVerticeColorsInGraph(
         this.currentService,
-        biggestSubset,
+        this.biggestSubset,
         subset
       );
       let edges = await this.currentService.getEdgesBetweenSubset(subset);
       await this.createKruskalTree(edges);
       await this.currentService.refresh();
 
-      this.weightSum = this.currentService.getSumOfEdgeWeights();
+      console.log(this.weightSum + ' ' + this.optimalWeightSum);
+      this.weightSum = await this.currentService.getSumOfEdgeWeights();
+      console.log(this.currentService.checkVerticesConnected(this.smallestSubset.map(s => {return s.id})));
       if(this.optimalWeightSum === null ||
-        this.weightSum < this.optimalWeightSum
+        (this.weightSum < this.optimalWeightSum &&
+          await this.currentService.checkVerticesConnected(subset)
+        )
       ) {
         await this.optimalService.reset();
         await this.updateVerticeColorsInGraph(
           this.optimalService,
-          biggestSubset,
+          this.biggestSubset,
           subset
         );
         let kruskalEdges = this.currentService.getKruskalEdges();
@@ -138,12 +176,12 @@ export class SteinerComponent implements OnInit {
         await this.optimalService.refresh();
 
         this.optimalWeightSum = this.weightSum;
-        // console.log(this.optimalWeightSum);
       }
       this.subsets.shift();
 
       await this.currentService.sleep(this.sleepTime);
     }
+    this.paused = true;
   }
 
   async addEdgesToGraph(service: CytoService, edges: Edge[]) {
@@ -223,5 +261,9 @@ export class SteinerComponent implements OnInit {
     this.subsets.sort(function(a, b) {
       return a.length - b.length;
     });
+  }
+
+  togglePaused() {
+    this.paused = !this.paused;
   }
 }

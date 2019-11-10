@@ -412,8 +412,22 @@ export class CytoService {
     return sum;
   }
 
-  checkVerticesConnected() {
-    ;
+  async checkVerticesConnected(vertices: number[]) {
+    if(vertices.length > 0) {
+      let ret = true;
+      let index = await this.findIndexInKruskalArray(vertices[0]);
+      for(let i = 1; i < vertices.length; i++) {
+        let index2 = await this.findIndexInKruskalArray(vertices[i]);
+        console.log(index, index2);
+        if(index2 !== index) {
+          ret = false;
+          break;
+        }
+      }
+      return ret;
+    } else {
+      return false;
+    }
   }
 
   getEdgesBetweenSubset(subsetIds: number[]): Edge[] {
