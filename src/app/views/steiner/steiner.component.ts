@@ -6,7 +6,6 @@ import { Pair } from '../../models/pair.model';
 import Combinatorics from 'js-combinatorics';
 import PriorityQueue from 'ts-priority-queue';
 import { Graph } from '../../models/graph.model';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-steiner',
@@ -36,7 +35,7 @@ export class SteinerComponent implements OnInit {
 
   exampleGraphs: Graph[];
 
-  constructor(private http: HttpClient) {
+  constructor() {
     this.currentService = new CytoService;
     this.optimalService = new CytoService;
     this.vertices = [];

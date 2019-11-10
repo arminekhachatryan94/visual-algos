@@ -12,7 +12,6 @@ import { HomeComponent } from './views/home/home.component';
 import { D3Service } from './services/d3.service';
 import { CytoService } from './services/cyto.service';
 import { SteinerComponent } from './views/steiner/steiner.component';
-import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -28,8 +27,7 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
-    AppRoutingModule,
-    HttpClientModule
+    AppRoutingModule
   ],
   providers: [
     D3Service,
