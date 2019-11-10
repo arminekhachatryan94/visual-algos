@@ -27,19 +27,24 @@
   <!-- customize graph -->
   <div>
     <!-- update num vertices -->
-    <div class="inline-block">
-      <button class="btn btn-danger" (click)="decrementVertices()">-</button>
-      V = {{ numVertices }}
-      <button class="btn btn-success" (click)="incrementVertices()">+</button>
-      <div *ngIf="!solving && selectingSubs" class="inline-block">
-        Choose a set of vertices by clicking on them.
-        The subset of vertices will be colored red.</div>
+    <div class="row">
+      <div class="col-3 text-left">
+        <button class="btn btn-danger" (click)="decrementVertices()">-</button>
+        V = {{ numVertices }}
+        <button class="btn btn-success" (click)="incrementVertices()">+</button>
+      </div>
+      <div class="col-3 text-right">
+        <button *ngIf="selectingSubs && !solving" (click)="editGraph()" class="btn btn-warning">Edit Graph</button>
+        <button *ngIf="!selectingSubs" (click)="selectSubVertices()" class="btn btn-success">Select SubVertices</button>    
+      </div>
     </div>
-    <div>
-      <button *ngIf="selectingSubs && !solving" (click)="editGraph()" class="btn btn-warning">Edit Graph</button>
-      <button *ngIf="!selectingSubs" (click)="generateRandomEdges()" class="btn btn-primary">Generate Random Edges</button>
-      <button *ngIf="!selectingSubs" (click)="useExampleGraph()" class="btn btn-info">Example Graph</button>
-      <button *ngIf="!selectingSubs" (click)="selectSubVertices()" class="btn btn-success">Select SubVertices</button>
+    <div *ngIf="!selectingSubs">
+      <button (click)="generateRandomEdges()" class="btn btn-primary">Generate Random Edges</button>
+      <button (click)="useExampleGraph()" class="btn btn-info">Example Graph</button>
+    </div>
+    <div *ngIf="!solving && selectingSubs" class="inline-block">
+      Choose a set of vertices by clicking on them.
+      The subset of vertices will be colored red.
     </div>
     <div *ngIf="selectingSubs">
       <div>

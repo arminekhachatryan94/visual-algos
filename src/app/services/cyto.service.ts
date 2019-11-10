@@ -75,58 +75,60 @@ export class CytoService {
 
   verticeClickEvent() {
     this.cy.on('click', 'node', async event => {
-      if(!this.selectSub) {
-        if(this.clickedEdgeIndex !== null) {
-          this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'black', lineStyle: 'dashed'});
-          this.clickedEdgeIndex = null;
-        }
-        let index = event.target.id();
-        if(index === this.clickedVerticeIndex) {
-          this.cy.nodes('#' + index).first().data('color', 'black');
-          this.clickedVerticeIndex = null;
-        }
-        else if(this.clickedVerticeIndex === null) {
-          this.clickedVerticeIndex = index;
-          this.cy.nodes('#' + this.clickedVerticeIndex).first().data('color', 'green');
-        } else {
-          // check if edge already exists
-          let edgeIndex1 = this.cy.edges('#e' + this.clickedVerticeIndex + '-' + index);
-          let edgeIndex2 = this.cy.edges('#e' + index + '-' + this.clickedVerticeIndex);
-          if(edgeIndex1.length === 0 && edgeIndex2.length === 0) {
-            // add edge
-            let e = await new Edge(
-              'e' + this.clickedVerticeIndex + '-' + index,
-              new Pair(this.clickedVerticeIndex, this.clickedVerticeIndex + ''),
-              new Pair(index, index + ''),
-              ''
-            );
-            await this.addEdge(e);
+      if(this.selectSub !== null) {
+        if(!this.selectSub) {
+          if(this.clickedEdgeIndex !== null) {
+            this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'black', lineStyle: 'dashed'});
+            this.clickedEdgeIndex = null;
+          }
+          let index = event.target.id();
+          if(index === this.clickedVerticeIndex) {
+            this.cy.nodes('#' + index).first().data('color', 'black');
+            this.clickedVerticeIndex = null;
+          }
+          else if(this.clickedVerticeIndex === null) {
+            this.clickedVerticeIndex = index;
+            this.cy.nodes('#' + this.clickedVerticeIndex).first().data('color', 'green');
           } else {
-            // remove edge
-            if(edgeIndex1.length !== 0) {
-              this.removeEdge(edgeIndex1.first().data('id'));
+            // check if edge already exists
+            let edgeIndex1 = this.cy.edges('#e' + this.clickedVerticeIndex + '-' + index);
+            let edgeIndex2 = this.cy.edges('#e' + index + '-' + this.clickedVerticeIndex);
+            if(edgeIndex1.length === 0 && edgeIndex2.length === 0) {
+              // add edge
+              let e = await new Edge(
+                'e' + this.clickedVerticeIndex + '-' + index,
+                new Pair(this.clickedVerticeIndex, this.clickedVerticeIndex + ''),
+                new Pair(index, index + ''),
+                ''
+              );
+              await this.addEdge(e);
+            } else {
+              // remove edge
+              if(edgeIndex1.length !== 0) {
+                this.removeEdge(edgeIndex1.first().data('id'));
+              }
+              if(edgeIndex2.length !== 0) {
+                this.removeEdge(edgeIndex2.first().data('id'));
+              }
             }
-            if(edgeIndex2.length !== 0) {
-              this.removeEdge(edgeIndex2.first().data('id'));
-            }
-          }
-          this.cy.nodes('#' + this.clickedVerticeIndex).first().data('color', 'black');
-          this.clickedVerticeIndex = null;
-        }
-      } else {
-        let id = event.target.id();
-        let node = this.cy.nodes('#' + id).first();
-        if(node.data('color') === 'red') {
-          node.data('color', 'black');
-          for(let s = 0; s <= this.subVerticeIds.length; s++) {
-            if(this.subVerticeIds[s] === id) {
-              this.subVerticeIds.splice(s, 1);
-              break;
-            }
+            this.cy.nodes('#' + this.clickedVerticeIndex).first().data('color', 'black');
+            this.clickedVerticeIndex = null;
           }
         } else {
-          node.data('color', 'red');
-          this.subVerticeIds.push(id);
+          let id = event.target.id();
+          let node = this.cy.nodes('#' + id).first();
+          if(node.data('color') === 'red') {
+            node.data('color', 'black');
+            for(let s = 0; s <= this.subVerticeIds.length; s++) {
+              if(this.subVerticeIds[s] === id) {
+                this.subVerticeIds.splice(s, 1);
+                break;
+              }
+            }
+          } else {
+            node.data('color', 'red');
+            this.subVerticeIds.push(id);
+          }
         }
       }
     });
@@ -134,22 +136,24 @@ export class CytoService {
 
   edgeClickEvent() {
     this.cy.on('click', 'edge', async event => {
-      if(this.clickedVerticeIndex !== null) {
-        this.cy.nodes('#' + this.clickedVerticeIndex).data('color', 'black');
-        this.clickedVerticeIndex = null;
-      }
-      let index = event.target.id();
-      if(index === this.clickedEdgeIndex) {
-        this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'black', lineStyle: 'dashed'});
-        this.clickedEdgeIndex = null;
-      } else {
-        if(this.clickedEdgeIndex !== null) {
+      if(this.selectSub !== null) {
+        if(this.clickedVerticeIndex !== null) {
+          this.cy.nodes('#' + this.clickedVerticeIndex).data('color', 'black');
+          this.clickedVerticeIndex = null;
+        }
+        let index = event.target.id();
+        if(index === this.clickedEdgeIndex) {
           this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'black', lineStyle: 'dashed'});
           this.clickedEdgeIndex = null;
-        }
-        if(this.clickedEdgeIndex === null) {
-          this.clickedEdgeIndex = event.target.id();
-          this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'green', lineStyle: 'dashed'});
+        } else {
+          if(this.clickedEdgeIndex !== null) {
+            this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'black', lineStyle: 'dashed'});
+            this.clickedEdgeIndex = null;
+          }
+          if(this.clickedEdgeIndex === null) {
+            this.clickedEdgeIndex = event.target.id();
+            this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'green', lineStyle: 'dashed'});
+          }
         }
       }
     });

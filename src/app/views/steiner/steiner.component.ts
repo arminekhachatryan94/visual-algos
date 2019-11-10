@@ -38,6 +38,7 @@ export class SteinerComponent implements OnInit {
   constructor() {
     this.currentService = new CytoService;
     this.optimalService = new CytoService;
+    this.optimalService.updateSelectSub(null);
     this.vertices = [];
     this.numVertices = 3;
     this.solving = true;
@@ -154,6 +155,7 @@ export class SteinerComponent implements OnInit {
     await this.smallestSubset.forEach(v => {
       this.currentService.changeVerticeStyle(v, 'red');
     });
+    this.currentService.updateSelectSub(null);
     this.currentService.refresh();
 
     // reset optimal service
@@ -170,6 +172,7 @@ export class SteinerComponent implements OnInit {
   }
 
   async algorithm() {
+    this.currentService.updateSelectSub(null);
     this.paused = !this.paused;
     if(!this.solving) {
       this.solving = true;
@@ -217,7 +220,6 @@ export class SteinerComponent implements OnInit {
           subset
         );
         let kruskalEdges = this.currentService.getKruskalEdges();
-        console.log(kruskalEdges);
         await this.updateEdgeColorsInGraph(
           this.optimalService,
           kruskalEdges
