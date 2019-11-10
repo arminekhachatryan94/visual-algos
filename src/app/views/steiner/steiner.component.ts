@@ -140,6 +140,30 @@ export class SteinerComponent implements OnInit {
     this.currentService.updateSelectSub(true);
   }
 
+  async reset() {
+    this.solving = false;
+    this.paused = true;
+
+    // reset current service
+    this.currentService.reset();
+    await this.smallestSubset.forEach(v => {
+      this.currentService.changeVerticeStyle(v, 'red');
+    });
+    this.currentService.refresh();
+
+    // reset optimal service
+    await this.optimalService.reset();
+    await this.optimalService.removeAllVertices();
+    await this.optimalService.removeAllEdges();
+    await this.optimalService.refresh();
+
+    this.subsets = [];
+    this.smallestSubset = null;
+    this.biggestSubset = null;
+    this.weightSum = null
+    this.optimalWeightSum = null;
+  }
+
   async algorithm() {
     this.paused = !this.paused;
     if(!this.solving) {
@@ -175,9 +199,7 @@ export class SteinerComponent implements OnInit {
       await this.createKruskalTree(edges);
       await this.currentService.refresh();
 
-      console.log(this.weightSum + ' ' + this.optimalWeightSum);
       this.weightSum = await this.currentService.getSumOfEdgeWeights();
-      console.log(this.currentService.checkVerticesConnected(this.smallestSubset.map(s => {return s.id})));
       if(this.optimalWeightSum === null ||
         (this.weightSum < this.optimalWeightSum &&
           await this.currentService.checkVerticesConnected(subset)

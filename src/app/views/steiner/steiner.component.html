@@ -45,5 +45,8 @@
       <button [disabled]="!selectingSubs" (click)="algorithm()" class="btn" [ngClass]="{'btn-success': paused, 'btn-warning': !paused}">{{ paused ? 'Run Algorithm' : 'Pause Algorithm' }}</button>
       <button (click)="faster()" class="btn btn-danger inline-block">Faster (&#215;2)</button>
     </div>
+    <div>
+      <button *ngIf="solving" (click)="reset()">Reset</button>
+    </div>
   </div>
 </div>
