@@ -72,11 +72,30 @@ export class SteinerComponent implements OnInit {
     graph1.addEdge(5, 4, 4);
     graph1.addEdge(4, 3, 1);
     graph1.addEdge(3, 2, 1);
+    graph1.addSubVertices([1, 2, 3, 5]);
     this.exampleGraphs.push(graph1);
+
+    let graph2 = new Graph(7);
+    graph2.addEdge(0, 1, 2);
+    graph2.addEdge(0, 2, 6);
+    graph2.addEdge(0, 3, 3);
+    graph2.addEdge(0, 4, 2);
+    graph2.addEdge(1, 3, 4);
+    graph2.addEdge(1, 5, 13);
+    graph2.addEdge(2, 4, 5);
+    graph2.addEdge(2, 6, 5);
+    graph2.addEdge(3, 4, 2);
+    graph2.addEdge(3, 5, 2);
+    graph2.addEdge(3, 6, 3);
+    graph2.addEdge(5, 6, 4);
+    graph2.addSubVertices([0, 1, 5, 6]);
+    this.exampleGraphs.push(graph2);
   }
 
   async useExampleGraph() {
     await this.currentService.reset();
+    await this.currentService.removeAllVertices();
+    await this.currentService.removeAllEdges();
     let len = this.exampleGraphs.length;
     let g = this.exampleGraphs[Math.floor(Math.random()*len)];
     this.numVertices = g.vertices.length;
@@ -85,6 +104,11 @@ export class SteinerComponent implements OnInit {
     for(let i = 0; i < g.edges.length; i++) {
       await this.currentService.addEdge(g.edges[i]);
     }
+    for(let i = 0; i < g.subVertices.length; i++) {
+      await this.currentService.addOrRemoveSubVertice(g.subVertices[i]);
+    }
+    this.selectingSubs = true;
+    await this.currentService.updateSelectSub(true);
   }
 
   async incrementVertices() {
@@ -183,7 +207,7 @@ export class SteinerComponent implements OnInit {
       );
       await this.optimalService.refresh();
 
-      this.setSubsets();
+      await this.setSubsets();
       this.smallestSubset = this.subsets[0];
       this.biggestSubset = this.subsets[this.subsets.length-1];
 
@@ -236,7 +260,7 @@ export class SteinerComponent implements OnInit {
   }
 
   async addEdgesToGraph(service: CytoService, edges: Edge[]) {
-    service.removeAllEdges();
+    await service.removeAllEdges();
     edges.forEach(edge => {
       service.addEdge(edge);
     });
@@ -291,7 +315,7 @@ export class SteinerComponent implements OnInit {
     let subVertices = [];
     let additionalVertices = [];
     for(let v = 0; v < vertices.length; v++) {
-      if(subIds.includes(vertices[v].id.value)) {
+      if(subIds.includes(vertices[v].id.key)) {
         vertices[v].changeColor('red');
         subVertices.push(vertices[v]);
       } else {

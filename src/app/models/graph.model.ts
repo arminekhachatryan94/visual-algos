@@ -5,6 +5,7 @@ import { Pair } from './pair.model';
 export class Graph {
     vertices: Vertice[];
     edges: Edge[];
+    subVertices: number[];
 
     constructor(size_vertices: number) {
         this.vertices = [];
@@ -23,5 +24,9 @@ export class Graph {
                 weight + ''
             )
         );
+    }
+
+    addSubVertices(subs: number[]) {
+        this.subVertices = subs;
     }
 }

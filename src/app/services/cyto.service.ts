@@ -10,8 +10,7 @@ export class CytoService {
   cy: cytoscape;
   kruskalEdges: Edge[];
   kruskalCyc: Number[][];
-  visited: boolean[];
-  subVerticeIds: string[];
+  subVerticeIds: number[];
   tapped: boolean;
 
   clickedVerticeIndex: number;
@@ -21,7 +20,6 @@ export class CytoService {
 
   constructor() {
     this.kruskalEdges = [];
-    this.visited = [];
     this.kruskalCyc = [];
     this.tapped = false;
     this.clickedVerticeIndex = null;
@@ -116,22 +114,26 @@ export class CytoService {
           }
         } else {
           let id = event.target.id();
-          let node = this.cy.nodes('#' + id).first();
-          if(node.data('color') === 'red') {
-            node.data('color', 'black');
-            for(let s = 0; s <= this.subVerticeIds.length; s++) {
-              if(this.subVerticeIds[s] === id) {
-                this.subVerticeIds.splice(s, 1);
-                break;
-              }
-            }
-          } else {
-            node.data('color', 'red');
-            this.subVerticeIds.push(id);
-          }
+          this.addOrRemoveSubVertice(id);
         }
       }
     });
+  }
+
+  addOrRemoveSubVertice(id: number) {
+    let node = this.cy.nodes('#' + id).first();
+    if(node.data('color') === 'red') {
+      node.data('color', 'black');
+      for(let s = 0; s < this.subVerticeIds.length; s++) {
+        if(this.subVerticeIds[s] === id) {
+          this.subVerticeIds.splice(s, 1);
+          break;
+        }
+      }
+    } else {
+      node.data('color', 'red');
+      this.subVerticeIds.push(id);
+    }
   }
 
   edgeClickEvent() {
@@ -180,6 +182,10 @@ export class CytoService {
 
   isEdgeSelected() {
     return this.clickedEdgeIndex !== null;
+  }
+
+  addSubVertice() {
+    ;
   }
 
   addWeight(keyCode) {
@@ -294,7 +300,6 @@ export class CytoService {
         color: vertice.color
       }
     });
-    this.visited.push(false);
     this.kruskalCyc.push([vertice.id.key]);
   }
 

@@ -12,35 +12,23 @@
       </div>
     </div>
   </div>
-  <div>
-    <div *ngIf="weightSum !== null">Total weight of tree: {{ weightSum }}</div>
-    <p *ngIf="subsets.length">Subset of Vertices:</p>
-    <div *ngFor="let subset of subsets">
-      &#123;
-      <div *ngFor="let v of subset; let i = index" class="inline-block">
-        <div [style.background-color]="v.color" class="vertice inline-block">{{ v.id.key }}</div>
-        <div *ngIf="i !== subset.length-1" class="inline-block">,</div>
-      </div>
-      &#125;
-    </div>
-  </div>
   <!-- customize graph -->
   <div>
     <!-- update num vertices -->
     <div class="row">
-      <div class="col-3 text-left">
+      <div class="col-6 text-left">
         <button class="btn btn-danger" (click)="decrementVertices()">-</button>
         V = {{ numVertices }}
         <button class="btn btn-success" (click)="incrementVertices()">+</button>
       </div>
-      <div class="col-3 text-right">
+      <div class="col-6 text-right">
+        <button *ngIf="!solving" (click)="useExampleGraph()" class="btn btn-info">Example Graph</button>
         <button *ngIf="selectingSubs && !solving" (click)="editGraph()" class="btn btn-warning">Edit Graph</button>
-        <button *ngIf="!selectingSubs" (click)="selectSubVertices()" class="btn btn-success">Select SubVertices</button>    
+        <button *ngIf="!selectingSubs" (click)="selectSubVertices()" class="btn btn-success">Select SubVertices</button>
       </div>
     </div>
-    <div *ngIf="!selectingSubs">
-      <button (click)="generateRandomEdges()" class="btn btn-primary">Generate Random Edges</button>
-      <button (click)="useExampleGraph()" class="btn btn-info">Example Graph</button>
+    <div class="text-left">
+      <button *ngIf="!selectingSubs" (click)="generateRandomEdges()" class="btn btn-primary">Generate Random Edges</button>
     </div>
     <div *ngIf="!solving && selectingSubs" class="inline-block">
       Choose a set of vertices by clicking on them.
@@ -58,6 +46,19 @@
     </div>
     <div>
       <button *ngIf="solving" (click)="reset()">Reset</button>
+    </div>
+  </div>
+
+  <div>
+    <div *ngIf="weightSum !== null">Total weight of tree: {{ weightSum }}</div>
+    <p *ngIf="subsets.length">Subset of Vertices:</p>
+    <div *ngFor="let subset of subsets">
+      &#123;
+      <div *ngFor="let v of subset; let i = index" class="inline-block">
+        <div [style.background-color]="v.color" class="vertice inline-block">{{ v.id.key }}</div>
+        <div *ngIf="i !== subset.length-1" class="inline-block">,</div>
+      </div>
+      &#125;
     </div>
   </div>
 </div>
