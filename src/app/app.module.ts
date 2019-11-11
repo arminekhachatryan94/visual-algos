@@ -6,7 +6,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { InversionComponent } from './views/inversion/inversion.component';
-import { HuffmancodeComponent } from './views/huffmancode/huffmancode.component';
 import { KruskalComponent } from './views/kruskal/kruskal.component';
 import { HomeComponent } from './views/home/home.component';
 import { D3Service } from './services/d3.service';
@@ -18,7 +17,6 @@ import { SteinerComponent } from './views/steiner/steiner.component';
     AppComponent,
     NavbarComponent,
     InversionComponent,
-    HuffmancodeComponent,
     KruskalComponent,
     HomeComponent,
     SteinerComponent,
