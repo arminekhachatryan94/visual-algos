@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { InversionComponent } from './views/inversion/inversion.component';
+import { CountingInversionsComponent } from './views/counting-inversions/counting-inversions.component';
 import { KruskalComponent } from './views/kruskal/kruskal.component';
 import { HomeComponent } from './views/home/home.component';
 import { D3Service } from './services/d3.service';
@@ -16,7 +16,7 @@ import { SteinerComponent } from './views/steiner/steiner.component';
   declarations: [
     AppComponent,
     NavbarComponent,
-    InversionComponent,
+    CountingInversionsComponent,
     KruskalComponent,
     HomeComponent,
     SteinerComponent,

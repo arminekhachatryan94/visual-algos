@@ -8,12 +8,12 @@ import { D3Service } from 'src/app/services/d3.service';
 import { Element } from 'src/app/models/element.model';
 
 @Component({
-  selector: 'app-inversion',
-  templateUrl: './inversion.component.html',
-  styleUrls: ['./inversion.component.css'],
+  selector: 'app-counting-inversions',
+  templateUrl: './counting-inversions.component.html',
+  styleUrls: ['./counting-inversions.component.css'],
 })
 
-export class InversionComponent implements OnInit {
+export class CountingInversionsComponent implements OnInit {
   int_array = [];
   // height_array = [];
   userText;

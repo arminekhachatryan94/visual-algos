@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InversionComponent } from './inversion.component';
+import { CountingInversionsComponent } from './counting-inversions.component';
 
-describe('InversionComponent', () => {
-  let component: InversionComponent;
-  let fixture: ComponentFixture<InversionComponent>;
+describe('CountingInversionsComponent', () => {
+  let component: CountingInversionsComponent;
+  let fixture: ComponentFixture<CountingInversionsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InversionComponent ]
+      declarations: [ CountingInversionsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InversionComponent);
+    fixture = TestBed.createComponent(CountingInversionsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
