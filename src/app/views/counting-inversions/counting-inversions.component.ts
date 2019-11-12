@@ -15,11 +15,9 @@ import { Element } from 'src/app/models/element.model';
 
 export class CountingInversionsComponent implements OnInit {
   int_array = [];
-  // height_array = [];
   userText;
   input_error: String;
   ordering: String;
-  // solutionType: String;
   num_nodes: number;
   paused: boolean;
   solving: boolean;
@@ -47,7 +45,6 @@ export class CountingInversionsComponent implements OnInit {
     this.mergedArray = [];
     this.beforeArray = [];
     this.afterArray = [];
-    // this.solutionType = 'breadth';
     this.inversions = '';
     this.speed = 1;
     this.paused = true;
@@ -107,27 +104,6 @@ export class CountingInversionsComponent implements OnInit {
     this.d3Service.draw();
     return true;
   }
-
-  // async sortArray() {
-  //   this.solving = true;
-  //   this.paused = !this.paused;
-  //   this.inversions = '';
-  //   if(!this.input_error.length && this.int_array.length) {
-  //     // if(this.solutionType === 'breadth') {
-  //       // breadth
-  //       this.queue1 = [];
-  //       this.maxDepth = 0;
-  //       this.queue1.push(this.treeData);
-  //       this.num_nodes++;
-  //       await this.breadthSplit();
-  //       await this.breadthMerge();
-  //     // } else {
-  //       // depth
-  //       // await this.depthMergeSort(this.int_array, 0, 1, this.treeData);
-  //     // }
-  //   this.paused = false;
-  //   }
-  // }
 
   async changeColorOfElementsInNode(node: Node, color: string) {
     for(let n = 0; n < node.value.length; n++) {
