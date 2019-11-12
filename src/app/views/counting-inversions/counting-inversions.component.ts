@@ -47,7 +47,7 @@ export class CountingInversionsComponent implements OnInit {
     this.afterArray = [];
     this.inversions = '';
     this.speed = 1;
-    this.paused = true;
+    this.paused = false;
     this.solving = false;
   }
 
@@ -111,13 +111,23 @@ export class CountingInversionsComponent implements OnInit {
     }
   }
 
+  async sleepWhilePaused() {
+    if(this.paused) {
+      while(this.paused) {
+        await this.sleep(this.mergeSleepTime);
+      }
+    } else {
+      await this.sleep(this.mergeSleepTime);
+    }
+  }
+
   async merge(leftNode, rightNode) {
-    this.mergedArray = [];
+    let result = [];
+    this.afterArray = [];
     this.displayBefore = false;
     this.displayAfter = false;
-    let result = [];
 
-    await this.sleep(this.mergeSleepTime);
+    await this.sleepWhilePaused();
 
     await this.changeColorOfElementsInNode(leftNode, 'red');
     await this.changeColorOfElementsInNode(rightNode, 'blue');
@@ -126,7 +136,7 @@ export class CountingInversionsComponent implements OnInit {
     await this.d3Service.setRoot(this.treeData);
     await this.d3Service.draw();
 
-    await this.sleep(this.mergeSleepTime);
+    await this.sleepWhilePaused();
 
     // get left part of array
     for(let n = 0; n < this.queue1.length; n++) {
@@ -148,7 +158,7 @@ export class CountingInversionsComponent implements OnInit {
       }
     }
 
-    await this.sleep(this.mergeSleepTime);
+    await this.sleepWhilePaused();
 
     // inversions
     if(leftNode.inversions !== '' || rightNode.inversions !== '') {
@@ -156,22 +166,22 @@ export class CountingInversionsComponent implements OnInit {
       let tempRight = rightNode.inversions !== '' ? rightNode.inversions : '0';
       this.inversions = tempLeft;
       leftNode.setInversions('');
-      await this.sleep(this.mergeSleepTime);
+      await this.sleepWhilePaused();
       this.inversions += ' + ';
-      await this.sleep(this.mergeSleepTime);
+      await this.sleepWhilePaused();
       this.inversions += tempRight;
       rightNode.setInversions('');
-      await this.sleep(this.mergeSleepTime);
+      await this.sleepWhilePaused();
       this.inversions = parseInt(tempLeft) + parseInt(tempRight) + '';
-      await this.sleep(this.mergeSleepTime);
+      await this.sleepWhilePaused();
     } else {
       this.inversions = '0';
-      await this.sleep(this.mergeSleepTime);
+      await this.sleepWhilePaused();
     }
   
     let leftI = 0, rightI = 0;
     while (leftI < leftNode.value.length && rightI < rightNode.value.length) {
-      await this.sleep(this.mergeSleepTime);
+      await this.sleepWhilePaused();
 
       let node;
       let tempInversions = null, totalInversions = null;
@@ -206,17 +216,17 @@ export class CountingInversionsComponent implements OnInit {
       await this.mergedArray.push(node);
       
       if(tempInversions !== null || totalInversions !== null) {
-        await this.sleep(this.mergeSleepTime);
+        await this.sleepWhilePaused();
         this.inversions += ' + ';
-        await this.sleep(this.mergeSleepTime);
+        await this.sleepWhilePaused();
         this.inversions += tempInversions;
-        await this.sleep(this.mergeSleepTime);
+        await this.sleepWhilePaused();
         this.inversions = totalInversions + '';
-        await this.sleep(this.mergeSleepTime);
+        await this.sleepWhilePaused();
       }
     }
     while(leftI < leftNode.value.length) {
-      await this.sleep(this.mergeSleepTime);
+      await this.sleepWhilePaused();
 
       let node = await leftNode.value[leftI];
       await node.changeVisibility(false);
@@ -231,7 +241,7 @@ export class CountingInversionsComponent implements OnInit {
       leftI++;
     }
     while(rightI < rightNode.value.length) {
-      await this.sleep(this.mergeSleepTime);
+      await this.sleepWhilePaused();
 
       let node = await rightNode.value[rightI];
       await node.changeVisibility(false);
@@ -246,7 +256,7 @@ export class CountingInversionsComponent implements OnInit {
       rightI++;
     }
 
-    await this.sleep(this.mergeSleepTime);
+    await this.sleepWhilePaused();
 
     this.changeVisibilityOfArray(this.beforeArray, false);
     this.changeVisibilityOfArray(this.afterArray, false);
@@ -258,7 +268,7 @@ export class CountingInversionsComponent implements OnInit {
     this.displayBefore = true;
     this.displayAfter = true;
 
-    await this.sleep(this.mergeSleepTime);
+    await this.sleepWhilePaused();
 
     this.changeVisibilityOfArray(this.beforeArray, true);
     this.changeVisibilityOfArray(this.afterArray, true);
@@ -302,28 +312,24 @@ export class CountingInversionsComponent implements OnInit {
     }
   }
 
-  async algorithm() {
-    if(!this.solving) {
-      this.solving = true;
-      this.queue1 = [];
-      this.maxDepth = 0;
-      this.queue1.push(this.treeData);
-      this.num_nodes++;
-    }
+  pauseContinue() {
     this.paused = !this.paused;
-    if(!this.paused) {
-      console.log('running');
-      await this.breadthSplit();
-      await this.breadthMerge();
-      this.paused = true;
-    }
+  }
+
+  async algorithm() {
+    this.solving = true;
+    this.queue1 = [];
+    this.maxDepth = 0;
+    this.queue1.push(this.treeData);
+    this.num_nodes++;
+    await this.breadthSplit();
+    await this.breadthMerge();
+    this.paused = true;
   }
 
   async breadthSplit() {
     while(this.queue1.length < this.int_array.length) {
-      if(this.paused) {
-        break;
-      }
+      await this.sleepWhilePaused();
 
       let node = this.queue1.shift();
 
@@ -368,7 +374,7 @@ export class CountingInversionsComponent implements OnInit {
         this.d3Service.setRoot(this.treeData);
         this.d3Service.draw();
     
-        await this.sleep(this.mergeSleepTime);
+        await this.sleepWhilePaused();
       } else {
         this.queue1.push(node);
       }
@@ -377,9 +383,8 @@ export class CountingInversionsComponent implements OnInit {
 
   async breadthMerge() {
     for(let depth = this.maxDepth-1; depth >= 0; depth--) {
-      if(this.paused) {
-        break;
-      }
+      await this.sleepWhilePaused();
+
       await this.breadthTraverse(this.treeData, depth);
       this.d3Service.removeAll();
       this.d3Service.setRoot(this.treeData);
@@ -388,6 +393,9 @@ export class CountingInversionsComponent implements OnInit {
   }
 
   async breadthTraverse(tree, depth) {
+    if(this.paused) {
+      return;
+    }
     if(tree.left && tree.right) {
       if(tree.depth === depth) {
         let nodeLeft = tree.left;
