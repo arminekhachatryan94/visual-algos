@@ -23,7 +23,7 @@ export class Node {
         this.parent = parent;
         this.left = left;
         this.right = right;
-        this.inversions = '';
+        this.inversions = '0';
     }
 
     public setInversions(inversions: string) {
