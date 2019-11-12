@@ -171,13 +171,13 @@ export class CountingInversionsComponent implements OnInit {
       this.message = 'Left array inversions ' + leftInversions;
       await this.sleepWhilePaused();
       this.inversions += ' + ';
-      this.message += ' plus ';
+      this.message += ' + ';
       await this.sleepWhilePaused();
       this.inversions += rightInversions;
       this.message += ' right array inversions ' + rightInversions;
       await this.sleepWhilePaused();
       this.inversions = parseInt(leftInversions) + parseInt(rightInversions) + '';
-      this.message += 'equals ' + this.inversions;
+      this.message += ' = ' + this.inversions;
     } else {
       this.message = 'Inversions is 0.';
       this.inversions = '0';
