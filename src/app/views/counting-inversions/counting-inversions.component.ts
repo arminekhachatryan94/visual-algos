@@ -225,6 +225,7 @@ export class CountingInversionsComponent implements OnInit {
       
       if(tempInversions !== null || totalInversions !== null) {
         await this.sleepWhilePaused();
+        this.message = 'Add size of left array to number of inversions.';
         this.inversions += ' + ';
         await this.sleepWhilePaused();
         this.inversions += tempInversions;
@@ -275,7 +276,6 @@ export class CountingInversionsComponent implements OnInit {
     await this.d3Service.setRoot(this.treeData);
     await this.d3Service.draw();
 
-    this.message = '';
     this.displayBefore = true;
     this.displayAfter = true;
 
@@ -334,6 +334,7 @@ export class CountingInversionsComponent implements OnInit {
     this.queue1.push(this.treeData);
     this.num_nodes++;
     await this.breadthSplit();
+    this.message = '';
     await this.breadthMerge();
     this.paused = true;
   }
@@ -352,7 +353,7 @@ export class CountingInversionsComponent implements OnInit {
 
         this.message = 'Split [' + node.value.map(function(el) {
           return el.value;
-        }).join(', ') + '] into two arrays: [' + subLeft.map(function(el) {
+        }).join(', ') + '] into two arrays: \n\n[' + subLeft.map(function(el) {
           return el.value;
         }).join(', ') + '] and [' + subRight.map(function(el) {
           return el.value;
@@ -426,7 +427,6 @@ export class CountingInversionsComponent implements OnInit {
           el.changeVisibility(true);
         });
 
-        console.log(merged);
         this.message = 'Merge [' + nodeLeft.value.map(function(el) {
           return el.value;
         }).join(', ') + '] and [' + nodeRight.value.map(function(el) {
