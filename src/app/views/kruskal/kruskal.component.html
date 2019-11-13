@@ -3,35 +3,35 @@
   <div class="row col">
     <div id="cy" class="col-8"></div>
     <div class="col-4 text-center">
-      <div>
+      <div *ngIf="!solving">
         <div>Number of vertices</div>
         <button (click)="decrementVertices()" [disabled]="numVertices <= 3" class="btn btn-danger margin-lr-5"><b>-</b></button>
         <div class="display-inline margin-lr-5">v = {{ numVertices }}</div>
         <button (click)="incrementVertices()" [disabled]="numVertices >= 20" class="btn btn-success margin-lr-5"><b>+</b></button>
       </div>
-      <div>
+      <div *ngIf="!solving">
         <button (click)="generateRandomEdges()" class="btn btn-primary">Generate Random Edges</button>
       </div>
-      <div>
+      <div *ngIf="!solving">
         <input [(ngModel)]="treeType.type" type="radio" value="min" name="treeType"> Min
         <input [(ngModel)]="treeType.type" type="radio" value="max" name="treeType"> Max
       </div>
       <div>
-          <button (click)="slower()" class="btn btn-primary inline-block">Slower (&#xF7;2)</button>
-          <button (click)="getKruskal()" [disabled]="solving" class="btn btn-success margin-lr-5 inline-block">Solve</button>
-          <button (click)="pauseContinueKruskal()" *ngIf="!stop && solving" class="btn btn-success margin-lr-5 inline-block">{{this.paused ? 'Run Algorithm' : 'Pause Algorithm'}}</button>
-          <button (click)="faster()" class="btn btn-danger inline-block">Faster (&#215;2)</button>
-          <div>Speed: &#215;{{ speed }}</div>
+          <button (click)="slower()" [disabled]="!solving" class="btn btn-primary inline-block">Slower (&#xF7;2)</button>
+          <button *ngIf="!solving" (click)="getKruskal()" class="btn btn-success margin-lr-5 inline-block">Run Algorithm</button>
+          <button *ngIf="solving" (click)="pauseContinueKruskal()" class="btn btn-success margin-lr-5 inline-block">{{this.paused ? 'Run Algorithm' : 'Pause Algorithm'}}</button>
+          <button (click)="faster()" [disabled]="!solving" class="btn btn-danger inline-block">Faster (&#215;2)</button>
+          <div *ngIf="solving">Speed: &#215;{{ speed }}</div>
         </div>
       <div>
         <button (click)="previous()" *ngIf="isPrevious" [disabled]="previousSolving" class="btn btn-warning margin-lr-5">Previous</button>
         <button (click)="next()" *ngIf="isNext" [disabled]="nextSolving" class="btn btn-success margin-lr-5">Next</button>
       </div>
-      <div>
+      <div *ngIf="solving && paused">
         <button (click)="reset()" class="btn btn-danger margin-lr-5">Reset</button>
       </div>
       <div *ngIf="messages.length" class="message">{{ messages[messages.length-1] }} : {{ messages.length }}</div>
-      <div>Total weight: {{ weightSum }}</div>
+      <div *ngIf="weightSum !== null">Total weight: {{ weightSum }}</div>
     </div>
   </div>
   <div class="row" *ngIf="solving">

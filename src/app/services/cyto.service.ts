@@ -9,7 +9,7 @@ import { Pair } from '../models/pair.model';
 export class CytoService {
   cy: cytoscape;
   kruskalEdges: Edge[];
-  kruskalCyc: Number[][];
+  kruskalCyc: number[][];
   subVerticeIds: number[];
   tapped: boolean;
 
@@ -182,10 +182,6 @@ export class CytoService {
 
   isEdgeSelected() {
     return this.clickedEdgeIndex !== null;
-  }
-
-  addSubVertice() {
-    ;
   }
 
   addWeight(keyCode) {

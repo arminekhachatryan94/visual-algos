@@ -23,22 +23,21 @@ export class KruskalComponent implements OnInit {
   };
   edge: Edge;
 
-  stopped = true;
-  paused = true;
-  solving = false;
+  paused: boolean;
+  solving: boolean;
 
-  isNext = false;
-  isPrevious = false;
-  nextSolving = false;
-  previousSolving = false;
+  isNext: boolean;
+  isPrevious: boolean;
+  nextSolving: boolean;
+  previousSolving: boolean;
 
-  steps = [];
-
-  sleepTime = 1000;
+  sleepTime: number;
   speed: number;
 
   messages: string[];
   weightSum: number;
+
+  steps = [];
 
   constructor(cytoService: CytoService) {
     this.cytoService = cytoService;
@@ -53,7 +52,18 @@ export class KruskalComponent implements OnInit {
     this.numVertices = 3;
     this.speed = 1;
     this.messages = [];
-    this.weightSum = 0;
+    this.weightSum = null;
+    this.paused = true;
+    this.solving = false;
+
+    this.isNext = false;
+    this.isPrevious = false;
+    this.nextSolving = false;
+    this.previousSolving = false;
+  
+    this.steps = [];
+  
+    this.sleepTime = 1000;
   }
 
   ngOnInit() {
@@ -104,8 +114,8 @@ export class KruskalComponent implements OnInit {
   }
 
   async getKruskal() {
+    this.weightSum = 0;
     this.edges = this.cytoService.getEdges();
-    this.stopped = false;
     this.paused = false;
     this.solving = true;
     this.messages.push('Sort edges in ' + (this.treeType.type === 'asc' ? 'ascending' : 'descending') + ' order.');
@@ -132,10 +142,9 @@ export class KruskalComponent implements OnInit {
 
   async kruskalAlgorithm() {
     this.solving = true;
-    this.stopped = false;
     this.paused = false;
     while(this.before.length) {
-      if(this.stopped || this.paused) {
+      if(this.paused) {
         this.solving = true;
         this.paused = true;
         return;
@@ -155,7 +164,7 @@ export class KruskalComponent implements OnInit {
       this.edge.style.lineStyle = 'solid';
       await this.cytoService.sleep(this.sleepTime);
 
-      if(this.stopped || this.paused) {
+      if(this.paused) {
         this.solving = true;
         this.paused = true;
         return;
@@ -188,8 +197,6 @@ export class KruskalComponent implements OnInit {
       this.edge = null;
       await this.cytoService.sleep(this.sleepTime);
     }
-    this.solving = false;
-    this.stopped = true;
     this.paused = true;
     this.isNext = false;
   }
@@ -202,7 +209,6 @@ export class KruskalComponent implements OnInit {
   }
 
   async reset() {
-    this.stopped = true;
     this.paused = true;
     this.solving = false;
     await this.cytoService.reset();
