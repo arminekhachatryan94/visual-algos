@@ -8,10 +8,10 @@
         <div *ngIf="input_error.length" class="error">{{ input_error }}</div>
       </div>
       <div class="text-center">
-        <button class="btn btn-primary inline-block" (click)="slower()">Slower (&#xF7;2)</button>
+        <button class="btn btn-primary inline-block" (click)="slower()" [disabled]="!solving">Slower (&#xF7;2)</button>
         <button *ngIf="!solving" class="btn btn-success inline-block" (click)="algorithm()" [disabled]="!int_array.length || input_error.length">Run Algorithm</button>
         <button *ngIf="solving" class="btn btn-success inline-block" (click)="pauseContinue()">{{ paused ? 'Run Algorithm' : 'Pause Algorithm' }}</button>
-        <button class="btn btn-danger inline-block" (click)="faster()">Faster (&#215;2)</button>
+        <button class="btn btn-danger inline-block" (click)="faster()" [disabled]="!solving">Faster (&#215;2)</button>
         <div>Speed: &#215;{{ speed }}</div>
       </div>
     </div>
