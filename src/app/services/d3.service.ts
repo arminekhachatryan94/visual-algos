@@ -73,4 +73,8 @@ export class D3Service {
             .selectAll('div')
             .remove();
     }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 }

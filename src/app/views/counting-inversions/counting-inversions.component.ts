@@ -117,10 +117,10 @@ export class CountingInversionsComponent implements OnInit {
   async sleepWhilePaused() {
     if(this.paused) {
       while(this.paused) {
-        await this.sleep(this.mergeSleepTime);
+        await this.d3Service.sleep(this.mergeSleepTime);
       }
     } else {
-      await this.sleep(this.mergeSleepTime);
+      await this.d3Service.sleep(this.mergeSleepTime);
     }
   }
 
@@ -438,7 +438,7 @@ export class CountingInversionsComponent implements OnInit {
         tree.value = merged;
         tree.setInversions(this.inversions);
         this.inversions = '';
-        await this.sleep(this.mergeSleepTime);
+        await this.d3Service.sleep(this.mergeSleepTime);
         tree.left = null;
         tree.right = null;
 
@@ -471,10 +471,6 @@ export class CountingInversionsComponent implements OnInit {
   faster() {
     this.mergeSleepTime /= 2;
     this.speed *= 2;
-  }
-
-  sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   clearInputError() {
