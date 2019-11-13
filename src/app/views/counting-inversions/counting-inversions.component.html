@@ -26,17 +26,8 @@
       <div>
         <button (click)="generateRandomInput()">Generate Random Input</button>
       </div>
-      <div>{{ message }}</div>
-    <!-- <div>
-      <label>
-        <input type="radio" value="breadth" name="solutionType" [checked]="solutionType === 'breadth'" [(ngModel)]="solutionType">
-        Breadth
-      </label>
-      <label>
-        <input type="radio" value="depth" name="solutionType" [checked]="solutionType === 'depth'" [(ngModel)]="solutionType">
-        Depth
-      </label>
-    </div> -->
+      <div *ngIf="message.length" class="message">{{ message }}</div>
+    </div>
   </div>
   <div>
     <div class="myTree"></div>

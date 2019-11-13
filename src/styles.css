@@ -14,3 +14,12 @@
 .inline-block {
   display: inline-block;
 }
+
+.message {
+  border: 0.5px solid rgb(255, 156, 34);
+  background-color: rgb(255, 187, 104);
+  border-radius: 15px;
+  padding: 10px;
+  color: rgb(77, 42, 0);
+  text-align: center;
+}

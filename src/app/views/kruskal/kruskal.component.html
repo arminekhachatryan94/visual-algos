@@ -30,7 +30,7 @@
       <div>
         <button (click)="reset()" class="btn btn-danger margin-lr-5">Reset</button>
       </div>
-      <div *ngIf="messages.length">{{ messages[messages.length-1] }} : {{ messages.length }}</div>
+      <div *ngIf="messages.length" class="message">{{ messages[messages.length-1] }} : {{ messages.length }}</div>
       <div>Total weight: {{ weightSum }}</div>
     </div>
   </div>
