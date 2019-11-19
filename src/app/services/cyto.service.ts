@@ -114,7 +114,7 @@ export class CytoService {
           }
         } else {
           let id = event.target.id();
-          this.addOrRemoveSubVertice(id);
+          this.addOrRemoveSubVertice(Number(id));
         }
       }
     });
@@ -259,7 +259,7 @@ export class CytoService {
   }
 
   getSubVerticeIds() {
-    return this.subVerticeIds;
+    return [...this.subVerticeIds];
   }
 
   removeAllEdges() {
@@ -292,7 +292,7 @@ export class CytoService {
     this.cy.add({
       group: 'nodes',
       data: {
-        id: vertice.id.value,
+        id: vertice.id.key,
         color: vertice.color
       }
     });
@@ -309,8 +309,8 @@ export class CytoService {
       group: 'edges',
       data: {
         id: edge.id,
-        source: edge.source.value,
-        target: edge.target.value,
+        source: edge.source.key,
+        target: edge.target.key,
         weight: edge.weight,
         style: edge.style
       }
@@ -385,12 +385,12 @@ export class CytoService {
     let vertices = this.getVertices();
     this.kruskalCyc = [];
     for(let i = 0; i < vertices.length; i++) {
-      this.cy.nodes('#' + vertices[i].id.value).first().data('color', 'black');
+      this.cy.nodes('#' + vertices[i].id.key).first().data('color', 'black');
       this.kruskalCyc.push([vertices[i].id.key]);
     }
     let edges = this.getEdges();
     for(let i = 0; i < edges.length; i++) {
-      this.cy.edges('#e' + edges[i].source.value + '-' + edges[i].target.value).first().data('style', {color: 'black', lineStyle: 'dashed'});
+      this.cy.edges('#e' + edges[i].source.key + '-' + edges[i].target.key).first().data('style', {color: 'black', lineStyle: 'dashed'});
     }
     while(this.kruskalEdges.length > 0) {
       this.kruskalEdges.pop();
@@ -410,9 +410,14 @@ export class CytoService {
   }
 
   getSumOfEdgeWeights() {
-    let sum = 0;
+    let sum = null;
     for(let k = 0; k < this.kruskalEdges.length; k++) {
-      sum += Number(this.kruskalEdges[k].weight);
+      let weight = Number(this.kruskalEdges[k].weight);
+      if(sum === null) {
+        sum =  weight;
+      } else {
+        sum += weight;
+      }
     }
     return sum;
   }
@@ -466,6 +471,6 @@ export class CytoService {
       style = {color: 'gray', lineStyle: 'dashed'};
     }
 
-    this.cy.edges('#e' + edge.source.value + '-' + edge.target.value).first().data('style', style);
+    this.cy.edges('#e' + edge.source.key + '-' + edge.target.key).first().data('style', style);
   }
 }

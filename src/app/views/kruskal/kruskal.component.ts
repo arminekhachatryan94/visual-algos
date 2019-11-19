@@ -114,7 +114,7 @@ export class KruskalComponent implements OnInit {
   }
 
   async getKruskal() {
-    this.weightSum = 0;
+    this.weightSum = null;
     this.edges = this.cytoService.getEdges();
     this.paused = false;
     this.solving = true;

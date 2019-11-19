@@ -324,6 +324,9 @@ export class SteinerComponent implements OnInit {
       }
     }
 
+    console.log(subIds);
+    // console.log(additionalVertices);
+
     this.subsets = [];
     let combos = Combinatorics.power(additionalVertices);
     combos.forEach((combo) => {
