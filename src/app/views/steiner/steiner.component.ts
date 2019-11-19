@@ -232,10 +232,9 @@ export class SteinerComponent implements OnInit {
       await this.currentService.refresh();
 
       this.weightSum = await this.currentService.getSumOfEdgeWeights();
-      if(this.optimalWeightSum === null ||
-        (this.weightSum < this.optimalWeightSum &&
-          await this.currentService.checkVerticesConnected(subset)
-        )
+      if((this.optimalWeightSum === null ||
+        this.weightSum < this.optimalWeightSum) &&
+        await this.currentService.checkVerticesConnected(subset)
       ) {
         await this.optimalService.reset();
         await this.updateVerticeColorsInGraph(

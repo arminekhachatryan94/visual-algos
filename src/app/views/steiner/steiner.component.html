@@ -16,7 +16,7 @@
   <div>
     <!-- update num vertices -->
     <div class="row">
-      <div class="col-6 text-left">
+      <div *ngIf="!solving" class="col-6 text-left">
         <button class="btn btn-danger" (click)="decrementVertices()">-</button>
         V = {{ numVertices }}
         <button class="btn btn-success" (click)="incrementVertices()">+</button>
