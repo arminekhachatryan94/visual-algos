@@ -4,7 +4,7 @@
     <div class="col-6 text-right">
       <div class="text-center">
         <div>Enter integers separated by spaces to sort:</div>
-        <input type="text" [(ngModel)]="userText" (keydown)="clearInputError()" (ngModelChange)="convertStringToArray()" [disabled]="!solving">
+        <input type="text" [(ngModel)]="userText" (keydown)="clearInputError()" (ngModelChange)="convertStringToArray()" [disabled]="solving">
         <div *ngIf="input_error.length" class="error">{{ input_error }}</div>
       </div>
       <div class="text-center">
