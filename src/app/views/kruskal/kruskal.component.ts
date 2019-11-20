@@ -220,6 +220,8 @@ export class KruskalComponent implements OnInit {
     this.edge = null;
     this.isNext = false;
     this.isPrevious = false;
+    this.weightSum = null;
+    this.messages = [];
   }
 
   async previous() {
