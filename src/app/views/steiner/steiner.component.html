@@ -44,8 +44,8 @@
         Speed: &#215;{{ speed }}
       </div>
     </div>
-    <div>
-      <button *ngIf="solving" (click)="reset()">Reset</button>
+    <div *ngIf="solving && paused">
+      <button (click)="reset()">Reset</button>
     </div>
   </div>
 

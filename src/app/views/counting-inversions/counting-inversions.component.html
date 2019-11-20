@@ -23,6 +23,9 @@
           <option value="DESC">DESC</option>
         </select>
       </div>
+      <div *ngIf="solving && paused">
+        <button (click)="reset()">reset</button>
+      </div>
       <div *ngIf="!solving">
         <button (click)="generateRandomInput()">Generate Random Input</button>
       </div>
@@ -58,9 +61,6 @@
           {{ el.value }}
         </a>
       </div>
-    </div>
-    <div>
-      <button (click)="reset()">reset</button>
     </div>
   </div>
 </div>
