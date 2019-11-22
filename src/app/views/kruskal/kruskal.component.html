@@ -163,13 +163,15 @@
                 <h5>Rules</h5>
                 <ul>
                   <li>NUMBERS ONLY</li>
-                  <li>First line of input is the number of vertices.</li>
+                  <li>No repeating edges</li>
                   <li>Vertices are numbered from 0</li>
+                  <li>First line of input is the number of vertices</li>
                   <li>Every following line is in the following format: s t w</li>
                     <ul>
-                      <li>s is the edge source (vertice number)</li>
-                      <li>t is the edge target (vertice number)</li>
-                      <li>w is weight of the edge</li>
+                      <li>s &mdash; edge source (vertice number)</li>
+                      <li>t &mdash; edge target (vertice number)</li>
+                      <li>w &mdash; weight of edge in the range [-500, 500]</li>
+                      <li>Negatives and decimals are accepted for weight</li>
                     </ul>
                 </ul>
               </div>
@@ -177,11 +179,15 @@
             <div class="col-6">
               <div>
                 Paste the graph instance text here
-                <textarea rows=6 cols=40></textarea>
+                <textarea rows=6 cols=40 placeholder="3&#10;0 1 5&#10;1 2 -1&#10;0 2 50"></textarea>
               </div>
               <div>Or upload a text file</div>
+              <button class="btn btn-primary" (click)="uploadAlgo()">Choose a File</button>
             </div>
           </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="uploadAlgo()"></button>
         </div>
       </div>
     </div>

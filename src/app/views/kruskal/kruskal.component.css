@@ -70,7 +70,9 @@
 
 .rules {
   border: gray solid 1px;
-  background-color: lightgray;
-  padding: 5px;
+  background-color: rgb(226, 226, 226);
+  padding: 8px;
   border-radius: 10px;
+  font-size: 12px;
+  font-family: Arial, Helvetica, sans-serif;
 }
