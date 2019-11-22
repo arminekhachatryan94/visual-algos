@@ -6,6 +6,7 @@ import {
 import { Node } from '../../models/Node.model';
 import { D3Service } from 'src/app/services/d3.service';
 import { Element } from 'src/app/models/element.model';
+import { Arr } from 'src/app/models/arr.model';
 
 @Component({
   selector: 'app-counting-inversions',
@@ -38,6 +39,7 @@ export class CountingInversionsComponent implements OnInit {
   speed: number;
 
   message: string;
+  exampleArrays: Arr[];
 
   constructor(private d3Service: D3Service) {
     this.userText = "";
@@ -52,16 +54,35 @@ export class CountingInversionsComponent implements OnInit {
     this.paused = false;
     this.solving = false;
     this.message = '';
+    this.exampleArrays = [];
   }
 
   ngOnInit() {
     this.ordering = 'ASC';
     this.int_array = [];
     this.num_nodes = 0;
+    this.createExampleArrays();
   }
 
   ngAfterContentInit(){
     this.d3Service.initialize();
+  }
+
+  createExampleArrays() {
+    let a1 = new Arr();
+    a1.setArray([1, 2, 3, 4, 5]);
+    a1.setName('Sorted array (N = 5)');
+    this.exampleArrays.push(a1);
+
+    let a2 = new Arr();
+    a2.setArray([6, 5, 4, 3, 2, 1]);
+    a2.setName('Maximum number of inversions (N = 6)');
+    this.exampleArrays.push(a2);
+  }
+
+  useExampleArray(a: Arr[]) {
+    this.userText = a.arr.join(' ');
+    this.convertStringToArray();
   }
 
   convertStringToArray() {
