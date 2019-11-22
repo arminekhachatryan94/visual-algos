@@ -4,6 +4,7 @@ import { Edge } from 'src/app/models/edge.model';
 import { Pair } from 'src/app/models/pair.model';
 import { Vertice } from 'src/app/models/vertice.model';
 import PriorityQueue from 'ts-priority-queue';
+import { Graph } from 'src/app/models/graph.model';
 
 @Component({
   selector: 'app-kruskal',
@@ -39,6 +40,8 @@ export class KruskalComponent implements OnInit {
 
   steps = [];
 
+  exampleGraphs: Graph[];
+
   constructor(cytoService: CytoService) {
     this.cytoService = cytoService;
     this.vertices = [];
@@ -64,6 +67,7 @@ export class KruskalComponent implements OnInit {
     this.steps = [];
   
     this.sleepTime = 1000;
+    this.exampleGraphs = [];
   }
 
   ngOnInit() {
@@ -71,6 +75,7 @@ export class KruskalComponent implements OnInit {
     this.createVertices();
     this.cytoService.addKeyListener();
     this.steps.push(this.cytoService.getKruskalArray());
+    this.createExampleGraphs();
   }
 
   async incrementVertices() {
@@ -87,6 +92,46 @@ export class KruskalComponent implements OnInit {
     this.vertices = this.cytoService.getVertices();
     this.cytoService.refresh();
   }
+
+  createExampleGraphs() {
+    let graph1 = new Graph(5);
+    graph1.addEdge(0, 1, 3);
+    graph1.addEdge(0, 2, 3);
+    graph1.addEdge(0, 3, 7);
+    graph1.addEdge(0, 4, 2);
+    graph1.setName('Tree graph (V = 5)');
+    this.exampleGraphs.push(graph1);
+
+    let graph2 = new Graph(5);
+    graph2.addEdge(0, 1, 2);
+    graph2.addEdge(0, 2, 4);
+    graph2.addEdge(0, 3, 6);
+    graph2.addEdge(0, 4, 3);
+    graph2.addEdge(1, 2, 1)
+    graph2.addEdge(1, 3, 9);
+    graph2.addEdge(1, 4, 1);
+    graph2.addEdge(2, 3, 7);
+    graph2.addEdge(2, 4, 1);
+    graph2.addEdge(3, 4, 1);
+    graph2.setName('Complete graph (V = 4');
+    this.exampleGraphs.push(graph2);
+  }
+
+  async useExampleGraph(g: Graph) {
+    await this.cytoService.reset();
+    await this.cytoService.removeAllVertices();
+    await this.cytoService.removeAllEdges();
+
+    this.numVertices = g.vertices.length;
+    await this.createVertices();
+    for(let i = 0; i < g.edges.length; i++) {
+      await this.cytoService.addEdge(g.edges[i]);
+    }
+    for(let i = 0; i < g.subVertices.length; i++) {
+      await this.cytoService.addOrRemoveSubVertice(g.subVertices[i]);
+    }
+  }
+
 
   async createVertices() {
     this.vertices = [];

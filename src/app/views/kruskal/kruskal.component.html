@@ -1,6 +1,14 @@
 <div>
   <div class="row">
     <div class="col-8 h4 text-left">Kruskal's Minimum/Maximum Spanning Tree</div>
+    <div class="col-4 dropdown text-right">
+      <button class="btn btn-info dropdown-toggle" type="button" id="kruskalExamples" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Examples
+      </button>
+      <div class="dropdown-menu" aria-labelledby="kruskalExamples">
+        <a *ngFor="let g of exampleGraphs" class="dropdown-item" (click)="useExampleGraph(g)">{{ g.name }}</a>
+      </div>
+    </div>
   </div>
   <hr>
   <div class="row col">
