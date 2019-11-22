@@ -1,16 +1,41 @@
 <div>
-  <div class="row">
-    <div class="col-8 h4 text-left">Kruskal's Minimum/Maximum Spanning Tree</div>
-    <div class="col-4 dropdown text-right">
-      <button class="btn btn-info dropdown-toggle" type="button" id="kruskalExamples" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Examples
-      </button>
-      <div class="dropdown-menu" aria-labelledby="kruskalExamples">
-        <a *ngFor="let g of exampleGraphs" class="dropdown-item" (click)="useExampleGraph(g)">{{ g.name }}</a>
+  <div class="h4 text-left">Kruskal's Minimum/Maximum Spanning Tree</div>
+
+  <div *ngIf="!solving" class="row menu">
+    <div class="col-6 text-left">
+      <div class="dropdown display-inline">
+        <button class="btn btn-info dropdown-toggle" type="button" id="file" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          File
+        </button>
+        <div class="dropdown-menu" aria-labelledby="file">
+          <a class="dropdown-item" data-toggle="modal" data-target="#saveModal">Save As Text File</a>
+          <a class="dropdown-item" data-toggle="modal" data-target="#uploadModal">Upload Text File</a>
+        </div>
+      </div>
+
+      <div class="dropdown display-inline">
+        <button class="btn btn-info dropdown-toggle" type="button" id="kruskalExamples" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Examples
+        </button>
+        <div class="dropdown-menu" aria-labelledby="kruskalExamples">
+          <a *ngFor="let g of exampleGraphs" class="dropdown-item" (click)="useExampleGraph(g)">{{ g.name }}</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 text-right">
+      <div class="display-inline">
+        <button class="btn btn-info" type="button" data-toggle="modal" data-target="#problemModal">Problem</button>
+      </div>
+
+      <div class="display-inline">
+        <button class="btn btn-info" type="button" data-toggle="modal" data-target="#hintModal">&#63;</button>
       </div>
     </div>
   </div>
+
   <hr>
+
   <div class="row col">
     <div id="cy" class="col-8"></div>
     <div class="col-4 text-center">
@@ -62,6 +87,102 @@
       <div *ngIf="edge !== null" class="current-edge">
         <div><b>Weight:</b> {{ edge.weight }}</div>
         <div><b>V<sub>{{ edge.source.key }}</sub></b> to <b>V<sub>{{ edge.target.key }}</sub></b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modals -->
+  <!-- hint -->
+  <div class="modal fade" id="hintModal" tabindex="-1" role="dialog" aria-labelledby="hintModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="hintModalLabel">Hints</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <ul>
+            <li>Click on two vertices to add/remove an edge</li>
+            <li>Click on the edge and type in a number (accepts unsigned double)</li>
+            <li>Click and move vertices around if the edge weight is hidden</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- problem modal -->
+  <div class="modal fade" id="problemModal" tabindex="-1" role="dialog" aria-labelledby="problemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="problemModalLabel">Problem</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- problem modal -->
+  <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="saveModalLabel">Save As Text File</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- upload modal -->
+  <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="uploadModalLabel">Upload Text File</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-6 container">
+              <div class="rules">
+                <h5>Rules</h5>
+                <ul>
+                  <li>NUMBERS ONLY</li>
+                  <li>First line of input is the number of vertices.</li>
+                  <li>Vertices are numbered from 0</li>
+                  <li>Every following line is in the following format: s t w</li>
+                    <ul>
+                      <li>s is the edge source (vertice number)</li>
+                      <li>t is the edge target (vertice number)</li>
+                      <li>w is weight of the edge</li>
+                    </ul>
+                </ul>
+              </div>
+            </div>
+            <div class="col-6">
+              <div>
+                Paste the graph instance text here
+                <textarea rows=6 cols=40></textarea>
+              </div>
+              <div>Or upload a text file</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

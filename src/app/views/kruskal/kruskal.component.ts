@@ -78,6 +78,14 @@ export class KruskalComponent implements OnInit {
     this.createExampleGraphs();
   }
 
+  saveAlgo() {
+    console.log('save');
+  }
+
+  uploadAlgo() {
+    console.log('upload');
+  }
+
   async incrementVertices() {
     let v = new Vertice(new Pair(this.numVertices, this.numVertices+''));
     await this.cytoService.addVertice(v);
@@ -126,9 +134,6 @@ export class KruskalComponent implements OnInit {
     await this.createVertices();
     for(let i = 0; i < g.edges.length; i++) {
       await this.cytoService.addEdge(g.edges[i]);
-    }
-    for(let i = 0; i < g.subVertices.length; i++) {
-      await this.cytoService.addOrRemoveSubVertice(g.subVertices[i]);
     }
   }
 

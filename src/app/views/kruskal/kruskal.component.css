@@ -59,3 +59,18 @@
   margin-left: 5px;
   margin-right: 5px;
 }
+
+.menu .btn {
+  margin-right: 5px;
+}
+
+.modal-dialog {
+  max-width: 800px;
+}
+
+.rules {
+  border: gray solid 1px;
+  background-color: lightgray;
+  padding: 5px;
+  border-radius: 10px;
+}
