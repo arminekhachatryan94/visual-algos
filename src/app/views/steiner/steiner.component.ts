@@ -73,6 +73,7 @@ export class SteinerComponent implements OnInit {
     graph1.addEdge(4, 3, 1);
     graph1.addEdge(3, 2, 1);
     graph1.addSubVertices([1, 2, 3, 5]);
+    graph1.setName('V = 6');
     this.exampleGraphs.push(graph1);
 
     let graph2 = new Graph(7);
@@ -88,16 +89,16 @@ export class SteinerComponent implements OnInit {
     graph2.addEdge(3, 5, 2);
     graph2.addEdge(3, 6, 3);
     graph2.addEdge(5, 6, 4);
+    graph2.setName('V = 7');
     graph2.addSubVertices([0, 1, 5, 6]);
     this.exampleGraphs.push(graph2);
   }
 
-  async useExampleGraph() {
+  async useExampleGraph(g: Graph) {
     await this.currentService.reset();
     await this.currentService.removeAllVertices();
     await this.currentService.removeAllEdges();
-    let len = this.exampleGraphs.length;
-    let g = this.exampleGraphs[Math.floor(Math.random()*len)];
+
     this.numVertices = g.vertices.length;
     await this.createVertices();
     await this.addVerticesToGraph(this.currentService);
@@ -323,14 +324,11 @@ export class SteinerComponent implements OnInit {
       }
     }
 
-    console.log(subIds);
-    // console.log(additionalVertices);
-
     this.subsets = [];
     let combos = Combinatorics.power(additionalVertices);
     combos.forEach((combo) => {
       let c = combo.concat(subVertices);
-      if(c.length !== 0) {
+      if(c.length >= 2) {
         this.subsets.push(c)
       }
     });

@@ -1,4 +1,16 @@
 <div>
+  <div class="row">
+    <div class="col-6 h4 text-left">Steiner Tree</div>
+    <div class="col-6 dropdown text-right">
+      <button class="btn btn-info dropdown-toggle" type="button" id="steinerExamples" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Examples
+      </button>
+      <div class="dropdown-menu" aria-labelledby="steinerExamples">
+        <a *ngFor="let g of exampleGraphs" class="dropdown-item" (click)="useExampleGraph(g)">{{ g.name }}</a>
+      </div>
+    </div>
+  </div>
+  <hr>
   <!-- graphs -->
   <div>
     <div class="row text-center">
@@ -22,7 +34,6 @@
         <button class="btn btn-success" (click)="incrementVertices()">+</button>
       </div>
       <div class="col-6 text-right">
-        <button *ngIf="!solving" (click)="useExampleGraph()" class="btn btn-info">Example Graph</button>
         <button *ngIf="selectingSubs && !solving" (click)="editGraph()" class="btn btn-warning">Edit Graph</button>
         <button *ngIf="!selectingSubs" (click)="selectSubVertices()" class="btn btn-success">Select SubVertices</button>
       </div>
@@ -52,13 +63,11 @@
   <div>
     <div *ngIf="weightSum !== null">Total weight of tree: {{ weightSum }}</div>
     <p *ngIf="subsets.length">Subset of Vertices:</p>
-    <div *ngFor="let subset of subsets">
-      &#123;
+    <div *ngFor="let subset of subsets" class="inline-block bg-secondary subset">
       <div *ngFor="let v of subset; let i = index" class="inline-block">
         <div [style.background-color]="v.color" class="vertice inline-block">{{ v.id.key }}</div>
         <div *ngIf="i !== subset.length-1" class="inline-block">,</div>
       </div>
-      &#125;
     </div>
   </div>
 </div>

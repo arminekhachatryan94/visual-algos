@@ -6,6 +6,7 @@ export class Graph {
     vertices: Vertice[];
     edges: Edge[];
     subVertices: number[];
+    name: string;
 
     constructor(size_vertices: number) {
         this.vertices = [];
@@ -28,5 +29,9 @@ export class Graph {
 
     addSubVertices(subs: number[]) {
         this.subVertices = subs;
+    }
+
+    setName(name: string) {
+        this.name = name;
     }
 }
