@@ -165,21 +165,31 @@
                   <li>NUMBERS ONLY</li>
                   <li>No repeating edges</li>
                   <li>Vertices are numbered from 0</li>
-                  <li>First line of input is the number of vertices</li>
-                  <li>Every following line is in the following format: s t w</li>
+                  <li>All values are separated by exactly one space</li>
+                  <li>No trailing spaces allowed</li>
+                  <li>First line of input contains two values:</li>
+                  <ul>
+                    <li>The number of vertices</li>
+                    <li>Min/Max represented by 0 or 1</li>
                     <ul>
-                      <li>s &mdash; edge source (vertice number)</li>
-                      <li>t &mdash; edge target (vertice number)</li>
-                      <li>w &mdash; weight of edge in the range [-500, 500]</li>
-                      <li>Negatives and decimals are accepted for weight</li>
+                      <li>0 &mdash; min</li>
+                      <li>1 &mdash; max</li>
                     </ul>
+                  </ul>
+                  <li>Every following line is in the following format: s t w</li>
+                  <ul>
+                    <li>s &mdash; edge source (vertice number)</li>
+                    <li>t &mdash; edge target (vertice number)</li>
+                    <li>w &mdash; weight of edge in the range [-500, 500]</li>
+                    <li>Negatives and decimals are accepted for weight</li>
+                  </ul>
                 </ul>
               </div>
             </div>
             <div class="col-6">
               <div>
                 Paste the graph instance text here
-                <textarea rows=6 cols=40 placeholder="3&#10;0 1 5&#10;1 2 -1&#10;0 2 50"></textarea>
+                <textarea [(ngModel)]="uploadText" rows=6 cols=40 placeholder="3 1&#10;0 1 5&#10;1 2 -1&#10;0 2 50"></textarea>
               </div>
               <div>Or upload a text file</div>
               <button class="btn btn-primary" (click)="uploadAlgo()">Choose a File</button>
@@ -187,7 +197,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button (click)="uploadAlgo()"></button>
+          <button (click)="uploadAlgo()">Load</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>

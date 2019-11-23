@@ -7,6 +7,7 @@ export class Graph {
     edges: Edge[];
     subVertices: number[];
     name: string;
+    minMax: number;
 
     constructor(size_vertices: number) {
         this.vertices = [];
@@ -14,6 +15,7 @@ export class Graph {
             this.vertices.push(new Vertice(new Pair(i, i + '')));
         }
         this.edges = [];
+        this.minMax = 0;
     }
 
     addEdge(source: number, target: number, weight: number) {
@@ -33,5 +35,9 @@ export class Graph {
 
     setName(name: string) {
         this.name = name;
+    }
+
+    setMinMax(minMax: number) {
+        this.minMax = minMax;
     }
 }

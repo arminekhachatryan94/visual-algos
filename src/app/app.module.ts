@@ -11,6 +11,7 @@ import { HomeComponent } from './views/home/home.component';
 import { D3Service } from './services/d3.service';
 import { CytoService } from './services/cyto.service';
 import { SteinerComponent } from './views/steiner/steiner.component';
+import { FileService } from './services/file.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { SteinerComponent } from './views/steiner/steiner.component';
   ],
   providers: [
     D3Service,
-    CytoService
+    CytoService,
+    FileService
   ],
   bootstrap: [AppComponent]
 })

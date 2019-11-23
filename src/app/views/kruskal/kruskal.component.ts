@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CytoService } from 'src/app/services/cyto.service';
+import { FileService } from 'src/app/services/file.service';
 import { Edge } from 'src/app/models/edge.model';
 import { Pair } from 'src/app/models/pair.model';
 import { Vertice } from 'src/app/models/vertice.model';
@@ -13,6 +14,7 @@ import { Graph } from 'src/app/models/graph.model';
 })
 export class KruskalComponent implements OnInit {
   cytoService: CytoService;
+  fileService: FileService;
   numVertices: number;
   vertices: Vertice[];
   edges: Edge[];
@@ -42,8 +44,15 @@ export class KruskalComponent implements OnInit {
 
   exampleGraphs: Graph[];
 
-  constructor(cytoService: CytoService) {
+  uploadText: string;
+  uploadFile: string;
+
+  constructor(
+    cytoService: CytoService,
+    fileService: FileService
+  ) {
     this.cytoService = cytoService;
+    this.fileService = fileService;
     this.vertices = [];
     this.edges = [];
     this.treeType = {
@@ -68,6 +77,9 @@ export class KruskalComponent implements OnInit {
   
     this.sleepTime = 1000;
     this.exampleGraphs = [];
+
+    this.uploadText = '';
+    this.uploadFile = '';
   }
 
   ngOnInit() {
@@ -83,7 +95,11 @@ export class KruskalComponent implements OnInit {
   }
 
   uploadAlgo() {
-    console.log('upload');
+    if(this.uploadText.length !== 0) {
+      let g = this.fileService.convertStringToGraph(this.uploadText);
+      this.useExampleGraph(g);
+      // this.uploadModal.hide();
+    }
   }
 
   async incrementVertices() {
@@ -121,7 +137,7 @@ export class KruskalComponent implements OnInit {
     graph2.addEdge(2, 3, 7);
     graph2.addEdge(2, 4, 1);
     graph2.addEdge(3, 4, 1);
-    graph2.setName('Complete graph (V = 4');
+    graph2.setName('Complete graph (V = 4)');
     this.exampleGraphs.push(graph2);
   }
 
@@ -135,8 +151,8 @@ export class KruskalComponent implements OnInit {
     for(let i = 0; i < g.edges.length; i++) {
       await this.cytoService.addEdge(g.edges[i]);
     }
+    this.treeType.type = (g.minMax === 0 ? 'min' : 'max');
   }
-
 
   async createVertices() {
     this.vertices = [];
