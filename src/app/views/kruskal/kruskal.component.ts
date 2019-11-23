@@ -47,6 +47,8 @@ export class KruskalComponent implements OnInit {
   uploadText: string;
   uploadFile: string;
 
+  uploadError: boolean;
+
   constructor(
     cytoService: CytoService,
     fileService: FileService
@@ -94,11 +96,25 @@ export class KruskalComponent implements OnInit {
     console.log('save');
   }
 
+  readFile(event) {
+    this.uploadError = false;
+    let file = event.target.files[0];
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      this.uploadText = fileReader.result.toString();
+    }
+    fileReader.readAsText(file);
+  }
+
   uploadAlgo() {
     if(this.uploadText.length !== 0) {
-      let g = this.fileService.convertStringToGraph(this.uploadText);
-      this.useExampleGraph(g);
-      // this.uploadModal.hide();
+      let g = this.fileService.convertStringToKruskalGraph(this.uploadText);
+      if(g === null) {
+        this.uploadError = true;
+      } else {
+        this.useExampleGraph(g);
+        // this.uploadModal.hide();
+      }
     }
   }
 

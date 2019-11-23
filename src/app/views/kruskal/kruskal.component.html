@@ -191,8 +191,13 @@
                 Paste the graph instance text here
                 <textarea [(ngModel)]="uploadText" rows=6 cols=40 placeholder="3 1&#10;0 1 5&#10;1 2 -1&#10;0 2 50"></textarea>
               </div>
+
               <div>Or upload a text file</div>
-              <button class="btn btn-primary" (click)="uploadAlgo()">Choose a File</button>
+              <label class="btn btn-primary">
+                Upload File
+                <input type='file' (change)="readFile($event)" hidden>
+              </label>
+              <div *ngIf="uploadError" class="text-danger">Error in input</div>
             </div>
           </div>
         </div>
