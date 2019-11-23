@@ -8,7 +8,7 @@
           File
         </button>
         <div class="dropdown-menu" aria-labelledby="file">
-          <a class="dropdown-item" data-toggle="modal" data-target="#saveModal">Save As Text File</a>
+          <a class="dropdown-item" data-toggle="modal" data-target="#saveModal" (click)="getStringFromGraph()">Save As Text File</a>
           <a class="dropdown-item" data-toggle="modal" data-target="#uploadModal">Upload Text File</a>
         </div>
       </div>
@@ -92,7 +92,7 @@
   </div>
 
   <!-- modals -->
-  <!-- hint -->
+  <!-- hints -->
   <div class="modal fade" id="hintModal" tabindex="-1" role="dialog" aria-labelledby="hintModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -112,7 +112,8 @@
       </div>
     </div>
   </div>
-  <!-- problem modal -->
+
+  <!-- problem -->
   <div class="modal fade" id="problemModal" tabindex="-1" role="dialog" aria-labelledby="problemModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -129,8 +130,8 @@
     </div>
   </div>
 
-  <!-- problem modal -->
-  <div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
+  <!-- save instance -->
+  <div class="modal fade" id="saveModal" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -140,13 +141,19 @@
           </button>
         </div>
         <div class="modal-body">
-          ...
+          <div>
+            <button class="btn btn-primary" (click)="saveAlgo()">Download Text File</button>
+          </div>
+          <div>
+            <div>Or copy the text below</div>
+            <textarea rows=6 cols=40 readonly>{{ graphString }}</textarea>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- upload modal -->
+  <!-- upload instance -->
   <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">

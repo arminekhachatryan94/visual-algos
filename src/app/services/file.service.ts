@@ -1,6 +1,7 @@
 
 import { Injectable } from '@angular/core';
 import { Graph } from '../models/graph.model';
+import { Edge } from '../models/edge.model';
 
 @Injectable()
 export class FileService {
@@ -43,7 +44,18 @@ export class FileService {
     return g;
   }
 
-  readKruskalGraphFromFile(path: string) {
-    console.log(path);   
+  convertKruskalGraphToString(numVertices: number, minMax: string, edges: Edge[]) {
+    let text = numVertices + ' ';
+    if(minMax === 'min') {
+      text += '0';
+    } else {
+      text += '1';
+    }
+    for(let i = 0; i < edges.length; i++) {
+      let e = edges[i];
+      text += '\n' + e.source.key + ' ' + e.target.key + ' ' + e.weight;
+    }
+
+    return text;
   }
 }

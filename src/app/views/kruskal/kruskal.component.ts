@@ -4,8 +4,8 @@ import { FileService } from 'src/app/services/file.service';
 import { Edge } from 'src/app/models/edge.model';
 import { Pair } from 'src/app/models/pair.model';
 import { Vertice } from 'src/app/models/vertice.model';
-import PriorityQueue from 'ts-priority-queue';
 import { Graph } from 'src/app/models/graph.model';
+import PriorityQueue from 'ts-priority-queue';
 
 @Component({
   selector: 'app-kruskal',
@@ -46,8 +46,9 @@ export class KruskalComponent implements OnInit {
 
   uploadText: string;
   uploadFile: string;
-
   uploadError: boolean;
+
+  graphString: string;
 
   constructor(
     cytoService: CytoService,
@@ -82,6 +83,7 @@ export class KruskalComponent implements OnInit {
 
     this.uploadText = '';
     this.uploadFile = '';
+    this.graphString = '';
   }
 
   ngOnInit() {
@@ -92,10 +94,6 @@ export class KruskalComponent implements OnInit {
     this.createExampleGraphs();
   }
 
-  saveAlgo() {
-    console.log('save');
-  }
-
   readFile(event) {
     this.uploadError = false;
     let file = event.target.files[0];
@@ -104,6 +102,15 @@ export class KruskalComponent implements OnInit {
       this.uploadText = fileReader.result.toString();
     }
     fileReader.readAsText(file);
+  }
+
+  saveAlgo() {
+    console.log('save');
+  }
+
+  getStringFromGraph() {
+    let edges = this.cytoService.getEdges();
+    this.graphString = this.fileService.convertKruskalGraphToString(this.numVertices, this.treeType.type, edges);
   }
 
   uploadAlgo() {
