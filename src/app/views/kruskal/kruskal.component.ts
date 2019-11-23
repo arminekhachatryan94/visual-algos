@@ -105,7 +105,8 @@ export class KruskalComponent implements OnInit {
   }
 
   saveAlgo() {
-    console.log('save');
+    this.getStringFromGraph();
+    this.fileService.downloadKruskalFile(this.graphString);
   }
 
   getStringFromGraph() {

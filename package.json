@@ -23,6 +23,7 @@
     "core-js": "^2.5.4",
     "cytoscape": "^3.8.2",
     "d3": "^5.9.7",
+    "file-saver": "^2.0.2",
     "jquery": "^3.4.1",
     "js-combinatorics": "^0.5.4",
     "linked-list-typescript": "^1.0.15",

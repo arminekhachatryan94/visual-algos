@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Graph } from '../models/graph.model';
 import { Edge } from '../models/edge.model';
+import { saveAs } from 'file-saver';
 
 @Injectable()
 export class FileService {
@@ -57,5 +58,10 @@ export class FileService {
     }
 
     return text;
+  }
+
+  downloadKruskalFile(graphString: string) {
+    let blob = new Blob([graphString], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "KruskalGraph.txt");
   }
 }
