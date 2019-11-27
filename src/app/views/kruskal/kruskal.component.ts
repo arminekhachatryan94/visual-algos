@@ -208,6 +208,7 @@ export class KruskalComponent implements OnInit {
     this.edges = this.cytoService.getEdges();
     this.paused = false;
     this.solving = true;
+    this.cytoService.updateSelectSub(null);
     this.messages.push('Sort edges in ' + (this.treeType.type === 'asc' ? 'ascending' : 'descending') + ' order.');
     if(this.treeType.type === 'min') {
       this.queue = await new PriorityQueue({
@@ -301,6 +302,7 @@ export class KruskalComponent implements OnInit {
   async reset() {
     this.paused = true;
     this.solving = false;
+    this.cytoService.updateSelectSub(false);
     await this.cytoService.reset();
     this.steps = [];
     this.steps.push(this.cytoService.getKruskalArray());

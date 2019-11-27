@@ -43,7 +43,7 @@
         <div>Number of vertices</div>
         <button (click)="decrementVertices()" [disabled]="numVertices <= 3" class="btn btn-danger margin-lr-5"><b>-</b></button>
         <div class="display-inline margin-lr-5">v = {{ numVertices }}</div>
-        <button (click)="incrementVertices()" [disabled]="numVertices >= 20" class="btn btn-success margin-lr-5"><b>+</b></button>
+        <button (click)="incrementVertices()" [disabled]="numVertices >= 8" class="btn btn-success margin-lr-5"><b>+</b></button>
       </div>
       <div *ngIf="!solving">
         <button (click)="generateRandomEdges()" class="btn btn-primary">Generate Random Edges</button>

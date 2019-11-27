@@ -110,9 +110,20 @@ export class CountingInversionsComponent implements OnInit {
     this.d3Service.removeAll();
 
     let arr = this.userText.replace(/\s+/g,' ').trim().split(" ");
+    if(arr.length > 20) {
+      this.input_error = 'Please do not input more than 20 elements.'
+      return false;
+    }
     arr.forEach(value => {
       if(!this.isNumeric(value)) {
-        this.input_error = "Error in input.";
+        this.input_error = "One or more of the values are not a number.";
+        this.treeData = new Node(0, 0, [], null, null, null);
+        this.d3Service.setRoot(this.treeData);
+        this.d3Service.draw();
+        return false;
+      }
+      if(Number(value) < -999 || Number(value) > 999) {
+        this.input_error = "One or more of the values are out of the range [-999, 999]."
         this.treeData = new Node(0, 0, [], null, null, null);
         this.d3Service.setRoot(this.treeData);
         this.d3Service.draw();
@@ -546,7 +557,7 @@ export class CountingInversionsComponent implements OnInit {
     let input = [];
     let length = Math.floor(Math.random()*8+2);
     for(let l = 0; l < length; l++) {
-      let num = Math.floor(Math.random()*200-100);
+      let num = Math.floor(Math.random()*1998-999);
       input.push(num);
     }
     this.userText = input.join(" ");
