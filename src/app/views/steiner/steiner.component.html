@@ -29,9 +29,9 @@
     <!-- update num vertices -->
     <div class="row">
       <div *ngIf="!solving" class="col-6 text-left">
-        <button class="btn btn-danger" (click)="decrementVertices()">-</button>
+        <button class="btn btn-danger" [disabled]="numVertices <= 3" (click)="decrementVertices()">-</button>
         V = {{ numVertices }}
-        <button class="btn btn-success" (click)="incrementVertices()">+</button>
+        <button class="btn btn-success" [disabled]="numVertices >= 8" (click)="incrementVertices()">+</button>
       </div>
       <div class="col-6 text-right">
         <button *ngIf="selectingSubs && !solving" (click)="editGraph()" class="btn btn-warning">Edit Graph</button>
