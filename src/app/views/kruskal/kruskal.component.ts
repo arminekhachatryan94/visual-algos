@@ -13,8 +13,6 @@ import PriorityQueue from 'ts-priority-queue';
   styleUrls: ['./kruskal.component.css']
 })
 export class KruskalComponent implements OnInit {
-  cytoService: CytoService;
-  fileService: FileService;
   numVertices: number;
   vertices: Vertice[];
   edges: Edge[];
@@ -51,11 +49,9 @@ export class KruskalComponent implements OnInit {
   graphString: string;
 
   constructor(
-    cytoService: CytoService,
-    fileService: FileService
+    private cytoService: CytoService,
+    private fileService: FileService
   ) {
-    this.cytoService = cytoService;
-    this.fileService = fileService;
     this.vertices = [];
     this.edges = [];
     this.treeType = {
@@ -83,6 +79,7 @@ export class KruskalComponent implements OnInit {
 
     this.uploadText = '';
     this.uploadFile = '';
+    this.uploadError = false;
     this.graphString = '';
   }
 
