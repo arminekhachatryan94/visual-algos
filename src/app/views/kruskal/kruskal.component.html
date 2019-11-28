@@ -29,6 +29,10 @@
       </div>
 
       <div class="display-inline">
+        <button class="btn btn-info" type="button" data-toggle="modal" data-target="#pseudoModal">Pseudo Code</button>
+      </div>
+
+      <div class="display-inline">
         <button class="btn btn-info" type="button" data-toggle="modal" data-target="#hintModal">&#63;</button>
       </div>
     </div>
@@ -102,11 +106,12 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body modal-style">
           <ul>
             <li>Click on two vertices to add/remove an edge</li>
-            <li>Click on the edge and type in a number (accepts unsigned double)</li>
+            <li>To add a weight to an edge, click on the edge and type in a number (accepts unsigned double)</li>
             <li>Click and move vertices around if the edge weight is hidden</li>
+            <li>Select <a>Min</a> or <a>Max</a> to specify which spanning tree to solve for</li>
           </ul>
         </div>
       </div>
@@ -123,12 +128,50 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
-          ...
+        <div class="modal-body modal-style">
+          <p>
+            Given an undirected and connected graph <a>g</a>, find the <a>minimum spanning tree</a>.
+          </p>
+          <p>
+            A <a>minimum spanning tree</a> is a spanning tree that has a weight less than or
+            equal to every other spanning tree for <a>g</a>. The weight of a spanning tree is
+            the sum of all the edge weights of that tree. The <a>minimum spanning tree</a> has
+            <a>V-1</a> edges where <a>V</a> is the number of vertices in <a>g</a>.
+          </p>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- pseudo code -->
+  <div class="modal fade" id="pseudoModal" tabindex="-1" role="dialog" aria-labelledby="pseudoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="pseudoModalLabel">Pseudo Code</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-style">
+          <ul>
+            <li>Place all of the edges from the graph into an array <a>a</a></li>
+            <li>Sort <a>a</a> in ascending (min spanning tree) or descending (max spanning tree) order based on the edge weight</li>
+            <li>Create a new graph <a>g</a> with the same vertices but no edges</li>
+            <li>While <a>a</a> is not empty</li>
+            <ul>
+              <li>If adding the edge to g does not create a cycle</li>
+              <ul>
+                <li>Add the edge to <a>g</a></li>
+              </ul>
+              <li>Remove edge from <a>a</a></li>
+            </ul>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
   <!-- save instance -->
   <div class="modal fade" id="saveModal" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
@@ -140,7 +183,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-bodymodal-style">
           <div>
             <button class="btn btn-primary" (click)="saveAlgo()">Download Text File</button>
           </div>
@@ -163,7 +206,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <div class="modal-body">
+        <div class="modal-body modal-style">
           <div class="row">
             <div class="col-6 container">
               <div class="rules">
