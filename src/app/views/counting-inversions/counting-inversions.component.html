@@ -1,6 +1,5 @@
 <div>
-  <div class="col-4 h4 text-left">Counting Inversions</div>
-
+  <div class="h4 text-left">Counting Inversions</div>
 
   <div *ngIf="!solving" class="row menu">
     <div class="col-6 text-left">
@@ -51,27 +50,35 @@
         <button *ngIf="!solving" class="btn btn-success inline-block" (click)="algorithm()" [disabled]="!int_array.length || input_error.length">Run Algorithm</button>
         <button *ngIf="solving" class="btn btn-success inline-block" (click)="pauseContinue()">{{ paused ? 'Run Algorithm' : 'Pause Algorithm' }}</button>
         <button class="btn btn-danger inline-block" (click)="faster()" [disabled]="!solving">Faster (&#215;2)</button>
-        <div>Speed: &#215;{{ speed }}</div>
       </div>
     </div>
     <div class="col-6 text-left">
-      <div *ngIf="!solving">
-        Select Order:
-        <select [(ngModel)]="ordering">
-          <option value="ASC" selected>ASC</option>
-          <option value="DESC">DESC</option>
-        </select>
+      <div *ngIf="!solving" class="bmw">
+        <div>
+          Select Order:
+          <select [(ngModel)]="ordering" class="selectpicker">
+            <option value="ASC" selected>ASC</option>
+            <option value="DESC">DESC</option>
+          </select>
+        </div>
+        <div>
+          <button (click)="generateRandomInput()" class="btn btn-primary">Generate Random Input</button>
+        </div>
       </div>
-      <div *ngIf="solving && paused">
-        <button (click)="reset()">reset</button>
+      <div class="col-12 row">
+        <div class="col-2">
+          <div *ngIf="solving && paused">
+            <button (click)="reset()">reset</button>
+          </div>
+          <div class="text-center">Speed: &#215;{{ speed }}</div>
+        </div>
+        <div *ngIf="messages.length" class="col-10 text-right">
+          <div *ngFor="let message of messages" class="message">{{ message }}</div>
+        </div>
       </div>
-      <div *ngIf="!solving">
-        <button (click)="generateRandomInput()">Generate Random Input</button>
-      </div>
-      <div *ngIf="message.length" class="message">{{ message }}</div>
     </div>
   </div>
-  <div>
+  <div class="text-center">
     <div class="myTree"></div>
     <div *ngIf="beforeArray.length" [style.visibility]="displayBefore ? 'visible' : 'hidden'" class="text-center display-parent">
       <div *ngFor="let n of beforeArray" class="text-center display-parent">

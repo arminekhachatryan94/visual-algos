@@ -39,7 +39,7 @@ export class CountingInversionsComponent implements OnInit {
   mergeSleepTime = 2000;
   speed: number;
 
-  message: string;
+  messages: string[];
   exampleArrays: Arr[];
 
   uploadText: string;
@@ -62,7 +62,7 @@ export class CountingInversionsComponent implements OnInit {
     this.speed = 1;
     this.paused = false;
     this.solving = false;
-    this.message = '';
+    this.messages = [];
     this.exampleArrays = [];
 
     this.uploadText = '';
@@ -264,27 +264,32 @@ export class CountingInversionsComponent implements OnInit {
       let leftInversions = leftNode.inversions;
       let rightInversions = rightNode.inversions;
       this.inversions = leftInversions;
-      this.message = 'Left array inversions ' + leftInversions;
+      let message = 'Left array inversions ' + leftInversions;
+      this.messages.push(message);
       await this.sleepWhilePaused();
       if(!this.solving) {
         return;
       }
       this.inversions += ' + ';
-      this.message += ' + ';
+      message += ' + ';
+      this.messages.push(message);
       await this.sleepWhilePaused();
       if(!this.solving) {
         return;
       }
       this.inversions += rightInversions;
-      this.message += ' right array inversions ' + rightInversions;
+      message += ' right array inversions ' + rightInversions;
+      this.messages.push(message);
       await this.sleepWhilePaused();
       if(!this.solving) {
         return;
       }
       this.inversions = parseInt(leftInversions) + parseInt(rightInversions) + '';
-      this.message += ' = ' + this.inversions;
+      message += ' = ' + this.inversions;
+      this.messages.push(message);
     } else {
-      this.message = 'Inversions is 0.';
+      let message = 'Inversions is 0.';
+      this.messages.push(message);
       this.inversions = '0';
     }
   
@@ -301,25 +306,29 @@ export class CountingInversionsComponent implements OnInit {
         if(parseFloat(leftNode.value[leftI].value) < parseFloat(rightNode.value[rightI].value)) {
           node = await leftNode.value[leftI];
           leftI++;
-          this.message = 'First value of left array > first value of the right array, so bring down the first value of the left array.';
+          let message = 'First value of left array > first value of the right array, so bring down the first value of the left array.';
+          this.messages.push(message);
         } else {
           node = await rightNode.value[rightI];
           tempInversions = leftNode.value.length - leftI;
           totalInversions = tempInversions + parseInt(this.inversions);
           rightI++;
-          this.message = 'First value of right array > first value of left array, so bring down the first value of the right array.';
+          let message = 'First value of right array > first value of left array, so bring down the first value of the right array.';
+          this.messages.push(message);
         }
       } else {
         if (parseFloat(leftNode.value[leftI].value) > parseFloat(rightNode.value[rightI].value)) {
           node = await leftNode.value[leftI];
           leftI++;
-          this.message = 'First value of left array > first value of the right array, so bring down the first value of the left array.';
+          let message = 'First value of left array > first value of the right array, so bring down the first value of the left array.';
+          this.messages.push(message);
         } else {
           node = await rightNode.value[rightI];
           tempInversions = leftNode.value.length - leftI;
           totalInversions = tempInversions + parseInt(this.inversions);
           rightI++;
-          this.message = 'First value of right array > first value of the left array, so bring down the first value of the right array.';
+          let message = 'First value of right array > first value of the left array, so bring down the first value of the right array.';
+          this.messages.push(message);
         }
       }
       node.changeVisibility(false);
@@ -336,7 +345,8 @@ export class CountingInversionsComponent implements OnInit {
         if(!this.solving) {
           return;
         }
-        this.message = 'Add size of left array to number of inversions.';
+        let message = 'Add size of left array to number of inversions.';
+        this.messages.push(message);
         this.inversions += ' + ';
         await this.sleepWhilePaused();
         if(!this.solving) {
@@ -355,7 +365,8 @@ export class CountingInversionsComponent implements OnInit {
       }
     }
     while(leftI < leftNode.value.length) {
-      this.message = 'There are no more elements in the right array, so bring down the remaining values of the left array.';
+      let message = 'There are no more elements in the right array, so bring down the remaining values of the left array.';
+      this.messages.push(message);
       await this.sleepWhilePaused();
       if(!this.solving) {
         return;
@@ -374,7 +385,8 @@ export class CountingInversionsComponent implements OnInit {
       leftI++;
     }
     while(rightI < rightNode.value.length) {
-      this.message = 'There are no more elements in the left array, so bring down the remaining values of the right array.';
+      let message = 'There are no more elements in the left array, so bring down the remaining values of the right array.';
+      this.messages.push(message);
       await this.sleepWhilePaused();
       if(!this.solving) {
         return;
@@ -469,7 +481,7 @@ export class CountingInversionsComponent implements OnInit {
     if(!this.solving) {
       return;
     }
-    this.message = '';
+    this.messages = [];
     await this.breadthMerge();
     this.paused = true;
   }
@@ -489,13 +501,14 @@ export class CountingInversionsComponent implements OnInit {
         var subLeft = node.value.slice(0, mid);
         var subRight = node.value.slice(mid);
 
-        this.message = 'Split [' + node.value.map(function(el) {
+        let message = 'Split [' + node.value.map(function(el) {
           return el.value;
         }).join(', ') + '] into two arrays: \n\n[' + subLeft.map(function(el) {
           return el.value;
         }).join(', ') + '] and [' + subRight.map(function(el) {
           return el.value;
         }).join(', ') + '].';
+        this.messages.push(message);
 
         let leftNode = new Node(
           this.num_nodes,
@@ -574,13 +587,14 @@ export class CountingInversionsComponent implements OnInit {
           el.changeVisibility(true);
         });
 
-        this.message = 'Merge [' + nodeLeft.value.map(function(el) {
+        let message = 'Merge [' + nodeLeft.value.map(function(el) {
           return el.value;
         }).join(', ') + '] and [' + nodeRight.value.map(function(el) {
           return el.value
         }).join(', ') + '], so you have [' + merged.map(function(el) {
           return el.value;
         }) + '].';
+        this.messages.push(message);
 
         tree.value = merged;
         tree.setInversions(this.inversions);
@@ -642,7 +656,7 @@ export class CountingInversionsComponent implements OnInit {
     this.mergedArray = [];
     this.queue1 = [];
     this.inversions = '';
-    this.message = '';
+    this.messages = [];
     this.validateInput();
   }
 }

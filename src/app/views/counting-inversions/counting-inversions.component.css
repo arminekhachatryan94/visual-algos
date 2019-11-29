@@ -69,3 +69,9 @@
   color: DarkCyan;
   font-weight: bold;
 }
+
+.selectpicker {
+  font-size: 18px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  margin: 10px;
+}
