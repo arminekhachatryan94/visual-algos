@@ -85,4 +85,16 @@ export class FileService {
     let blob = new Blob([text], {type: "text/plain;charset=utf-8"});
     saveAs(blob, fileName + ".txt");
   }
+
+  closeModal(name: string) {
+    let modal = document.getElementById(name);
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    modal.setAttribute('style', 'display: none');
+    const modalsBackdrops = document.getElementsByClassName('modal-backdrop');
+    for(let i=0; i<modalsBackdrops.length; i++) {
+      document.body.removeChild(modalsBackdrops[i]);
+    }
+  }
+
 }

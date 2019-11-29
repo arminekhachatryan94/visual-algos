@@ -118,7 +118,7 @@ export class KruskalComponent implements OnInit {
         this.uploadError = true;
       } else {
         this.useExampleGraph(g);
-        // this.uploadModal.hide();
+        this.fileService.closeModal('uploadModal');
       }
     }
   }

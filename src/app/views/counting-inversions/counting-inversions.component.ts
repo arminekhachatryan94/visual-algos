@@ -107,7 +107,7 @@ export class CountingInversionsComponent implements OnInit {
       } else {
         this.useExampleArray(arr);
       }
-      // this.uploadModal.hide();
+      this.fileService.closeModal('uploadModal');
     } else {
       this.uploadError = true;
     }
