@@ -29,3 +29,43 @@
   stroke: #ccc;
   stroke-width: 2px;
 }
+
+.display-inline {
+  display: inline;
+}
+
+.margin-lr-5 {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.menu .btn {
+  margin-right: 5px;
+}
+
+.modal-dialog {
+  max-width: 800px;
+}
+
+.rules {
+  border: gray solid 1px;
+  background-color: rgb(226, 226, 226);
+  padding: 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.display-none {
+  display: none;
+}
+
+.modal-style {
+  font-size: 18px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.modal-style a {
+  color: DarkCyan;
+  font-weight: bold;
+}

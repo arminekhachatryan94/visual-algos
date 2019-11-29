@@ -7,6 +7,7 @@ import { Node } from '../../models/Node.model';
 import { D3Service } from 'src/app/services/d3.service';
 import { Element } from 'src/app/models/element.model';
 import { Arr } from 'src/app/models/arr.model';
+import { FileService } from '../../services/file.service';
 
 @Component({
   selector: 'app-counting-inversions',
@@ -41,7 +42,15 @@ export class CountingInversionsComponent implements OnInit {
   message: string;
   exampleArrays: Arr[];
 
-  constructor(private d3Service: D3Service) {
+  uploadText: string;
+  uploadFile: string;
+  uploadError: boolean;
+  arrayString: string;
+
+  constructor(
+    private d3Service: D3Service,
+    private fileService: FileService
+  ) {
     this.userText = "";
     this.input_error = "";
     this.displayBefore = false;
@@ -55,6 +64,11 @@ export class CountingInversionsComponent implements OnInit {
     this.solving = false;
     this.message = '';
     this.exampleArrays = [];
+
+    this.uploadText = '';
+    this.uploadFile = '';
+    this.uploadError = false;
+    this.arrayString = '';
   }
 
   ngOnInit() {
@@ -66,6 +80,43 @@ export class CountingInversionsComponent implements OnInit {
 
   ngAfterContentInit(){
     this.d3Service.initialize();
+  }
+
+  readFile(event) {
+    this.uploadError = false;
+    let file = event.target.files[0];
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      this.uploadText = fileReader.result.toString();
+    }
+    fileReader.onerror = (e) => {
+      this.uploadError = true;
+    };  
+    fileReader.readAsText(file);
+  }
+
+  saveAlgo() {
+    this.fileService.downloadFile(this.arrayString, 'counting-inversions');
+  }
+
+  uploadAlgo() {
+    if(this.uploadText !== null && this.uploadText.length !== 0) {
+      let arr = this.fileService.convertStringToCountingInversionsArray(this.uploadText);
+      if(arr === null) {
+        this.uploadError = true;
+      } else {
+        this.useExampleArray(arr);
+      }
+      // this.uploadModal.hide();
+    } else {
+      this.uploadError = true;
+    }
+  }
+
+  getStringFromArray() {
+    this.arrayString = this.ordering === 'ASC' ? '0' : '1';
+    this.arrayString += ' ' + this.userText;
+    this.validateInput();
   }
 
   createExampleArrays() {
@@ -80,8 +131,9 @@ export class CountingInversionsComponent implements OnInit {
     this.exampleArrays.push(a2);
   }
 
-  useExampleArray(a: Arr[]) {
+  useExampleArray(a: Arr) {
     this.userText = a.arr.join(' ');
+    this.ordering = a.ordering === 0 ? 'ASC' : 'DESC';
     this.convertStringToArray();
   }
 

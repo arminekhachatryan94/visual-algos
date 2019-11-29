@@ -1,7 +1,20 @@
 <div>
-    <div class="row">
-      <div class="col-4 h4 text-left">Counting Inversions</div>
-      <div class="col-8 dropdown text-right">
+  <div class="col-4 h4 text-left">Counting Inversions</div>
+
+
+  <div *ngIf="!solving" class="row menu">
+    <div class="col-6 text-left">
+      <div class="dropdown display-inline">
+        <button class="btn btn-info dropdown-toggle" type="button" id="file" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          File
+        </button>
+        <div class="dropdown-menu" aria-labelledby="file">
+          <a class="dropdown-item" data-toggle="modal" data-target="#saveModal" (click)="getStringFromArray()">Save As Text File</a>
+          <a class="dropdown-item" data-toggle="modal" data-target="#uploadModal">Upload Text File</a>
+        </div>
+      </div>
+
+      <div class="dropdown display-inline">
         <button class="btn btn-info dropdown-toggle" type="button" id="countingInversionsExample" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Examples
         </button>
@@ -10,7 +23,22 @@
         </div>
       </div>
     </div>
-    <hr>
+
+    <div class="col-6 text-right">
+      <div class="display-inline">
+        <button class="btn btn-info" type="button" data-toggle="modal" data-target="#problemModal">Problem</button>
+      </div>
+
+      <div class="display-inline">
+        <button class="btn btn-info" type="button" data-toggle="modal" data-target="#pseudoModal">Pseudo Code</button>
+      </div>
+
+      <div class="display-inline">
+        <button class="btn btn-info" type="button" data-toggle="modal" data-target="#hintModal">&#63;</button>
+      </div>
+    </div>
+  </div>
+  <hr>
   <div class="row">
     <div class="col-6 text-right">
       <div class="text-center">
@@ -71,6 +99,160 @@
           [style.border-color]="el.border">
           {{ el.value }}
         </a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- modals -->
+  <!-- hints -->
+  <div class="modal fade" id="hintModal" tabindex="-1" role="dialog" aria-labelledby="hintModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="hintModalLabel">Hints</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-style">
+          <ul>
+            <li>Type numbers into the input (negatives and decimals are allowed).</li>
+            <li>You can also <a>Generate Random Input</a> or upload a previous saved input by selecting <a>File</a> > <a>Upload Text File</a></li>
+            <li>Select <a>ASC</a> or <a>DESC</a> to specify the order in which the array should be sorted.</li>
+            <li>Click <a>Run Algorithm</a> to see how the array gets sorted.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- problem -->
+  <div class="modal fade" id="problemModal" tabindex="-1" role="dialog" aria-labelledby="problemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="problemModalLabel">Problem</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-style">
+          <p>Given an array <a>n</a> of unsorted numbers, find the inversion count.</p>
+          <div>If the <a>a</a> is already sorted, then the inversion count is zero.</div>
+          <div>The inversion count is maximized if <a>a</a> is the reverse of the sorted array of <a>a</a>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- pseudo code -->
+  <div class="modal fade" id="pseudoModal" tabindex="-1" role="dialog" aria-labelledby="pseudoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="pseudoModalLabel">Pseudo Code</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-style">
+          <ul>
+            <li>Let <a>n</a> be the size of <a>a</a></li>
+            <li>Split array <a>a</a> into <a>n</a> subarrays of size 1 denoted by <a>s</a></li>
+            <li>Let <a>c</a> be the inversions count initially zero</li>
+            <li>While size of <a>s</a> > 1</li>
+            <ul>
+              <li>Let <a>l</a> be an element from <a>s</a></li>
+              <li>Let <a>r</a> be another element from <a>s</a></li>
+              <li>While merging <a>l</a> and <a>r</a></li>
+              <ul>
+                <li>If element from <a>r</a> is merged before <a>l</a></li>
+                <ul>
+                  <li>Add size of <a>l</a> to <a>c</a></li>
+                </ul>
+              </ul>
+              <li>Remove <a>l</a> from <a>s</a></li>
+              <li>Remove <a>r</a> from <a>s</a></li>
+            </ul>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- save instance -->
+  <div class="modal fade" id="saveModal" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="saveModalLabel">Save As Text File</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-style">
+          <div>
+            <button class="btn btn-primary" (click)="saveAlgo()">Download Text File</button>
+          </div>
+          <div>
+            <div>Or copy the text below</div>
+            <textarea rows=6 cols=40 readonly>{{ arrayString }}</textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- upload instance -->
+  <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="uploadModalLabel">Upload Text File</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-style">
+          <div class="row">
+            <div class="col-6 container">
+              <div class="rules">
+                <h5>Rules</h5>
+                <ul>
+                  <li>NUMBERS ONLY</li>
+                  <li>The first number should be 0 or 1</li>
+                  <ul>
+                    <li>0 - ASC</li>
+                    <li>1 - DESC</li>
+                  </ul>
+                  <li>The remaining are values in the array to be sorted</li>
+                  <li>Do not enter more than 20 numbers</li>
+                  <li>Numbers must be separated by exactly one space</li>
+                  <li>Each number must be in the range [-999, 999]</li>
+                  <li>Negatives and decimals are allowed</li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-6">
+              <div>
+                Paste the graph instance text here
+                <textarea [(ngModel)]="uploadText" rows=6 cols=40 placeholder="0 -60 30 23 4 5 67"></textarea>
+              </div>
+
+              <div>Or upload a text file</div>
+              <label class="btn btn-primary">
+                Upload File
+                <input type='file' accept=".txt" (change)="readFile($event)" hidden>
+              </label>
+              <div *ngIf="uploadError" class="text-danger">Error in input</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="uploadAlgo()">Load</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>
