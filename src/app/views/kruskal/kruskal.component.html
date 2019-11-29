@@ -41,50 +41,54 @@
   <hr>
 
   <div class="row col">
-    <div id="cy" class="col-8"></div>
-    <div class="col-4 text-center">
-      <div *ngIf="!solving">
-        <div>Number of vertices</div>
-        <button (click)="decrementVertices()" [disabled]="numVertices <= 3" class="btn btn-danger margin-lr-5"><b>-</b></button>
-        <div class="display-inline margin-lr-5">v = {{ numVertices }}</div>
-        <button (click)="incrementVertices()" [disabled]="numVertices >= 8" class="btn btn-success margin-lr-5"><b>+</b></button>
-      </div>
-      <div *ngIf="!solving">
-        <button (click)="generateRandomEdges()" class="btn btn-primary">Generate Random Edges</button>
-      </div>
-      <div *ngIf="!solving">
-        <input [(ngModel)]="treeType.type" type="radio" value="min" name="treeType"> Min
-        <input [(ngModel)]="treeType.type" type="radio" value="max" name="treeType"> Max
-      </div>
+    <div id="cy" class="col-7"></div>
+    <div class="col-5 text-center">
       <div>
-          <button (click)="slower()" [disabled]="!solving" class="btn btn-primary inline-block">Slower (&#xF7;2)</button>
-          <button *ngIf="!solving" (click)="getKruskal()" class="btn btn-success margin-lr-5 inline-block">Run Algorithm</button>
-          <button *ngIf="solving" (click)="pauseContinueKruskal()" class="btn btn-success margin-lr-5 inline-block">{{this.paused ? 'Run Algorithm' : 'Pause Algorithm'}}</button>
-          <button (click)="faster()" [disabled]="!solving" class="btn btn-danger inline-block">Faster (&#215;2)</button>
-          <div *ngIf="solving">Speed: &#215;{{ speed }}</div>
+        <div *ngIf="messages.length" class="message-scroll-panel">
+          <div *ngFor="let message of messages" class="message" [ngClass]="{'dark-orange-message': i === 0, 'orange-message': i !== 0}">{{ message }}</div>
         </div>
+        <div *ngIf="weightSum !== null">Total weight: {{ weightSum }}</div>
+      </div>
       <div>
-        <button (click)="previous()" *ngIf="isPrevious" [disabled]="previousSolving" class="btn btn-warning margin-lr-5">Previous</button>
-        <button (click)="next()" *ngIf="isNext" [disabled]="nextSolving" class="btn btn-success margin-lr-5">Next</button>
+        <div *ngIf="!solving">
+          <div>Number of vertices</div>
+          <button (click)="decrementVertices()" [disabled]="numVertices <= 3" class="btn btn-danger"><b>-</b></button>
+          <div class="display-inline margin-lr-5">v = {{ numVertices }}</div>
+          <button (click)="incrementVertices()" [disabled]="numVertices >= 8" class="btn btn-success"><b>+</b></button>
+        </div>
+        <div *ngIf="!solving">
+          <button (click)="generateRandomEdges()" class="btn btn-primary">Generate Random Edges</button>
+        </div>
+        <div *ngIf="!solving">
+          <input [(ngModel)]="treeType.type" type="radio" value="min" name="treeType"> Min
+          <input [(ngModel)]="treeType.type" type="radio" value="max" name="treeType"> Max
+        </div>
       </div>
-      <div *ngIf="solving && paused">
-        <button (click)="reset()" class="btn btn-danger margin-lr-5">Reset</button>
+      <div>
+        <button (click)="slower()" [disabled]="!solving" class="btn btn-primary inline-block">Slower (&#xF7;2)</button>
+        <button *ngIf="!solving" (click)="getKruskal()" class="btn btn-success inline-block">Run Algorithm</button>
+        <button *ngIf="solving" (click)="pauseContinueKruskal()" class="btn btn-success inline-block">{{this.paused ? 'Run Algorithm' : 'Pause Algorithm'}}</button>
+        <button (click)="faster()" [disabled]="!solving" class="btn btn-danger inline-block">Faster (&#215;2)</button>
       </div>
-      <div *ngIf="messages.length" class="message">{{ messages[messages.length-1] }} : {{ messages.length }}</div>
-      <div *ngIf="weightSum !== null">Total weight: {{ weightSum }}</div>
+      <div>
+        <button (click)="previous()" *ngIf="isPrevious" [disabled]="previousSolving" class="btn btn-warning">Previous</button>
+        <button (click)="next()" *ngIf="isNext" [disabled]="nextSolving" class="btn btn-success">Next</button>
+        <button *ngIf="solving && paused" (click)="reset()" class="btn btn-secondary">Reset</button>
+      </div>
+      <div>Speed: &#215;{{ speed }}</div>
     </div>
   </div>
   <div class="row" *ngIf="solving">
     <div class="col-8">
       <div>Queue:</div>
+      <div *ngIf="before.length" class="inline-block">&#8594;</div>
       <div class="queue">
-        <div *ngIf="before.length" class="inline-block">&#8594;</div>
         <div *ngFor="let b of before" class="queue-element">
           <div><b>Weight:</b> {{ b.weight }}</div>
           <div><b>V<sub>{{ b.source.key }}</sub></b> to <b>V<sub>{{ b.target.key }}</sub></b></div>
         </div>
-        <div *ngIf="before.length" class="inline-block">&#8594;</div>
       </div>
+      <div *ngIf="before.length" class="inline-block">&#8594;</div>
     </div>
     <div class="col-4">
       <div>Current Edge:</div>

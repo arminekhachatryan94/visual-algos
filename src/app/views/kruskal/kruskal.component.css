@@ -33,18 +33,6 @@
   font-size: 14px;
   font-family: 'Courier New', Courier, monospace;
 }
-/* 
-.btn-plus {
-  background-color: rgb(67, 197, 67);
-  border: 1.5px solid green;
-  color: white;
-}
-
-.btn-minus {
-  background-color: rgb(255, 79, 79);
-  border: 1.5px solid red;
-  color: white;
-} */
 
 .btn-warning {
   background-color: rgb(255, 186, 57);
