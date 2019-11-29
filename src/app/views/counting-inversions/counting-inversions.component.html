@@ -38,21 +38,27 @@
     </div>
   </div>
   <hr>
-  <div class="row">
+  <div class="row control">
     <div class="col-6 text-right">
       <div class="text-center">
         <div>Enter integers separated by spaces to sort:</div>
         <input type="text" [(ngModel)]="userText" (keydown)="clearInputError()" (ngModelChange)="convertStringToArray()" [disabled]="solving">
         <div *ngIf="input_error.length" class="error">{{ input_error }}</div>
       </div>
-      <div class="text-center">
+      <div class="text-center control-buttons">
         <button class="btn btn-primary inline-block" (click)="slower()" [disabled]="!solving">Slower (&#xF7;2)</button>
         <button *ngIf="!solving" class="btn btn-success inline-block" (click)="algorithm()" [disabled]="!int_array.length || input_error.length">Run Algorithm</button>
         <button *ngIf="solving" class="btn btn-success inline-block" (click)="pauseContinue()">{{ paused ? 'Run Algorithm' : 'Pause Algorithm' }}</button>
         <button class="btn btn-danger inline-block" (click)="faster()" [disabled]="!solving">Faster (&#215;2)</button>
       </div>
+      <div class="text-center">
+        <div class="inline-block">Speed: &#215;{{ speed }}</div>
+        <div *ngIf="solving && paused" class="inline-block">
+          <button (click)="reset()" class="btn btn-secondary">reset</button>
+        </div>
+      </div>
     </div>
-    <div class="col-6 text-left">
+    <div class="row col-6 text-left">
       <div *ngIf="!solving" class="bmw">
         <div>
           Select Order:
@@ -65,15 +71,11 @@
           <button (click)="generateRandomInput()" class="btn btn-primary">Generate Random Input</button>
         </div>
       </div>
-      <div class="col-12 row">
-        <div class="col-2">
-          <div *ngIf="solving && paused">
-            <button (click)="reset()">reset</button>
+      <div *ngIf="messages.length" class="col-12 text-left">
+        <div class="text-right message-scroll-panel">
+          <div *ngFor="let message of messages.reverse(); let i = index">
+            <div class="message" [ngClass]="{'dark-orange-message': i === 0, 'orange-message': i !== 0}">{{ message }}</div>
           </div>
-          <div class="text-center">Speed: &#215;{{ speed }}</div>
-        </div>
-        <div *ngIf="messages.length" class="col-10 text-right">
-          <div *ngFor="let message of messages" class="message">{{ message }}</div>
         </div>
       </div>
     </div>

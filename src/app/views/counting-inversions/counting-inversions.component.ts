@@ -472,6 +472,7 @@ export class CountingInversionsComponent implements OnInit {
   }
 
   async algorithm() {
+    this.messages = [];
     this.solving = true;
     this.queue1 = [];
     this.maxDepth = 0;
@@ -481,7 +482,6 @@ export class CountingInversionsComponent implements OnInit {
     if(!this.solving) {
       return;
     }
-    this.messages = [];
     await this.breadthMerge();
     this.paused = true;
   }
