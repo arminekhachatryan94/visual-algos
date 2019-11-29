@@ -245,7 +245,7 @@
               <div>Or upload a text file</div>
               <label class="btn btn-primary">
                 Upload File
-                <input type='file' (change)="readFile($event)" hidden>
+                <input type='file' accept=".txt" (change)="readFile($event)" hidden>
               </label>
               <div *ngIf="uploadError" class="text-danger">Error in input</div>
             </div>
