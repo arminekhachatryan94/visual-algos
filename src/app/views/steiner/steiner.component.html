@@ -1,15 +1,43 @@
 <div>
-  <div class="row">
-    <div class="col-4 h4 text-left">Steiner Tree</div>
-    <div class="col-8 dropdown text-right">
-      <button class="btn btn-info dropdown-toggle" type="button" id="steinerExamples" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Examples
-      </button>
-      <div class="dropdown-menu" aria-labelledby="steinerExamples">
-        <a *ngFor="let g of exampleGraphs" class="dropdown-item" (click)="useExampleGraph(g)">{{ g.name }}</a>
+  <div class="col-4 h4 text-left">Steiner Tree</div>
+
+  <div *ngIf="!solving" class="row menu">
+    <div class="col-6 text-left">
+      <div class="dropdown display-inline">
+        <button class="btn btn-info dropdown-toggle" type="button" id="file" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          File
+        </button>
+        <div class="dropdown-menu" aria-labelledby="file">
+          <a class="dropdown-item" data-toggle="modal" data-target="#saveModal" (click)="getStringFromGraph()">Save As Text File</a>
+          <a class="dropdown-item" data-toggle="modal" data-target="#uploadModal">Upload Text File</a>
+        </div>
+      </div>
+
+      <div class="dropdown display-inline">
+        <button class="btn btn-info dropdown-toggle" type="button" id="steinerExamples" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Examples
+        </button>
+        <div class="dropdown-menu" aria-labelledby="steinerExamples">
+          <a *ngFor="let g of exampleGraphs" class="dropdown-item" (click)="useExampleGraph(g)">{{ g.name }}</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6 text-right">
+      <div class="display-inline">
+        <button class="btn btn-info" type="button" data-toggle="modal" data-target="#problemModal">Problem</button>
+      </div>
+
+      <div class="display-inline">
+        <button class="btn btn-info" type="button" data-toggle="modal" data-target="#pseudoModal">Pseudo Code</button>
+      </div>
+
+      <div class="display-inline">
+        <button class="btn btn-info" type="button" data-toggle="modal" data-target="#hintModal">&#63;</button>
       </div>
     </div>
   </div>
+
   <hr>
   <!-- graphs -->
   <div>
@@ -67,6 +95,149 @@
       <div *ngFor="let v of subset; let i = index" class="inline-block">
         <div [style.background-color]="v.color" class="vertice inline-block">{{ v.id.key }}</div>
         <div *ngIf="i !== subset.length-1" class="inline-block">,</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modals -->
+  <!-- hints -->
+  <div class="modal fade" id="hintModal" tabindex="-1" role="dialog" aria-labelledby="hintModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="hintModalLabel">Hints</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-style">
+          <ul>
+            <li>Click on two vertices to add/remove an edge</li>
+            <li>To add a weight to an edge, click on the edge and type in a number (accepts unsigned double)</li>
+            <li>Click and move vertices around if the edge weight is hidden</li>
+            <li>Click <a>Select SubVertices</a> then click on a vertice to add/remove it from the set</li>
+            <li>Click <a>Run Algorithm</a> to see how to find the Steiner Tree</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- problem -->
+  <div class="modal fade" id="problemModal" tabindex="-1" role="dialog" aria-labelledby="problemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="problemModalLabel">Problem</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-style">
+          <p>Problem</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- pseudo code -->
+  <div class="modal fade" id="pseudoModal" tabindex="-1" role="dialog" aria-labelledby="pseudoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="pseudoModalLabel">Pseudo Code</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-style">
+          <ul>
+            <li>Pseudo</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- save instance -->
+  <div class="modal fade" id="saveModal" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="saveModalLabel">Save As Text File</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-style">
+          <div>
+            <button class="btn btn-primary" (click)="saveAlgo()">Download Text File</button>
+          </div>
+          <div>
+            <div>Or copy the text below</div>
+            <textarea rows=6 cols=40 readonly>{{ graphString }}</textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- upload instance -->
+  <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="uploadModalLabel">Upload Text File</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body modal-style">
+          <div class="row">
+            <div class="col-6 container">
+              <div class="rules">
+                <h5>Rules</h5>
+                <ul>
+                  <li>NUMBERS ONLY</li>
+                  <li>No repeating edges</li>
+                  <li>Vertices are numbered from 0</li>
+                  <li>All values are separated by exactly one space</li>
+                  <li>No trailing spaces allowed</li>
+                  <li>The first line contains:</li>
+                  <ul>
+                    <li>First value is the number of vertices in the graph denoted by <a>v</a></li>
+                    <li>The remainder of the numbers are the terminal vertices</li>
+                    <li>Make sure every terminal vertice falls inside the range [0, <a>v</a>]</li>
+                  </ul>
+                  <li>Every following line is in the following format: <a>s t w</a></li>
+                  <ul>
+                    <li>s &mdash; edge source (vertice number)</li>
+                    <li>t &mdash; edge target (vertice number)</li>
+                    <li>w &mdash; weight of edge in the range [-500, 500]</li>
+                    <li>Negatives and decimals are accepted for weight</li>
+                  </ul>
+                </ul>
+              </div>
+            </div>
+            <div class="col-6">
+              <div>
+                Paste the graph instance text here
+                <textarea [(ngModel)]="uploadText" rows=6 cols=40 placeholder="5 1 2 0&#10;0 1 5&#10;1 2 -1&#10;0 2 50&#10;4 1 -6&#10;3 4 431&#10;3 2 -98"></textarea>
+              </div>
+
+              <div>Or upload a text file</div>
+              <label class="btn btn-primary">
+                Upload File
+                <input type='file' accept=".txt" (change)="readFile($event)" hidden>
+              </label>
+              <div *ngIf="uploadError" class="text-danger">Error in input</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button (click)="uploadAlgo()">Load</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>

@@ -6,6 +6,7 @@ import { Pair } from '../../models/pair.model';
 import Combinatorics from 'js-combinatorics';
 import PriorityQueue from 'ts-priority-queue';
 import { Graph } from '../../models/graph.model';
+import { FileService } from '../../services/file.service';
 
 @Component({
   selector: 'app-steiner',
@@ -35,7 +36,12 @@ export class SteinerComponent implements OnInit {
 
   exampleGraphs: Graph[];
 
-  constructor() {
+  uploadText: string;
+  uploadFile: string;
+  uploadError: boolean;
+  graphString: string;
+
+  constructor(private fileService: FileService) {
     this.currentService = new CytoService;
     this.optimalService = new CytoService;
     this.optimalService.updateSelectSub(null);
@@ -50,6 +56,11 @@ export class SteinerComponent implements OnInit {
     this.optimalWeightSum = null;
     this.paused = true;
     this.exampleGraphs = [];
+
+    this.uploadText = '';
+    this.uploadFile = '';
+    this.uploadError = false;
+    this.graphString = '';
   }
 
   async ngOnInit() {
@@ -59,6 +70,39 @@ export class SteinerComponent implements OnInit {
     await this.currentService.addKeyListener();
     await this.optimalService.draw('optimal').then(f => {this.solving = false;});
     this.createExampleGraphs();
+  }
+
+  readFile(event) {
+    this.uploadError = false;
+    let file = event.target.files[0];
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      this.uploadText = fileReader.result.toString();
+    }
+    fileReader.readAsText(file);
+  }
+
+  saveAlgo() {
+    this.getStringFromGraph();
+    this.fileService.downloadFile(this.graphString, 'steiner');
+  }
+
+  getStringFromGraph() {
+    let edges = this.currentService.getEdges();
+    let subVertices = this.currentService.getSubVerticeIds();
+    this.graphString = this.fileService.convertSteinerGraphToString(this.numVertices, subVertices, edges);
+  }
+
+  uploadAlgo() {
+    if(this.uploadText.length !== 0) {
+      let g = this.fileService.convertStringToSteinerGraph(this.uploadText);
+      if(g === null) {
+        this.uploadError = true;
+      } else {
+        this.useExampleGraph(g);
+        this.fileService.closeModal('uploadModal');
+      }
+    }
   }
 
   createExampleGraphs() {
