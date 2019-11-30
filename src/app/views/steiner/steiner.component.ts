@@ -41,6 +41,10 @@ export class SteinerComponent implements OnInit {
   uploadError: boolean;
   graphString: string;
 
+  messages: string[];
+
+  currentSubset: number[];
+
   constructor(private fileService: FileService) {
     this.currentService = new CytoService;
     this.optimalService = new CytoService;
@@ -61,6 +65,9 @@ export class SteinerComponent implements OnInit {
     this.uploadFile = '';
     this.uploadError = false;
     this.graphString = '';
+
+    this.messages = [];
+    this.currentSubset = null;
   }
 
   async ngOnInit() {
@@ -238,6 +245,7 @@ export class SteinerComponent implements OnInit {
     this.biggestSubset = null;
     this.weightSum = null
     this.optimalWeightSum = null;
+    this.messages = [];
   }
 
   async algorithm() {
@@ -253,6 +261,7 @@ export class SteinerComponent implements OnInit {
       await this.optimalService.refresh();
 
       await this.setSubsets();
+      this.messages.push('Get combination of all required vertices and optional vertices.');
       this.smallestSubset = this.subsets[0];
       this.biggestSubset = this.subsets[this.subsets.length-1];
 
@@ -263,29 +272,44 @@ export class SteinerComponent implements OnInit {
       if(this.paused) {
         return;
       }
-      this.currentService.reset();
-      let subset = this.subsets[0].map(function(v) {
-        return v.id.key;
-      });
-      this.updateVerticeColorsInGraph(
-        this.currentService,
-        this.biggestSubset,
-        subset
-      );
-      let edges = await this.currentService.getEdgesBetweenSubset(subset);
-      await this.createKruskalTree(edges);
-      await this.currentService.refresh();
+      if(this.currentSubset === null) {
+        this.currentService.reset();
+        this.currentSubset = this.subsets[0].map(function(v) {
+          return v.id.key;
+        });
+        this.updateVerticeColorsInGraph(
+          this.currentService,
+          this.biggestSubset,
+          this.currentSubset
+        );
+        let edges = await this.currentService.getEdgesBetweenSubset(this.currentSubset);
+        await this.createKruskalTree(edges);
+        await this.currentService.refresh();
+
+        this.messages.push('Get next subset.');
+        this.subsets.shift();
+        await this.currentService.sleep(this.sleepTime);
+      }
+
+      if(this.paused) {
+        return;
+      }
 
       this.weightSum = await this.currentService.getSumOfEdgeWeights();
       if((this.optimalWeightSum === null ||
         this.weightSum < this.optimalWeightSum) &&
-        await this.currentService.checkVerticesConnected(subset)
+        await this.currentService.checkVerticesConnected(this.currentSubset)
       ) {
+        if(this.optimalWeightSum === null) {
+          this.messages.push('Update optimal tree because optimal tree is blank.');
+        } else {
+          this.messages.push('Update optimal tree because current tree is connected and weight of current tree < weight of optimal tree.');
+        }
         await this.optimalService.reset();
         await this.updateVerticeColorsInGraph(
           this.optimalService,
           this.biggestSubset,
-          subset
+          this.currentSubset
         );
         let kruskalEdges = this.currentService.getKruskalEdges();
         await this.updateEdgeColorsInGraph(
@@ -295,8 +319,14 @@ export class SteinerComponent implements OnInit {
         await this.optimalService.refresh();
 
         this.optimalWeightSum = this.weightSum;
+      } else {
+        if(!(await this.currentService.checkVerticesConnected(this.currentSubset))) {
+          this.messages.push('Do not update optimal tree because current tree is disconnected.');
+        } else {
+          this.messages.push('Do not update optimal tree because weight of current tree > weight of optimal tree.')
+        }
       }
-      this.subsets.shift();
+      this.currentSubset = null;
 
       await this.currentService.sleep(this.sleepTime);
     }

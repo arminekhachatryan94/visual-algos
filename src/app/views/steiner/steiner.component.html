@@ -40,61 +40,72 @@
 
   <hr>
   <!-- graphs -->
-  <div>
-    <div class="row text-center">
-      <div class="col-6">
-        <div>Current Graph</div>
-        <div id="current" class="text-left"></div>
-      </div>
-      <div class="col-6">
-        <div *ngIf="solving">Optimal Graph</div>
-        <div id="optimal" class="text-left"></div>
-      </div>
+  <div class="row">
+    <div class="col-5">
+      <div>Current Graph</div>
+      <div id="current" class="text-left"></div>
+      <div *ngIf="weightSum !== null">Current tree weight: {{ weightSum }}</div>
     </div>
-  </div>
-  <!-- customize graph -->
-  <div>
-    <!-- update num vertices -->
-    <div class="row">
-      <div *ngIf="!solving" class="col-6 text-left">
-        <button class="btn btn-danger" [disabled]="numVertices <= 3" (click)="decrementVertices()">-</button>
-        V = {{ numVertices }}
-        <button class="btn btn-success" [disabled]="numVertices >= 8" (click)="incrementVertices()">+</button>
-      </div>
-      <div class="col-6 text-right">
-        <button *ngIf="selectingSubs && !solving" (click)="editGraph()" class="btn btn-warning">Edit Graph</button>
-        <button *ngIf="!selectingSubs" (click)="selectSubVertices()" class="btn btn-success">Select SubVertices</button>
-      </div>
-    </div>
-    <div class="text-left">
-      <button *ngIf="!selectingSubs" (click)="generateRandomEdges()" class="btn btn-primary">Generate Random Edges</button>
-    </div>
-    <div *ngIf="!solving && selectingSubs" class="inline-block">
-      Choose a set of vertices by clicking on them.
-      The subset of vertices will be colored red.
-    </div>
-    <div *ngIf="selectingSubs">
-      <div>
-        <button (click)="slower()" class="btn btn-primary inline-block">Slower (&#xF7;2)</button>
-        <button [disabled]="!selectingSubs" (click)="algorithm()" class="btn" [ngClass]="{'btn-success': paused, 'btn-warning': !paused}">{{ paused ? 'Run Algorithm' : 'Pause Algorithm' }}</button>
-        <button (click)="faster()" class="btn btn-danger inline-block">Faster (&#215;2)</button>
+    <div class="col-7">
+      <div class="row col-12">
+        <div class="col-5">
+          <div *ngIf="solving">Optimal Graph</div>
+          <div id="optimal" class="text-left"></div>
+          <div *ngIf="optimalWeightSum !== null">Optimal tree weight: {{ optimalWeightSum }}</div>
+        </div>
+        <div *ngIf="messages.length" class="col-7 message-scroll-panel height-600">
+          <div *ngFor="let message of messages.reverse(); let i = index" class="message" [ngClass]="{'dark-orange-message': i === 0, 'orange-message': i !== 0}">{{ message }}</div>
+        </div>
       </div>
       <div>
-        Speed: &#215;{{ speed }}
-      </div>
-    </div>
-    <div *ngIf="solving && paused">
-      <button (click)="reset()">Reset</button>
-    </div>
-  </div>
-
-  <div>
-    <div *ngIf="weightSum !== null">Total weight of tree: {{ weightSum }}</div>
-    <p *ngIf="subsets.length">Subset of Vertices:</p>
-    <div *ngFor="let subset of subsets" class="inline-block bg-secondary subset">
-      <div *ngFor="let v of subset; let i = index" class="inline-block">
-        <div [style.background-color]="v.color" class="vertice inline-block">{{ v.id.key }}</div>
-        <div *ngIf="i !== subset.length-1" class="inline-block">,</div>
+        <!-- customize graph -->
+        <div>
+          <!-- update num vertices -->
+          <div class="row">
+            <div *ngIf="!solving" class="col-6 text-left">
+              <button class="btn btn-danger" [disabled]="numVertices <= 3" (click)="decrementVertices()">-</button>
+              V = {{ numVertices }}
+              <button class="btn btn-success" [disabled]="numVertices >= 8" (click)="incrementVertices()">+</button>
+            </div>
+            <div class="col-6 text-right">
+              <button *ngIf="selectingSubs && !solving" (click)="editGraph()" class="btn btn-warning">Edit Graph</button>
+              <button *ngIf="!selectingSubs" (click)="selectSubVertices()" class="btn btn-success">Select SubVertices</button>
+            </div>
+          </div>
+          <div class="text-left">
+            <button *ngIf="!selectingSubs" (click)="generateRandomEdges()" class="btn btn-primary">Generate Random Edges</button>
+          </div>
+          <div *ngIf="!solving && selectingSubs" class="inline-block">
+            Choose a set of vertices by clicking on them.
+            The subset of vertices will be colored red.
+          </div>
+          <div *ngIf="selectingSubs">
+            <div class="row">
+              <div class="col-9">
+                <button (click)="slower()" class="btn btn-primary inline-block">Slower (&#xF7;2)</button>
+                <button [disabled]="!selectingSubs" (click)="algorithm()" class="btn" [ngClass]="{'btn-success': paused, 'btn-warning': !paused}">{{ paused ? 'Run Algorithm' : 'Pause Algorithm' }}</button>
+                <button (click)="faster()" class="btn btn-danger inline-block">Faster (&#215;2)</button>
+                <button *ngIf="solving && paused" (click)="reset()" class="btn btn-secondary">Reset</button>
+              </div>
+              <div class="col-3 text-right">
+                <div class="inline-block margin-top-20">
+                  Speed: &#215;{{ speed }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>  
+        <div>
+          <p *ngIf="subsets.length">Subset of Vertices:</p>
+          <div *ngIf="subsets.length" class="scroll-panel">
+            <div *ngFor="let subset of subsets" class="block bg-secondary subset">
+              <div *ngFor="let v of subset; let i = index" class="inline-block">
+                <div [style.background-color]="v.color" class="vertice inline-block">{{ v.id.key }}</div>
+                <div *ngIf="i !== subset.length-1" class="inline-block">,</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
