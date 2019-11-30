@@ -167,7 +167,30 @@
         </div>
         <div class="modal-body modal-style">
           <ul>
-            <li>Pseudo</li>
+            <li>Let <a>G</a> be a graph and <a>T</a> be a subset of vertices from <a>G</a></li>
+            <li>Let <a>T<sup>C</sup></a></li>
+            <li>Let <a>O</a> be an empty graph</li>
+            <li>Let <a>S</a> be an array of all combinations of <a>T</a> and <a>T<sup>C</sup></a></li>
+            <li>For all <a>S</a> as <a>sub</a></li>
+            <ul>
+              <li>Let <a>N</a> be a graph that contains the minimum spanning tree of all vertices in <a>sub</a></li>
+              <li>If <a>O</a> is empty and N is connected</li>
+              <ul>
+                <li>Make <a>O</a> be a copy of <a>N</a></li>
+              </ul>
+              <li>Else if weight of edges in <a>N</a> are less than weight of edges in <a>O</a> and N is connected</li>
+              <ul>
+                <li>Make <a>O</a> be a copy of <a>N</a></li>
+              </ul>
+            </ul>
+            <li>If <a>O</a> is still an empty graph</li>
+            <ul>
+              <li>No Steiner Tree exists</li>
+            </ul>
+            <li>Else</li>
+            <ul>
+              <li><a>O</a> is the Steiner Tree</li>
+            </ul>
           </ul>
         </div>
       </div>
