@@ -49,7 +49,7 @@
     <div class="col-7">
       <div class="row col-12">
         <div class="col-5">
-          <div *ngIf="solving">Optimal Graph</div>
+          <div *ngIf="solving">{{ finished ? 'Final' : 'Possible'}} Optimal Graph</div>
           <div id="optimal" class="text-left"></div>
           <div *ngIf="optimalWeightSum !== null">Optimal tree weight: {{ optimalWeightSum }}</div>
         </div>
@@ -83,7 +83,7 @@
             <div class="row">
               <div class="col-9">
                 <button (click)="slower()" class="btn btn-primary inline-block">Slower (&#xF7;2)</button>
-                <button [disabled]="!selectingSubs" (click)="algorithm()" class="btn" [ngClass]="{'btn-success': paused, 'btn-warning': !paused}">{{ paused ? 'Run Algorithm' : 'Pause Algorithm' }}</button>
+                <button [disabled]="!selectingSubs" (click)="algorithm()" class="btn" [ngClass]="{'btn-success': paused, 'btn-warning': !paused}" [disabled]="finished">{{ paused ? 'Run Algorithm' : 'Pause Algorithm' }}</button>
                 <button (click)="faster()" class="btn btn-danger inline-block">Faster (&#215;2)</button>
                 <button *ngIf="solving && paused" (click)="reset()" class="btn btn-secondary">Reset</button>
               </div>

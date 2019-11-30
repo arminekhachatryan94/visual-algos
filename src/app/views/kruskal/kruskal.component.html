@@ -45,7 +45,7 @@
     <div class="col-5 text-center">
       <div>
         <div *ngIf="messages.length" class="message-scroll-panel">
-          <div *ngFor="let message of messages; let i = index" class="message" [ngClass]="{'dark-orange-message': i === 0, 'orange-message': i !== 0}">{{ message }}</div>
+          <div *ngFor="let message of messages.reverse(); let i = index" class="message" [ngClass]="{'dark-orange-message': i === 0, 'orange-message': i !== 0}">{{ message }}</div>
         </div>
         <div *ngIf="weightSum !== null">Total weight: {{ weightSum }}</div>
       </div>
@@ -66,8 +66,8 @@
       </div>
       <div>
         <button (click)="slower()" [disabled]="!solving" class="btn btn-primary inline-block">Slower (&#xF7;2)</button>
-        <button *ngIf="!solving" (click)="getKruskal()" class="btn btn-success inline-block">Run Algorithm</button>
-        <button *ngIf="solving" (click)="pauseContinueKruskal()" class="btn btn-success inline-block">{{this.paused ? 'Run Algorithm' : 'Pause Algorithm'}}</button>
+        <button *ngIf="!solving" (click)="getKruskal()" class="btn btn-success inline-block" [disabled]="finished">Run Algorithm</button>
+        <button *ngIf="solving" (click)="pauseContinueKruskal()" class="btn btn-success inline-block" [disabled]="finished">{{this.paused ? 'Run Algorithm' : 'Pause Algorithm'}}</button>
         <button (click)="faster()" [disabled]="!solving" class="btn btn-danger inline-block">Faster (&#215;2)</button>
       </div>
       <div>

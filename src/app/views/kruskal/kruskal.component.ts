@@ -48,6 +48,8 @@ export class KruskalComponent implements OnInit {
 
   graphString: string;
 
+  finished: boolean;
+
   constructor(
     private cytoService: CytoService,
     private fileService: FileService
@@ -81,6 +83,8 @@ export class KruskalComponent implements OnInit {
     this.uploadFile = '';
     this.uploadError = false;
     this.graphString = '';
+
+    this.finished = false;
   }
 
   ngOnInit() {
@@ -226,6 +230,7 @@ export class KruskalComponent implements OnInit {
     this.isNext = true;
 
     await this.kruskalAlgorithm();
+    this.finished = true;
   }
 
   async kruskalAlgorithm() {
@@ -311,6 +316,7 @@ export class KruskalComponent implements OnInit {
     this.isPrevious = false;
     this.weightSum = null;
     this.messages = [];
+    this.finished = false;
   }
 
   async previous() {

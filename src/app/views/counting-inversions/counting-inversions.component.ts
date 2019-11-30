@@ -47,6 +47,8 @@ export class CountingInversionsComponent implements OnInit {
   uploadError: boolean;
   arrayString: string;
 
+  finished: boolean;
+
   constructor(
     private d3Service: D3Service,
     private fileService: FileService
@@ -69,6 +71,7 @@ export class CountingInversionsComponent implements OnInit {
     this.uploadFile = '';
     this.uploadError = false;
     this.arrayString = '';
+    this.finished = false;
   }
 
   ngOnInit() {
@@ -484,6 +487,7 @@ export class CountingInversionsComponent implements OnInit {
     }
     await this.breadthMerge();
     this.paused = true;
+    this.finished = true;
   }
 
   async breadthSplit() {
@@ -658,5 +662,6 @@ export class CountingInversionsComponent implements OnInit {
     this.inversions = '';
     this.messages = [];
     this.validateInput();
+    this.finished = false;
   }
 }

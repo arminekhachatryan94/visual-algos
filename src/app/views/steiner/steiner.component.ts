@@ -45,6 +45,8 @@ export class SteinerComponent implements OnInit {
 
   currentSubset: number[];
 
+  finished: boolean;
+
   constructor(private fileService: FileService) {
     this.currentService = new CytoService;
     this.optimalService = new CytoService;
@@ -68,6 +70,8 @@ export class SteinerComponent implements OnInit {
 
     this.messages = [];
     this.currentSubset = null;
+
+    this.finished = false;
   }
 
   async ngOnInit() {
@@ -246,6 +250,7 @@ export class SteinerComponent implements OnInit {
     this.weightSum = null
     this.optimalWeightSum = null;
     this.messages = [];
+    this.finished = false;
   }
 
   async algorithm() {
@@ -331,6 +336,7 @@ export class SteinerComponent implements OnInit {
       await this.currentService.sleep(this.sleepTime);
     }
     this.paused = true;
+    this.finished = true;
   }
 
   async addEdgesToGraph(service: CytoService, edges: Edge[]) {
