@@ -475,8 +475,27 @@ export class CountingInversionsComponent implements OnInit {
     this.paused = !this.paused;
   }
 
+  isArraySorted() {
+    for(let i = 0; i < this.int_array.length-1; i++) {
+      if(this.ordering === 'ASC') {
+        if(Number(this.int_array[i]) > Number(this.int_array[i+1])) {
+          return false;
+        }
+      } else {
+        if(Number(this.int_array[i]) < Number(this.int_array[i+1])) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   async algorithm() {
     this.messages = [];
+    if(this.isArraySorted()) {
+      this.messages.push('Array is already sorted');
+      return;
+    }
     this.solving = true;
     this.queue1 = [];
     this.maxDepth = 0;
