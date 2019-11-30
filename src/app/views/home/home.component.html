@@ -1,12 +1,49 @@
 <div>
   <div class="h2 text-center">Welcome to Visual Algos</div>
 
-  <div class="row">
-    <div id="sidebar" class="col-4">
-      <div></div>
+  <div class="row padding-lr-20">
+    This is an algorithm visualization tool for instructors to
+    use in their classes instead of drawing complex diagrams
+    and graphs. Instructors may save and email the algorithm
+    input to students. Students can focus on what is happening
+    in the algorithm, rather than taking notes, and instructors
+    can spend more time on explaining the algorithmic logic,
+    rather than drawing complicated diagrams.
+  </div>
+  <div id="home" class="row">
+    <div id="sidebar" class="col-4 text-center">
+      <div class="algo"
+        (click)="changeAlgo('counting-inversions')"
+        [ngClass]="{
+          'clicked': algo == 'counting-inversions',
+          'not-clicked': algo != 'counting-inversions'
+        }"
+      >Counting Inversions</div>
+      <div class="algo"
+        (click)="changeAlgo('kruskal-tree')"
+        [ngClass]="{
+          'clicked': algo == 'kruskal-tree',
+          'not-clicked': algo != 'kruskal-tree'
+        }"
+      >Kruskal's Minimum Spanning Tree</div>
+      <div class="algo"
+        (click)="changeAlgo('steiner-tree')"
+        [ngClass]="{
+          'clicked': algo == 'steiner-tree',
+          'not-clicked': algo != 'steiner-tree'
+        }"
+      >Steiner Tree</div>
     </div>
-    <div class="col-8">
-      <div *ngIf=""></div>
+    <div id="content" class="col-8">
+      <div *ngIf="algo === 'counting-inversions'">
+        <div [routerLink]= "['counting-inversions']">Counting Inversions</div>
+      </div>
+      <div *ngIf="algo === 'kruskal-tree'">
+        <div [routerLink]= "['kruskal']">Kruskal's Minimum Spanning Tree</div>
+      </div>
+      <div *ngIf="algo === 'steiner-tree'">
+        <div [routerLink]= "['steiner']">Steiner Tree</div>
+      </div>
     </div>
   </div>
 </div>

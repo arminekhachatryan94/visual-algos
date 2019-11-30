@@ -1,0 +1,31 @@
+.padding-lr-20 {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+#home {
+    margin-top: 30px;
+}
+
+#sidebar .algo {
+    border: 1px solid rgb(67, 180, 156);
+    color: rgb(36, 107, 92);
+    padding: 10px;
+}
+
+.clicked {
+    background-color: rgb(195, 231, 223);
+}
+.not-clicked {
+    background-color: rgb(119, 223, 200);
+}
+
+#sidebar .algo:hover {
+    background-color: rgb(123, 194, 179);
+}
+
+#content {
+    background-color: rgb(195, 231, 223);
+    border: 1px solid rgb(67, 180, 156);
+    padding: 10px;
+}
