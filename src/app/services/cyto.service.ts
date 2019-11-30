@@ -407,6 +407,7 @@ export class CytoService {
     this.kruskalCyc = [];
     for(let i = 0; i < vertices.length; i++) {
       this.cy.nodes('#' + vertices[i].id.key).first().data('color', 'black');
+      this.cy.nodes('#' + vertices[i].id.key).first().data('shape', 'circle');
       this.kruskalCyc.push([vertices[i].id.key]);
     }
     let edges = this.getEdges();

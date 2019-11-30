@@ -285,6 +285,7 @@ export class SteinerComponent implements OnInit {
       await this.currentService.sleep(this.sleepTime);
     }
 
+    let i = 0;
     while(this.subsets.length > 0) {
       if(this.paused) {
         return;
@@ -303,7 +304,11 @@ export class SteinerComponent implements OnInit {
         await this.createKruskalTree(edges);
         await this.currentService.refresh();
 
-        this.messages.push('Get next subset.');
+        if(i === 0) {
+          this.messages.push('Get spanning tree for first subset.');
+        } else {
+          this.messages.push('Use spanning tree for next subset.');
+        }
         this.subsets.shift();
         this.weightSum = await this.currentService.getSumOfEdgeWeights();
         await this.currentService.sleep(this.sleepTime);
@@ -345,6 +350,7 @@ export class SteinerComponent implements OnInit {
         }
       }
       this.currentSubset = null;
+      i++;
 
       await this.currentService.sleep(this.sleepTime);
     }

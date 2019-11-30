@@ -43,15 +43,15 @@
   <div class="row">
     <div class="col-5">
       <div>Current Graph</div>
+      <div *ngIf="weightSum !== null" class="text-primary">Tree weight: {{ weightSum }}</div>
       <div id="current" class="text-left"></div>
-      <div *ngIf="weightSum !== null">Current tree weight: {{ weightSum }}</div>
     </div>
     <div class="col-7">
       <div class="row col-12">
         <div class="col-5">
           <div *ngIf="solving">{{ finished ? 'Final' : 'Possible'}} Steiner Tree</div>
+          <div *ngIf="optimalWeightSum !== null" [ngClass]="{'text-danger': finished, 'text-primary': !finished, 'font-weight-bold': finished }">Tree weight: {{ optimalWeightSum }}</div>
           <div id="optimal" class="text-left"></div>
-          <div *ngIf="optimalWeightSum !== null">Optimal tree weight: {{ optimalWeightSum }}</div>
         </div>
         <div *ngIf="messages.length" class="col-7 message-scroll-panel height-300">
           <div *ngFor="let message of messages.reverse(); let i = index" class="message" [ngClass]="{'dark-orange-message': i === 0, 'orange-message': i !== 0}">{{ message }}</div>
