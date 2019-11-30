@@ -53,7 +53,7 @@
           <div id="optimal" class="text-left"></div>
           <div *ngIf="optimalWeightSum !== null">Optimal tree weight: {{ optimalWeightSum }}</div>
         </div>
-        <div *ngIf="messages.length" class="col-7 message-scroll-panel height-600">
+        <div *ngIf="messages.length" class="col-7 message-scroll-panel height-300">
           <div *ngFor="let message of messages.reverse(); let i = index" class="message" [ngClass]="{'dark-orange-message': i === 0, 'orange-message': i !== 0}">{{ message }}</div>
         </div>
       </div>

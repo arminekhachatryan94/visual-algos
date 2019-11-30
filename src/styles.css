@@ -37,7 +37,7 @@
 .message-scroll-panel {
   border: 1.5px solid lightgray;
   overflow-y: scroll;
-  height:200px;
+  height: 200px;
 }
 
 .message-scroll-panel::-webkit-scrollbar {
@@ -67,7 +67,7 @@
 }
 
 .container {
-  height: 600px;
+  height: 640px;
 }
 
 .control {
