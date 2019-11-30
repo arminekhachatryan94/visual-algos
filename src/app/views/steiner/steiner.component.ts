@@ -117,36 +117,48 @@ export class SteinerComponent implements OnInit {
   }
 
   createExampleGraphs() {
-    let graph1 = new Graph(6);
-    graph1.addEdge(0, 1, 1);
-    graph1.addEdge(0, 2, 1);
-    graph1.addEdge(0, 5, 1);
-    graph1.addEdge(1, 5, 2);
-    graph1.addEdge(1, 2, 2);
-    graph1.addEdge(5, 2, 2);
-    graph1.addEdge(5, 4, 4);
-    graph1.addEdge(4, 3, 1);
-    graph1.addEdge(3, 2, 1);
-    graph1.addSubVertices([1, 2, 3, 5]);
-    graph1.setName('V = 6');
+    let graph1 = new Graph(5);
+    graph1.addEdge(4, 0, 11);
+    graph1.addEdge(4, 3, 85);
+    graph1.addEdge(3, 0, 30);
+    graph1.addEdge(3, 0, 30);
+    graph1.addEdge(3, 2, 58);
+    graph1.addEdge(2, 1, 56);
+    graph1.addEdge(1, 0, 70);
+    graph1.setName('V = 5');
+    graph1.addSubVertices([4, 3]);
     this.exampleGraphs.push(graph1);
 
-    let graph2 = new Graph(7);
-    graph2.addEdge(0, 1, 2);
-    graph2.addEdge(0, 2, 6);
-    graph2.addEdge(0, 3, 3);
-    graph2.addEdge(0, 4, 2);
-    graph2.addEdge(1, 3, 4);
-    graph2.addEdge(1, 5, 13);
-    graph2.addEdge(2, 4, 5);
-    graph2.addEdge(2, 6, 5);
-    graph2.addEdge(3, 4, 2);
-    graph2.addEdge(3, 5, 2);
-    graph2.addEdge(3, 6, 3);
-    graph2.addEdge(5, 6, 4);
-    graph2.setName('V = 7');
-    graph2.addSubVertices([0, 1, 5, 6]);
+    let graph2 = new Graph(6);
+    graph2.addEdge(0, 1, 1);
+    graph2.addEdge(0, 2, 1);
+    graph2.addEdge(0, 5, 1);
+    graph2.addEdge(1, 5, 2);
+    graph2.addEdge(1, 2, 2);
+    graph2.addEdge(5, 2, 2);
+    graph2.addEdge(5, 4, 4);
+    graph2.addEdge(4, 3, 1);
+    graph2.addEdge(3, 2, 1);
+    graph2.addSubVertices([1, 2, 3, 5]);
+    graph2.setName('V = 6');
     this.exampleGraphs.push(graph2);
+
+    let graph3 = new Graph(7);
+    graph3.addEdge(0, 1, 2);
+    graph3.addEdge(0, 2, 6);
+    graph3.addEdge(0, 3, 3);
+    graph3.addEdge(0, 4, 2);
+    graph3.addEdge(1, 3, 4);
+    graph3.addEdge(1, 5, 13);
+    graph3.addEdge(2, 4, 5);
+    graph3.addEdge(2, 6, 5);
+    graph3.addEdge(3, 4, 2);
+    graph3.addEdge(3, 5, 2);
+    graph3.addEdge(3, 6, 3);
+    graph3.addEdge(5, 6, 4);
+    graph3.setName('V = 7');
+    graph3.addSubVertices([0, 1, 5, 6]);
+    this.exampleGraphs.push(graph3);
   }
 
   async useExampleGraph(g: Graph) {
@@ -293,6 +305,7 @@ export class SteinerComponent implements OnInit {
 
         this.messages.push('Get next subset.');
         this.subsets.shift();
+        this.weightSum = await this.currentService.getSumOfEdgeWeights();
         await this.currentService.sleep(this.sleepTime);
       }
 
