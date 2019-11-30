@@ -335,6 +335,9 @@ export class SteinerComponent implements OnInit {
 
       await this.currentService.sleep(this.sleepTime);
     }
+    if(this.optimalWeightSum === null) {
+      this.messages.push('This graph has no Steiner Tree');
+    }
     this.paused = true;
     this.finished = true;
   }
