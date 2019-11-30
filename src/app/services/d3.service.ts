@@ -44,9 +44,16 @@ export class D3Service {
                 .insert('div')
                 .classed('text-center display-parent', true);
 
+            let v = 0;
+            data.value.forEach(e => {
+                if(e.visibility) {
+                    v++;
+                }
+            });
             parent
                 .insert('div')
                 .classed('text-center', true)
+                .style('visibility', v === data.value.length ? 'visible' : 'hidden')
                 .text(data.inversions);
 
             data.value.forEach((e) => {

@@ -244,6 +244,7 @@ export class CountingInversionsComponent implements OnInit {
       }
       if(this.queue1[n].id !== leftNode.id) {
         await this.beforeArray.push(this.queue1[n]);
+        console.log(this.queue1[n].inversions);
       }
     }
 
