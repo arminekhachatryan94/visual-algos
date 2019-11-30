@@ -47,7 +47,19 @@ export class CytoService {
             'background-color': 'data(color)',
             'color': 'white',
             'text-halign': 'center',
-            'text-valign': 'center'
+            'text-valign': 'center',
+          }
+        },
+        {
+          selector: 'node[shape = "circle"]',
+          style: {
+            'shape': 'circle'
+          }
+        },
+        {
+          selector: 'node[shape = "square"]',
+          style: {
+            'shape': 'square'
           }
         },
         {
@@ -77,16 +89,19 @@ export class CytoService {
         if(!this.selectSub) {
           if(this.clickedEdgeIndex !== null) {
             this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'black', lineStyle: 'dashed'});
+            console.log('here');
             this.clickedEdgeIndex = null;
           }
           let index = event.target.id();
           if(index === this.clickedVerticeIndex) {
             this.cy.nodes('#' + index).first().data('color', 'black');
+            this.cy.nodes('#' + index).first().data('shape', 'circle');
             this.clickedVerticeIndex = null;
           }
           else if(this.clickedVerticeIndex === null) {
             this.clickedVerticeIndex = index;
             this.cy.nodes('#' + this.clickedVerticeIndex).first().data('color', 'green');
+            this.cy.nodes('#' + this.clickedVerticeIndex).first().data('shape', 'square');
           } else {
             // check if edge already exists
             let edgeIndex1 = this.cy.edges('#e' + this.clickedVerticeIndex + '-' + index);
@@ -110,6 +125,7 @@ export class CytoService {
               }
             }
             this.cy.nodes('#' + this.clickedVerticeIndex).first().data('color', 'black');
+            this.cy.nodes('#' + this.clickedVerticeIndex).first().data('shape', 'circle');
             this.clickedVerticeIndex = null;
           }
         } else {
@@ -124,6 +140,7 @@ export class CytoService {
     let node = this.cy.nodes('#' + id).first();
     if(node.data('color') === 'red') {
       node.data('color', 'black');
+      node.data('shape', 'circle');
       for(let s = 0; s < this.subVerticeIds.length; s++) {
         if(this.subVerticeIds[s] === id) {
           this.subVerticeIds.splice(s, 1);
@@ -132,6 +149,7 @@ export class CytoService {
       }
     } else {
       node.data('color', 'red');
+      node.data('shape', 'square');
       this.subVerticeIds.push(id);
     }
   }
@@ -141,6 +159,7 @@ export class CytoService {
       if(this.selectSub !== null) {
         if(this.clickedVerticeIndex !== null) {
           this.cy.nodes('#' + this.clickedVerticeIndex).data('color', 'black');
+          this.cy.nodes('#' + this.clickedVerticeIndex).data('shape', 'circle');
           this.clickedVerticeIndex = null;
         }
         let index = event.target.id();
@@ -254,6 +273,7 @@ export class CytoService {
           vertice.data('id')
         )
       );
+      v.shape = vertice.shape;
       return v;
     });
   }
@@ -293,7 +313,8 @@ export class CytoService {
       group: 'nodes',
       data: {
         id: vertice.id.key,
-        color: vertice.color
+        color: vertice.color,
+        shape: vertice.shape
       }
     });
     this.kruskalCyc.push([vertice.id.key]);
@@ -456,6 +477,11 @@ export class CytoService {
 
   async changeVerticeStyle(vertice: Vertice, color: string) {
     this.cy.nodes('#' + vertice.id.key).first().data('color', color);
+    if(color === 'black') {
+      this.cy.nodes('#' + vertice.id.key).first().data('shape', 'circle');
+    } else {
+      this.cy.nodes('#' + vertice.id.key).first().data('shape', 'square');
+    }
   }
 
   async changeEdgeStyle(edge: Edge, color: string) {
