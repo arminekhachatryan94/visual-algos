@@ -255,7 +255,7 @@ export class KruskalComponent implements OnInit {
       );
       await this.cytoService.changeEdgeStyle(this.edge, 'blue');
       this.edge.style.color = 'blue';
-      this.edge.style.lineStyle = 'solid';
+      this.edge.style.lineStyle = 'dotted';
       await this.cytoService.sleep(this.sleepTime);
 
       if(this.paused) {
@@ -330,7 +330,7 @@ export class KruskalComponent implements OnInit {
       this.messages.pop();
       this.edge = this.after.pop();
       this.edge.style.color = 'blue';
-      this.edge.style.lineStyle = 'solid';
+      this.edge.style.lineStyle = 'dotted';
       await this.cytoService.setKruskalArray(history);
       await this.cytoService.changeEdgeStyle(this.edge, 'blue');
       await this.cytoService.removeKruskalEdge(this.edge);
@@ -358,7 +358,7 @@ export class KruskalComponent implements OnInit {
     if(this.edge === null) {
       this.edge = this.before.pop();
       this.edge.style.color = 'blue';
-      this.edge.style.lineStyle = 'solid';
+      this.edge.style.lineStyle = 'dotted';
       await this.cytoService.changeEdgeStyle(this.edge, 'blue');
       this.messages.push(
         'Pop the last edge from the queue, and '

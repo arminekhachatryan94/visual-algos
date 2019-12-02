@@ -63,6 +63,12 @@ export class CytoService {
           }
         },
         {
+          selector: 'node[shape = "star"]',
+          style: {
+            'shape': 'star'
+          }
+        },
+        {
           selector: 'edge',
           style: {
             'label': 'data(weight)',
@@ -89,7 +95,6 @@ export class CytoService {
         if(!this.selectSub) {
           if(this.clickedEdgeIndex !== null) {
             this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'black', lineStyle: 'dashed'});
-            console.log('here');
             this.clickedEdgeIndex = null;
           }
           let index = event.target.id();
@@ -149,7 +154,7 @@ export class CytoService {
       }
     } else {
       node.data('color', 'red');
-      node.data('shape', 'square');
+      node.data('shape', 'star');
       this.subVerticeIds.push(id);
     }
   }
@@ -173,7 +178,7 @@ export class CytoService {
           }
           if(this.clickedEdgeIndex === null) {
             this.clickedEdgeIndex = event.target.id();
-            this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'green', lineStyle: 'dashed'});
+            this.cy.edges('#' + this.clickedEdgeIndex).first().data('style', {color: 'green', lineStyle: 'dotted'});
           }
         }
       }
@@ -478,10 +483,12 @@ export class CytoService {
 
   async changeVerticeStyle(vertice: Vertice, color: string) {
     this.cy.nodes('#' + vertice.id.key).first().data('color', color);
-    if(color === 'black') {
-      this.cy.nodes('#' + vertice.id.key).first().data('shape', 'circle');
-    } else {
+    if(color === 'red') {
+      this.cy.nodes('#' + vertice.id.key).first().data('shape', 'star');
+    } else if(color === 'green') {
       this.cy.nodes('#' + vertice.id.key).first().data('shape', 'square');
+    } else {
+      this.cy.nodes('#' + vertice.id.key).first().data('shape', 'circle');
     }
   }
 
@@ -489,7 +496,7 @@ export class CytoService {
     let style = {color: 'black', lineStyle: 'dashed'};
 
     if(color === 'blue') {
-      style = {color: 'blue', lineStyle: 'solid'};
+      style = {color: 'blue', lineStyle: 'dotted'};
     }
     if(color === 'red') {
       style = {color: 'red', lineStyle: 'solid'};
