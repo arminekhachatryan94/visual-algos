@@ -121,12 +121,11 @@ export class SteinerComponent implements OnInit {
     graph1.addEdge(4, 0, 11);
     graph1.addEdge(4, 3, 85);
     graph1.addEdge(3, 0, 30);
-    graph1.addEdge(3, 0, 30);
     graph1.addEdge(3, 2, 58);
     graph1.addEdge(2, 1, 56);
     graph1.addEdge(1, 0, 70);
     graph1.setName('V = 5');
-    graph1.addSubVertices([4, 3]);
+    graph1.addSubVertices([3, 4]);
     this.exampleGraphs.push(graph1);
 
     let graph2 = new Graph(6);
